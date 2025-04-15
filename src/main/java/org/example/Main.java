@@ -6,44 +6,45 @@ public class Main {
 
     private static final List<PointEntity> ALL_DRIVERLIST = new ArrayList<>(
             List.of(
-                    new PointEntity("Alex Albon", 13, 12),
-                    new PointEntity("Andrea Kimi Antonelli", 19.6, 28.0),
-                    new PointEntity("Carlos Sainz", 11.3, -2.3),
-                    new PointEntity("Charles Leclerc", 25, 6.7),
-                    new PointEntity("Estaban Ocon", 8.7, 11),
-                    new PointEntity("Fernando Alonso", 7.6, -10.7),
-                    new PointEntity("Gabriel Bortoleto", 4.5, -4.3),
-                    new PointEntity("George Russell", 21.7, 26),
-                    new PointEntity("Isack Hadjar", 4.5, -0.3),
-                    new PointEntity("Jack Doohan", 5.4, -3),
-                    new PointEntity("Lance Stroll", 9.9, 11.7),
-                    new PointEntity("Lando Norris", 29.9, 42.3),
-                    new PointEntity("Lewis Hamilton", 23.3, 4.7),
-                    new PointEntity("Liam Lawson", 7.8, -1.3),
-                    new PointEntity("Max Verstappen", 28.7, 31.7),
-                    new PointEntity("Nico Hulkenberg", 7.8, 7.7),
-                    new PointEntity("Oliver Bearman", 7.3, 8.7),
-                    new PointEntity("Oscar Piastri", 23.1, 26.3),
-                    new PointEntity("Pierre Gasly", 10, -2.3),
-                    new PointEntity("Yuki Tsunoda", 16.6, 4.3)
+                    new PointEntity("Alex Albon", 12.8, 12.8),
+                    new PointEntity("Andrea Kimi Antonelli", 19.7, 24.5),
+                    new PointEntity("Carlos Sainz", 10.7, -4),
+                    new PointEntity("Charles Leclerc", 24.7, 10),
+                    new PointEntity("Estaban Ocon", 9.3, 12),
+                    new PointEntity("Fernando Alonso", 6.4, -6.8),
+                    new PointEntity("Gabriel Bortoleto", 4.5, -2.3),
+                    new PointEntity("George Russell", 22, 27.3),
+                    new PointEntity("Isack Hadjar", 5.1, 1),
+                    new PointEntity("Jack Doohan", 5.6, -0.3),
+                    new PointEntity("Lance Stroll", 9.7, 10.5),
+                    new PointEntity("Lando Norris", 30, 39.8),
+                    new PointEntity("Lewis Hamilton", 23.2, 13),
+                    new PointEntity("Liam Lawson", 7.2, -3.5),
+                    new PointEntity("Max Verstappen", 28.8, 29.3),
+                    new PointEntity("Nico Hulkenberg", 7.2, 0.8),
+                    new PointEntity("Oliver Bearman", 7.9, 12),
+                    new PointEntity("Oscar Piastri", 23.4, 31),
+                    new PointEntity("Pierre Gasly", 9.4, 1.5),
+                    new PointEntity("Yuki Tsunoda", 16.4, 11)
             ));
 
     private static final List<PointEntity> ALL_TEAMLIST = new ArrayList<>(
             List.of(
-                    new PointEntity("Alpine", 7.7, -3.7),
-                    new PointEntity("Aston Martin", 7.1, 4.7),
-                    new PointEntity("Ferrari", 27, 23.0),
-                    new PointEntity("Haas", 8, 23.7),
-                    new PointEntity("Kick Sauber", 6, 5),
-                    new PointEntity("Mclaren", 30.9, 81),
-                    new PointEntity("Mercedes", 23.6, 64),
-                    new PointEntity("Racing Bulls", 8.6, 15.3),
-                    new PointEntity("Red Bull Racing", 25.7, 44.0),
-                    new PointEntity("Williams", 14.1, 18.3)
+                    new PointEntity("Alpine", 7.9, 2.8),
+                    new PointEntity("Aston Martin", 7.7, 8),
+                    new PointEntity("Ferrari", 27.3, 35.5),
+                    new PointEntity("Haas", 9.4, 27.8),
+                    new PointEntity("Kick Sauber", 5.4, -1.8),
+                    new PointEntity("Mclaren", 31.2, 83.8),
+                    new PointEntity("Mercedes", 23.9, 63),
+                    new PointEntity("Racing Bulls", 9.2, 17),
+                    new PointEntity("Red Bull Racing", 26, 44.5),
+                    new PointEntity("Williams", 14.7, 17)
             )
     );
 
     private static final Set<ScoreCard> validTeamSet = new HashSet<>();
+    public static final int COST_CAP = 101;
 
     public static void main(String[] args) {
 
@@ -53,20 +54,17 @@ public class Main {
         });
 
         System.out.println("sorting");
-        List<ScoreCard> validTeamlist = validTeamSet.stream().sorted(Comparator.comparing(ScoreCard::getAveragePoints).reversed()).limit(200).toList();
+        System.out.println(new ScoreCard(Set.of(new PointEntity("Jack Doohan", 5.6, -0.3), new PointEntity("Gabriel Bortoleto", 4.5, -2.3), new PointEntity("Isack Hadjar", 4.5, 1), new PointEntity("George Russell", 22, 27.3), new PointEntity("Oliver Bearman", 7.9, 12)),
+                Set.of(new PointEntity("Mclaren", 31.2, 83.8), new PointEntity("Mercedes", 23.9, 63))));
 
-        System.out.println(new ScoreCard(Set.of(new PointEntity("Jack Doohan", 5.4, -3), new PointEntity("Gabriel Bortoleto", 4.5, -4.3), new PointEntity("Isack Hadjar", 4.5, -0.3), new PointEntity("George Russell", 21.7, 26), new PointEntity("Oliver Bearman", 7.3, 8.7)),
-                Set.of(new PointEntity("Mclaren", 30.9, 81), new PointEntity("Mercedes", 23.6, 64))));
+        validTeamSet.stream().sorted(Comparator.comparing(ScoreCard::getAveragePoints).reversed()).limit(50).forEach(System.out::println);
 
-        for (int i = 0; i < validTeamlist.size(); i++) {
-            System.out.println(i + ": " + validTeamlist.get(i));
-        }
     }
 
     private static void driverLoop(
             Set<PointEntity> previousLevelDriverSet) {
         if (previousLevelDriverSet.size() == 5) {
-            if (!(previousLevelDriverSet.stream().map(PointEntity::getCost).reduce(0d, Double::sum) >= 98)) {
+            if (!(previousLevelDriverSet.stream().map(PointEntity::getCost).reduce(0d, Double::sum) >= COST_CAP)) {
                 teamLoop(new HashSet<>(), previousLevelDriverSet);
             }
         } else {
@@ -84,7 +82,7 @@ public class Main {
             Set<PointEntity> previousLevelTeamSet, Set<PointEntity> driverSet) {
         if (previousLevelTeamSet.size() == 2) {
             ScoreCard scoreCard = new ScoreCard(driverSet, previousLevelTeamSet);
-            if (scoreCard.getCost() <= 98 && scoreCard.getCost() > 94) {
+            if (scoreCard.getCost() <= COST_CAP && scoreCard.getCost() > 94) {
                 validTeamSet.add(scoreCard);
             }
 
