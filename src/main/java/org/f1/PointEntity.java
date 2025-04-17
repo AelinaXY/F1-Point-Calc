@@ -1,4 +1,6 @@
-package org.example;
+package org.f1;
+
+import java.util.Objects;
 
 public class PointEntity {
 
@@ -39,5 +41,18 @@ public class PointEntity {
     @Override
     public String toString() {
         return name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PointEntity that = (PointEntity) o;
+        return Double.compare(cost, that.cost) == 0 && Double.compare(averagePoints, that.averagePoints) == 0 && Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, cost, averagePoints);
     }
 }
