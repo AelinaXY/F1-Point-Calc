@@ -7,14 +7,13 @@ import java.util.*;
 
 public class Main {
 
-    private static final List<Drivers> ALL_DRIVERLIST = new ArrayList<>(List.of(Drivers.values())
-    );
+    private static final List<Drivers> ALL_DRIVERLIST = new ArrayList<>(List.of(Drivers.values()));
 
-    private static final List<Teams> ALL_TEAMLIST = new ArrayList<>(List.of(Teams.values())
-    );
+    private static final List<Teams> ALL_TEAMLIST = new ArrayList<>(List.of(Teams.values()));
 
     private static final Set<ScoreCard> validTeamSet = new HashSet<>();
-    public static final int COST_CAP = 101;
+    public static final double COST_CAP = 102.3;
+    public static final long TRANSFER_LIMIT = 3L;
 
     public static void main(String[] args) {
 
@@ -30,14 +29,22 @@ public class Main {
 
         System.out.println(currentScorecard);
 
-        List<ScoreCard> scoreCardList = validTeamSet.stream().sorted(Comparator.comparing(ScoreCard::getAveragePoints).reversed()).limit(50).toList();
+        scoreCardOutput(currentScorecard, Comparator.comparing(ScoreCard::getAveragePoints));
+
+        scoreCardOutput(currentScorecard, Comparator.comparing(ScoreCard::getThreeRaceAveragePoints));
+    }
+
+    private static void scoreCardOutput(ScoreCard currentScorecard, Comparator<ScoreCard> comparing) {
+        System.out.println("----------------------------------------------------------");
+
+        List<ScoreCard> scoreCardList = validTeamSet.stream().sorted(comparing.reversed()).limit(30).toList();
 
         scoreCardList.forEach(System.out::println);
 
         System.out.println("----------------------------------------------------------");
 
         List<DifferenceEntity> differenceEntityList = scoreCardList.stream().map(currentScorecard::calculateDifference).toList();
-        differenceEntityList = differenceEntityList.stream().filter(sc -> sc.getNumberOfChanges() <= 2L).toList();
+        differenceEntityList = differenceEntityList.stream().filter(sc -> sc.getNumberOfChanges() <= TRANSFER_LIMIT).toList();
 
         differenceEntityList.forEach(System.out::println);
     }

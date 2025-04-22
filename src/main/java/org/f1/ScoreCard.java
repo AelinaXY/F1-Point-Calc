@@ -15,6 +15,7 @@ public class ScoreCard {
     private Set<PointEntity> teamSet;
     private Double cost;
     private Double averagePoints;
+    private Double threeRaceAveragePoints;
 
     public ScoreCard() {
     }
@@ -27,7 +28,12 @@ public class ScoreCard {
         averagePoints = this.driverSet.stream().map(PointEntity::getAveragePoints).reduce(0d, Double::sum);
         averagePoints += this.teamSet.stream().map(PointEntity::getAveragePoints).reduce(0d, Double::sum);
 
+        threeRaceAveragePoints = this.driverSet.stream().map(PointEntity::getThreeRaceAveragePoints).reduce(0d, Double::sum);
+        threeRaceAveragePoints += this.teamSet.stream().map(PointEntity::getThreeRaceAveragePoints).reduce(0d, Double::sum);
+
         averagePoints += this.driverSet.stream().sorted(Comparator.comparing(PointEntity::getAveragePoints).reversed()).limit(1).map(PointEntity::getAveragePoints).findFirst().orElse(null);
+        threeRaceAveragePoints += this.driverSet.stream().sorted(Comparator.comparing(PointEntity::getAveragePoints).reversed()).limit(1).map(PointEntity::getThreeRaceAveragePoints).findFirst().orElse(null);
+
     }
 
     public Set<PointEntity> getDriverSet() {
@@ -58,6 +64,11 @@ public class ScoreCard {
         return averagePoints;
     }
 
+    public Double getThreeRaceAveragePoints() {
+        return threeRaceAveragePoints;
+    }
+
+
     public void setAveragePoints(Double averagePoints) {
         this.averagePoints = averagePoints;
     }
@@ -67,6 +78,7 @@ public class ScoreCard {
         return "ScoreCard{" +
                 "cost=" + cost +
                 ", averagePoints=" + averagePoints +
+                ", threeRacePoints=" + threeRaceAveragePoints +
                 ", drivers=" + driverSet +
                 ", teams=" + teamSet +
                 '}';
@@ -99,6 +111,8 @@ public class ScoreCard {
         inDifference(difference,newTeamSet,this,false);
 
         difference.setPointDifference(scoreCard.averagePoints-averagePoints);
+        difference.setThreeRacePointDifference(scoreCard.threeRaceAveragePoints-threeRaceAveragePoints);
+
 
         return difference;
     }

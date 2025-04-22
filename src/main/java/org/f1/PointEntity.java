@@ -7,11 +7,13 @@ public class PointEntity {
     private String name;
     private double cost;
     private double averagePoints;
+    private double threeRaceAveragePoints;
 
-    public PointEntity(String name, double cost, double averagePoints) {
+    public PointEntity(String name, double cost, double averagePoints, double threeRaceAveragePoints) {
         this.name = name;
         this.cost = cost;
         this.averagePoints = averagePoints;
+        this.threeRaceAveragePoints = threeRaceAveragePoints;
     }
 
     public String getName() {
@@ -34,8 +36,8 @@ public class PointEntity {
         return averagePoints;
     }
 
-    public void setAveragePoints(double averagePoints) {
-        this.averagePoints = averagePoints;
+    public double getThreeRaceAveragePoints() {
+        return threeRaceAveragePoints;
     }
 
     @Override
