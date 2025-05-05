@@ -22,9 +22,11 @@ public class Main {
             System.out.println("Driver " + driver.getPointEntity().getName() + " done");
         });
 
+        System.out.println(validTeamSet.size());
+
         System.out.println("sorting");
 
-        ScoreCard currentScorecard = new ScoreCard(Set.of(Drivers.DOO, Drivers.BOR, Drivers.HAD, Drivers.RUS, Drivers.BEA),
+        ScoreCard currentScorecard = new ScoreCard(Set.of(Drivers.DOO, Drivers.BOR, Drivers.HAD, Drivers.PIA, Drivers.LAW),
                 Set.of(Teams.MCL, Teams.MER));
 
         System.out.println(currentScorecard);
