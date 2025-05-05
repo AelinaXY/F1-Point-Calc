@@ -12,7 +12,7 @@ public class Main {
     private static final List<Teams> ALL_TEAMLIST = new ArrayList<>(List.of(Teams.values()));
 
     private static final Set<ScoreCard> validTeamSet = new HashSet<>();
-    public static final double COST_CAP = 102.3;
+    public static final double COST_CAP = 101.9;
     public static final long TRANSFER_LIMIT = 3L;
 
     public static void main(String[] args) {
