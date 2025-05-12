@@ -13,8 +13,9 @@ public class Main {
 
     private static final Set<ScoreCard> validTeamSet = new HashSet<>();
     public static final double COST_CAP = 101.9;
-    public static final long TRANSFER_LIMIT = 3L;
+    public static final long TRANSFER_LIMIT = 4L;
 
+    //Parse front and back of the csv then the middle as a list of values
     public static void main(String[] args) {
 
         ALL_DRIVERLIST.parallelStream().forEach(driver -> {
@@ -26,7 +27,7 @@ public class Main {
 
         System.out.println("sorting");
 
-        ScoreCard currentScorecard = new ScoreCard(Set.of(Drivers.DOO, Drivers.BOR, Drivers.HAD, Drivers.PIA, Drivers.LAW),
+        ScoreCard currentScorecard = new ScoreCard(Set.of(Drivers.COL, Drivers.BOR, Drivers.HAD, Drivers.PIA, Drivers.LAW),
                 Set.of(Teams.MCL, Teams.MER));
 
         System.out.println(currentScorecard);
