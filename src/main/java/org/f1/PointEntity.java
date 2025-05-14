@@ -5,11 +5,12 @@ import java.util.Objects;
 public class PointEntity {
 
     private String name;
-    private double cost;
-    private double averagePoints;
-    private double threeRaceAveragePoints;
+    private Double cost;
+    private Double averagePoints;
+    private Double threeRaceAveragePoints;
 
-    public PointEntity(String name, double cost, double averagePoints, double threeRaceAveragePoints) {
+
+    public PointEntity(String name, Double cost, Double averagePoints, Double threeRaceAveragePoints) {
         this.name = name;
         this.cost = cost;
         this.averagePoints = averagePoints;
@@ -24,20 +25,27 @@ public class PointEntity {
         this.name = name;
     }
 
-    public double getCost() {
+    public Double getCost() {
         return cost;
     }
 
-    public void setCost(double cost) {
+    public void setCost(Double cost) {
         this.cost = cost;
     }
 
-    public double getAveragePoints() {
+    public Double getAveragePoints() {
         return averagePoints;
     }
 
-    public double getThreeRaceAveragePoints() {
+    public Double getThreeRaceAveragePoints() {
         return threeRaceAveragePoints;
+    }
+    public void setAveragePoints(Double averagePoints) {
+        this.averagePoints = averagePoints;
+    }
+
+    public void setThreeRaceAveragePoints(Double threeRaceAveragePoints) {
+        this.threeRaceAveragePoints = threeRaceAveragePoints;
     }
 
     @Override

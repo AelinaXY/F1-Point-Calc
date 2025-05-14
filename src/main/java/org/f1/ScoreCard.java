@@ -1,13 +1,9 @@
 package org.f1;
 
-import org.f1.enums.Drivers;
-import org.f1.enums.Teams;
-
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class ScoreCard {
 
@@ -18,11 +14,18 @@ public class ScoreCard {
     private Double threeRaceAveragePoints;
 
     public ScoreCard() {
+        this.driverSet = new HashSet<>();
+        this.teamSet = new HashSet<>();
     }
 
-    public ScoreCard(Set<Drivers> driverSet, Set<Teams> teamSet) {
-        this.driverSet = driverSet.stream().map(Drivers::getPointEntity).collect(Collectors.toSet());
-        this.teamSet = teamSet.stream().map(Teams::getPointEntity).collect(Collectors.toSet());
+    public ScoreCard(Set<PointEntity> driverSet, Set<PointEntity> teamSet) {
+        this.driverSet = driverSet;
+        this.teamSet = teamSet;
+        initialize();
+
+    }
+
+    private void initialize() {
         cost = this.driverSet.stream().map(PointEntity::getCost).reduce(0d, Double::sum);
         cost += this.teamSet.stream().map(PointEntity::getCost).reduce(0d, Double::sum);
         averagePoints = this.driverSet.stream().map(PointEntity::getAveragePoints).reduce(0d, Double::sum);
@@ -33,7 +36,18 @@ public class ScoreCard {
 
         averagePoints += this.driverSet.stream().sorted(Comparator.comparing(PointEntity::getAveragePoints).reversed()).limit(1).map(PointEntity::getAveragePoints).findFirst().orElse(null);
         threeRaceAveragePoints += this.driverSet.stream().sorted(Comparator.comparing(PointEntity::getAveragePoints).reversed()).limit(1).map(PointEntity::getThreeRaceAveragePoints).findFirst().orElse(null);
+    }
 
+    public void intialize() {
+        initialize();
+    }
+
+    public void addDriver(PointEntity driver) {
+        this.driverSet.add(driver);
+    }
+
+    public void addTeam(PointEntity team) {
+        this.teamSet.add(team);
     }
 
     public Set<PointEntity> getDriverSet() {

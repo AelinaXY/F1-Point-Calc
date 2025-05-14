@@ -1,40 +1,41 @@
 package org.f1;
 
-import org.f1.enums.Drivers;
-import org.f1.enums.Teams;
+import org.f1.parsing.BaseCSVParsing;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Main {
 
-    private static final List<Drivers> ALL_DRIVERLIST = new ArrayList<>(List.of(Drivers.values()));
+    private static Set<? extends PointEntity> DRIVER_SET = BaseCSVParsing.parse("Drivers_Output.csv");
+    private static Set<? extends PointEntity> TEAM_SET = BaseCSVParsing.parse("Teams_Output.csv");
 
-    private static final List<Teams> ALL_TEAMLIST = new ArrayList<>(List.of(Teams.values()));
 
     private static final Set<ScoreCard> validTeamSet = new HashSet<>();
-    public static final double COST_CAP = 101.9;
-    public static final long TRANSFER_LIMIT = 4L;
+    public static final double COST_CAP = 108.5;
+    public static final long TRANSFER_LIMIT = 3L;
 
-    //Parse front and back of the csv then the middle as a list of values
     public static void main(String[] args) {
+        //Drivers no longer driving
+        List<String> driversNoLongerExists = List.of("Jack Doohan");
+        DRIVER_SET = DRIVER_SET.stream().filter(d -> !driversNoLongerExists.contains(d.getName())).collect(Collectors.toSet());
 
-        ALL_DRIVERLIST.parallelStream().forEach(driver -> {
+        DRIVER_SET.parallelStream().forEach(driver -> {
             driverLoop(Set.of(driver));
-            System.out.println("Driver " + driver.getPointEntity().getName() + " done");
+            System.out.println("Driver " + driver.getName() + " done");
         });
 
         System.out.println(validTeamSet.size());
 
         System.out.println("sorting");
 
-        ScoreCard currentScorecard = new ScoreCard(Set.of(Drivers.COL, Drivers.BOR, Drivers.HAD, Drivers.PIA, Drivers.LAW),
-                Set.of(Teams.MCL, Teams.MER));
+        ScoreCard previousScoreCard = createPreviousScoreCard(List.of("Franco Colapinto", "Gabriel Bortoleto", "Isack Hadjar", "Oscar Piastri", "Liam Lawson"), List.of("Mclaren", "Mercedes"));
 
-        System.out.println(currentScorecard);
+        System.out.println(previousScoreCard);
 
-        scoreCardOutput(currentScorecard, Comparator.comparing(ScoreCard::getAveragePoints));
+        scoreCardOutput(previousScoreCard, Comparator.comparing(ScoreCard::getAveragePoints));
 
-        scoreCardOutput(currentScorecard, Comparator.comparing(ScoreCard::getThreeRaceAveragePoints));
+        scoreCardOutput(previousScoreCard, Comparator.comparing(ScoreCard::getThreeRaceAveragePoints));
     }
 
     private static void scoreCardOutput(ScoreCard currentScorecard, Comparator<ScoreCard> comparing) {
@@ -53,15 +54,15 @@ public class Main {
     }
 
     private static void driverLoop(
-            Set<Drivers> previousLevelDriverSet) {
+            Set<PointEntity> previousLevelDriverSet) {
         if (previousLevelDriverSet.size() == 5) {
-            if (!(previousLevelDriverSet.stream().map(driver -> driver.getPointEntity().getCost()).reduce(0d, Double::sum) >= COST_CAP)) {
+            if (!(previousLevelDriverSet.stream().map(PointEntity::getCost).reduce(0d, Double::sum) >= COST_CAP)) {
                 teamLoop(new HashSet<>(), previousLevelDriverSet);
             }
         } else {
-            for (Drivers driver : ALL_DRIVERLIST) {
+            for (PointEntity driver : DRIVER_SET) {
                 if (!previousLevelDriverSet.contains(driver)) {
-                    Set<Drivers> nextLevelDriverSet = new HashSet<>(previousLevelDriverSet);
+                    Set<PointEntity> nextLevelDriverSet = new HashSet<>(previousLevelDriverSet);
                     nextLevelDriverSet.add(driver);
                     driverLoop(nextLevelDriverSet);
                 }
@@ -70,7 +71,7 @@ public class Main {
     }
 
     private static void teamLoop(
-            Set<Teams> previousLevelTeamSet, Set<Drivers> driverSet) {
+            Set<PointEntity> previousLevelTeamSet, Set<PointEntity> driverSet) {
         if (previousLevelTeamSet.size() == 2) {
             ScoreCard scoreCard = new ScoreCard(driverSet, previousLevelTeamSet);
             if (scoreCard.getCost() <= COST_CAP && scoreCard.getCost() > 94) {
@@ -78,13 +79,25 @@ public class Main {
             }
 
         } else {
-            for (Teams team : ALL_TEAMLIST) {
+            for (PointEntity team : TEAM_SET) {
                 if (!previousLevelTeamSet.contains(team)) {
-                    Set<Teams> nextLevelTeamSet = new HashSet<>(previousLevelTeamSet);
+                    Set<PointEntity> nextLevelTeamSet = new HashSet<>(previousLevelTeamSet);
                     nextLevelTeamSet.add(team);
                     teamLoop(nextLevelTeamSet, driverSet);
                 }
             }
         }
+    }
+
+    private static ScoreCard createPreviousScoreCard(List<String> driverNames, List<String> teamNames){
+        ScoreCard scoreCard = new ScoreCard();
+        for (String driverName : driverNames) {
+            scoreCard.addDriver(DRIVER_SET.stream().filter(d -> d.getName().equals(driverName)).findFirst().orElse(null));
+        }
+        for (String teamName : teamNames) {
+            scoreCard.addTeam(TEAM_SET.stream().filter(t -> t.getName().equals(teamName)).findFirst().orElse(null));
+        }
+        scoreCard.intialize();
+        return scoreCard;
     }
 }
