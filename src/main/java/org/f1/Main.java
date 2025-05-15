@@ -1,18 +1,18 @@
 package org.f1;
 
-import org.f1.parsing.BaseCSVParsing;
+import org.f1.parsing.CSVParsing;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class Main {
 
-    private static Set<? extends PointEntity> DRIVER_SET = BaseCSVParsing.parse("Drivers_Output.csv");
-    private static Set<? extends PointEntity> TEAM_SET = BaseCSVParsing.parse("Teams_Output.csv");
+    private static Set<? extends PointEntity> DRIVER_SET = CSVParsing.parse("Drivers_Output.csv");
+    private static Set<? extends PointEntity> TEAM_SET = CSVParsing.parse("Teams_Output.csv");
 
 
     private static final Set<ScoreCard> validTeamSet = new HashSet<>();
-    public static final double COST_CAP = 108.5;
+    public static final double COST_CAP = 101.9;
     public static final long TRANSFER_LIMIT = 3L;
 
     public static void main(String[] args) {
@@ -20,18 +20,19 @@ public class Main {
         List<String> driversNoLongerExists = List.of("Jack Doohan");
         DRIVER_SET = DRIVER_SET.stream().filter(d -> !driversNoLongerExists.contains(d.getName())).collect(Collectors.toSet());
 
+
         DRIVER_SET.parallelStream().forEach(driver -> {
             driverLoop(Set.of(driver));
             System.out.println("Driver " + driver.getName() + " done");
         });
 
-        System.out.println(validTeamSet.size());
+        System.out.println("Number of valid combinations: " + validTeamSet.size());
 
         System.out.println("sorting");
 
         ScoreCard previousScoreCard = createPreviousScoreCard(List.of("Franco Colapinto", "Gabriel Bortoleto", "Isack Hadjar", "Oscar Piastri", "Liam Lawson"), List.of("Mclaren", "Mercedes"));
 
-        System.out.println(previousScoreCard);
+        System.out.println("Previous scorecard: " + previousScoreCard);
 
         scoreCardOutput(previousScoreCard, Comparator.comparing(ScoreCard::getAveragePoints));
 
@@ -39,13 +40,13 @@ public class Main {
     }
 
     private static void scoreCardOutput(ScoreCard currentScorecard, Comparator<ScoreCard> comparing) {
-        System.out.println("----------------------------------------------------------");
+        System.out.println("\nAbsolute Score Cards: ----------------------------------------------------------");
 
         List<ScoreCard> scoreCardList = validTeamSet.stream().sorted(comparing.reversed()).limit(30).toList();
 
         scoreCardList.forEach(System.out::println);
 
-        System.out.println("----------------------------------------------------------");
+        System.out.println("\nDifference Entities: ----------------------------------------------------------");
 
         List<DifferenceEntity> differenceEntityList = scoreCardList.stream().map(currentScorecard::calculateDifference).toList();
         differenceEntityList = differenceEntityList.stream().filter(sc -> sc.getNumberOfChanges() <= TRANSFER_LIMIT).toList();
@@ -91,12 +92,8 @@ public class Main {
 
     private static ScoreCard createPreviousScoreCard(List<String> driverNames, List<String> teamNames){
         ScoreCard scoreCard = new ScoreCard();
-        for (String driverName : driverNames) {
-            scoreCard.addDriver(DRIVER_SET.stream().filter(d -> d.getName().equals(driverName)).findFirst().orElse(null));
-        }
-        for (String teamName : teamNames) {
-            scoreCard.addTeam(TEAM_SET.stream().filter(t -> t.getName().equals(teamName)).findFirst().orElse(null));
-        }
+        DRIVER_SET.stream().filter(d -> driverNames.contains(d.getName())).forEach(scoreCard::addDriver);
+        TEAM_SET.stream().filter(t -> teamNames.contains(t.getName())).forEach(scoreCard::addTeam);
         scoreCard.intialize();
         return scoreCard;
     }

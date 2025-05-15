@@ -4,11 +4,10 @@ import org.f1.PointEntityV2;
 
 import java.io.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
-public class BaseCSVParsing {
+public class CSVParsing {
 
     public static Set<PointEntityV2> parse(String fileName) {
 
