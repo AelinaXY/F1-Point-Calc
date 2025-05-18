@@ -12,8 +12,8 @@ public class Main {
 
 
     private static final Set<ScoreCard> validTeamSet = new HashSet<>();
-    public static final double COST_CAP = 101.9;
-    public static final long TRANSFER_LIMIT = 3L;
+    public static final double COST_CAP = 108.9;
+    public static final long TRANSFER_LIMIT = 100L;
 
     public static void main(String[] args) {
         //Drivers no longer driving
@@ -30,7 +30,7 @@ public class Main {
 
         System.out.println("sorting");
 
-        ScoreCard previousScoreCard = createPreviousScoreCard(List.of("Franco Colapinto", "Gabriel Bortoleto", "Isack Hadjar", "Oscar Piastri", "Liam Lawson"), List.of("Mclaren", "Mercedes"));
+        ScoreCard previousScoreCard = createPreviousScoreCard(List.of("Franco Colapinto", "Gabriel Bortoleto", "Isack Hadjar", "Oscar Piastri", "Nico Hulkenberg"), List.of("Mclaren", "Mercedes"));
 
         System.out.println("Previous scorecard: " + previousScoreCard);
 
