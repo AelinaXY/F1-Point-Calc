@@ -7,13 +7,13 @@ import java.util.stream.Collectors;
 
 public class Main {
 
-    private static Set<? extends PointEntity> DRIVER_SET = CSVParsing.parse("Drivers_Output.csv");
-    private static Set<? extends PointEntity> TEAM_SET = CSVParsing.parse("Teams_Output.csv");
+    private static Set<? extends PointEntity> DRIVER_SET = CSVParsing.parse("Drivers_Normalised.csv");
+    private static Set<? extends PointEntity> TEAM_SET = CSVParsing.parse("Teams_Normalised.csv");
 
 
     private static final Set<ScoreCard> validTeamSet = new HashSet<>();
-    public static final double COST_CAP = 108.9;
-    public static final long TRANSFER_LIMIT = 100L;
+    public static final double COST_CAP = 102.7;
+    public static final long TRANSFER_LIMIT = 3L;
 
     public static void main(String[] args) {
         //Drivers no longer driving
@@ -30,7 +30,7 @@ public class Main {
 
         System.out.println("sorting");
 
-        ScoreCard previousScoreCard = createPreviousScoreCard(List.of("Franco Colapinto", "Gabriel Bortoleto", "Isack Hadjar", "Oscar Piastri", "Nico Hulkenberg"), List.of("Mclaren", "Mercedes"));
+        ScoreCard previousScoreCard = createPreviousScoreCard(List.of("Franco Colapinto", "Liam Lawson", "Isack Hadjar", "Oscar Piastri", "Nico Hulkenberg"), List.of("Mclaren", "Mercedes"));
 
         System.out.println("Previous scorecard: " + previousScoreCard);
 
