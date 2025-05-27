@@ -9,6 +9,30 @@ import static java.util.stream.Collectors.toList;
 
 public class CSVParsing {
 
+    public static Set<FullPointEntity> fullParse(String fileName){
+        List<String> baseList = loadInput(fileName);
+        String openingLine = baseList.removeFirst();
+
+        List<String> openingLineParts = new ArrayList<>(List.of(openingLine.split(",")));
+        openingLineParts.removeFirst();
+        openingLineParts.removeFirst();
+        openingLineParts = openingLineParts.subList(0,openingLineParts.size()-6);
+
+        List<Integer> tempIntegerList = new ArrayList<>();
+        LinkedHashMap<String, List<Integer>> raceMap = new LinkedHashMap<>();
+        for (int i = 0; i < openingLineParts.size(); i++) {
+            if(openingLineParts.get(i).contains(":")){
+                tempIntegerList.add(i);
+            }
+            else {
+                raceMap.put(openingLineParts.get(i), new ArrayList<>(tempIntegerList));
+                tempIntegerList = new ArrayList<>();
+            }
+        }
+
+        return null;
+    }
+
     public static Set<FullPointEntity> oldParse(String fileName) {
 
         List<String> baseList = loadInput(fileName);

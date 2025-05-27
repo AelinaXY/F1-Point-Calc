@@ -2,6 +2,7 @@ package org.f1;
 
 import org.f1.domain.DifferenceEntity;
 import org.f1.domain.BasicPointEntity;
+import org.f1.domain.FullPointEntity;
 import org.f1.domain.ScoreCard;
 import org.f1.parsing.CSVParsing;
 
@@ -12,6 +13,7 @@ public class Main {
 
     private static Set<? extends BasicPointEntity> DRIVER_SET = CSVParsing.oldParse("Drivers_Output.csv");
     private static Set<? extends BasicPointEntity> TEAM_SET = CSVParsing.oldParse("Teams_Output.csv");
+    private static Set<FullPointEntity> FULL_SET = CSVParsing.fullParse("Drivers_Full.csv");
 
 
     private static final Set<ScoreCard> validTeamSet = new HashSet<>();

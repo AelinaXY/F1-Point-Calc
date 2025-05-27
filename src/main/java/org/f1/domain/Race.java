@@ -19,7 +19,4 @@ public class Race {
     public boolean isSprint(){
         return sprintPoints != null;
     }
-
-
-
 }
