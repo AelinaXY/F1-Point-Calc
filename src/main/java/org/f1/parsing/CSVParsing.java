@@ -1,6 +1,6 @@
 package org.f1.parsing;
 
-import org.f1.PointEntityV2;
+import org.f1.domain.PointEntityV2;
 
 import java.io.*;
 import java.util.*;
@@ -13,7 +13,10 @@ public class CSVParsing {
 
         List<String> baseList = loadInput(fileName);
 
-        baseList.removeFirst();
+        String openingLine = baseList.removeFirst();
+        List<String> openingParts = new ArrayList<>(List.of(openingLine.split(",")));
+
+
 
         Set<PointEntityV2> result = new HashSet<>();
 

@@ -1,4 +1,4 @@
-package org.f1;
+package org.f1.domain;
 
 import java.util.ArrayList;
 import java.util.List;

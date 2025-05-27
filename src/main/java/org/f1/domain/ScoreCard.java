@@ -1,4 +1,4 @@
-package org.f1;
+package org.f1.domain;
 
 import java.util.Comparator;
 import java.util.HashSet;

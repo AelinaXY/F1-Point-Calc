@@ -1,5 +1,8 @@
 package org.f1;
 
+import org.f1.domain.DifferenceEntity;
+import org.f1.domain.PointEntity;
+import org.f1.domain.ScoreCard;
 import org.f1.parsing.CSVParsing;
 
 import java.util.*;
@@ -7,8 +10,8 @@ import java.util.stream.Collectors;
 
 public class Main {
 
-    private static Set<? extends PointEntity> DRIVER_SET = CSVParsing.parse("Drivers_Normalised.csv");
-    private static Set<? extends PointEntity> TEAM_SET = CSVParsing.parse("Teams_Normalised.csv");
+    private static Set<? extends PointEntity> DRIVER_SET = CSVParsing.parse("Drivers_Output.csv");
+    private static Set<? extends PointEntity> TEAM_SET = CSVParsing.parse("Teams_Output.csv");
 
 
     private static final Set<ScoreCard> validTeamSet = new HashSet<>();

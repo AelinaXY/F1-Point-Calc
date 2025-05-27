@@ -1,4 +1,4 @@
-package org.f1;
+package org.f1.domain;
 
 import java.util.HashSet;
 import java.util.Set;
