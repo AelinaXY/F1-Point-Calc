@@ -3,10 +3,10 @@ package org.f1.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PointEntityV2 extends PointEntity {
+public class FullPointEntity extends BasicPointEntity {
     List<Double> points;
 
-    public PointEntityV2(String name, Double cost, List<Double> points) {
+    public FullPointEntity(String name, Double cost, List<Double> points) {
         super(name, cost, null, null);
 
         this.points = new ArrayList<>(points);

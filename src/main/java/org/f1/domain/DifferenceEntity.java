@@ -5,8 +5,8 @@ import java.util.Set;
 
 public class DifferenceEntity {
 
-    private Set<PointEntity> out;
-    private Set<PointEntity> in;
+    private Set<BasicPointEntity> out;
+    private Set<BasicPointEntity> in;
     private Long numberOfChanges;
     private Double pointDifference;
     private Double threeRacePointDifference;
@@ -19,19 +19,19 @@ public class DifferenceEntity {
         threeRacePointDifference = 0D;
     }
 
-    public Set<PointEntity> getOut() {
+    public Set<BasicPointEntity> getOut() {
         return out;
     }
 
-    public void setOut(Set<PointEntity> out) {
+    public void setOut(Set<BasicPointEntity> out) {
         this.out = out;
     }
 
-    public Set<PointEntity> getIn() {
+    public Set<BasicPointEntity> getIn() {
         return in;
     }
 
-    public void setIn(Set<PointEntity> in) {
+    public void setIn(Set<BasicPointEntity> in) {
         this.in = in;
     }
 
@@ -55,13 +55,13 @@ public class DifferenceEntity {
         this.threeRacePointDifference = pointDifference;
     }
 
-    public void addOut(Set<PointEntity> pointEntity)
+    public void addOut(Set<BasicPointEntity> basicPointEntity)
     {
-        this.out.addAll(pointEntity);
+        this.out.addAll(basicPointEntity);
     }
-    public void addIn(Set<PointEntity> pointEntity)
+    public void addIn(Set<BasicPointEntity> basicPointEntity)
     {
-        this.in.addAll(pointEntity);
+        this.in.addAll(basicPointEntity);
     }
 
     public void incrementDifference(long count)

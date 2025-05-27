@@ -7,8 +7,8 @@ import java.util.Set;
 
 public class ScoreCard {
 
-    private Set<PointEntity> driverSet;
-    private Set<PointEntity> teamSet;
+    private Set<BasicPointEntity> driverSet;
+    private Set<BasicPointEntity> teamSet;
     private Double cost;
     private Double averagePoints;
     private Double threeRaceAveragePoints;
@@ -18,7 +18,7 @@ public class ScoreCard {
         this.teamSet = new HashSet<>();
     }
 
-    public ScoreCard(Set<PointEntity> driverSet, Set<PointEntity> teamSet) {
+    public ScoreCard(Set<BasicPointEntity> driverSet, Set<BasicPointEntity> teamSet) {
         this.driverSet = driverSet;
         this.teamSet = teamSet;
         initialize();
@@ -26,43 +26,43 @@ public class ScoreCard {
     }
 
     private void initialize() {
-        cost = this.driverSet.stream().map(PointEntity::getCost).reduce(0d, Double::sum);
-        cost += this.teamSet.stream().map(PointEntity::getCost).reduce(0d, Double::sum);
-        averagePoints = this.driverSet.stream().map(PointEntity::getAveragePoints).reduce(0d, Double::sum);
-        averagePoints += this.teamSet.stream().map(PointEntity::getAveragePoints).reduce(0d, Double::sum);
+        cost = this.driverSet.stream().map(BasicPointEntity::getCost).reduce(0d, Double::sum);
+        cost += this.teamSet.stream().map(BasicPointEntity::getCost).reduce(0d, Double::sum);
+        averagePoints = this.driverSet.stream().map(BasicPointEntity::getAveragePoints).reduce(0d, Double::sum);
+        averagePoints += this.teamSet.stream().map(BasicPointEntity::getAveragePoints).reduce(0d, Double::sum);
 
-        threeRaceAveragePoints = this.driverSet.stream().map(PointEntity::getThreeRaceAveragePoints).reduce(0d, Double::sum);
-        threeRaceAveragePoints += this.teamSet.stream().map(PointEntity::getThreeRaceAveragePoints).reduce(0d, Double::sum);
+        threeRaceAveragePoints = this.driverSet.stream().map(BasicPointEntity::getThreeRaceAveragePoints).reduce(0d, Double::sum);
+        threeRaceAveragePoints += this.teamSet.stream().map(BasicPointEntity::getThreeRaceAveragePoints).reduce(0d, Double::sum);
 
-        averagePoints += this.driverSet.stream().sorted(Comparator.comparing(PointEntity::getAveragePoints).reversed()).limit(1).map(PointEntity::getAveragePoints).findFirst().orElse(null);
-        threeRaceAveragePoints += this.driverSet.stream().sorted(Comparator.comparing(PointEntity::getAveragePoints).reversed()).limit(1).map(PointEntity::getThreeRaceAveragePoints).findFirst().orElse(null);
+        averagePoints += this.driverSet.stream().sorted(Comparator.comparing(BasicPointEntity::getAveragePoints).reversed()).limit(1).map(BasicPointEntity::getAveragePoints).findFirst().orElse(null);
+        threeRaceAveragePoints += this.driverSet.stream().sorted(Comparator.comparing(BasicPointEntity::getAveragePoints).reversed()).limit(1).map(BasicPointEntity::getThreeRaceAveragePoints).findFirst().orElse(null);
     }
 
     public void intialize() {
         initialize();
     }
 
-    public void addDriver(PointEntity driver) {
+    public void addDriver(BasicPointEntity driver) {
         this.driverSet.add(driver);
     }
 
-    public void addTeam(PointEntity team) {
+    public void addTeam(BasicPointEntity team) {
         this.teamSet.add(team);
     }
 
-    public Set<PointEntity> getDriverSet() {
+    public Set<BasicPointEntity> getDriverSet() {
         return driverSet;
     }
 
-    public void setDriverSet(Set<PointEntity> driverSet) {
+    public void setDriverSet(Set<BasicPointEntity> driverSet) {
         this.driverSet = driverSet;
     }
 
-    public Set<PointEntity> getTeamSet() {
+    public Set<BasicPointEntity> getTeamSet() {
         return teamSet;
     }
 
-    public void setTeamSet(Set<PointEntity> teamSet) {
+    public void setTeamSet(Set<BasicPointEntity> teamSet) {
         this.teamSet = teamSet;
     }
 
@@ -113,10 +113,10 @@ public class ScoreCard {
 
     public DifferenceEntity calculateDifference(ScoreCard scoreCard) {
         DifferenceEntity difference = new DifferenceEntity();
-        Set<PointEntity> oldDriverSet = new HashSet<>(driverSet);
-        Set<PointEntity> oldTeamSet = new HashSet<>(teamSet);
-        Set<PointEntity> newDriverSet = new HashSet<>(scoreCard.getDriverSet());
-        Set<PointEntity> newTeamSet = new HashSet<>(scoreCard.getTeamSet());
+        Set<BasicPointEntity> oldDriverSet = new HashSet<>(driverSet);
+        Set<BasicPointEntity> oldTeamSet = new HashSet<>(teamSet);
+        Set<BasicPointEntity> newDriverSet = new HashSet<>(scoreCard.getDriverSet());
+        Set<BasicPointEntity> newTeamSet = new HashSet<>(scoreCard.getTeamSet());
 
         outDifference(difference,oldDriverSet,scoreCard,true);
         outDifference(difference,oldTeamSet,scoreCard,false);
@@ -131,25 +131,25 @@ public class ScoreCard {
         return difference;
     }
 
-    private void outDifference(DifferenceEntity difference, Set<PointEntity> pointEntitySet, ScoreCard scoreCard, Boolean driver) {
+    private void outDifference(DifferenceEntity difference, Set<BasicPointEntity> basicPointEntitySet, ScoreCard scoreCard, Boolean driver) {
         if(driver) {
-            pointEntitySet.removeAll(scoreCard.getDriverSet());
+            basicPointEntitySet.removeAll(scoreCard.getDriverSet());
         }
         else{
-            pointEntitySet.removeAll(scoreCard.getTeamSet());
+            basicPointEntitySet.removeAll(scoreCard.getTeamSet());
         }
-        difference.addOut(pointEntitySet);
-        difference.incrementDifference(pointEntitySet.size());
+        difference.addOut(basicPointEntitySet);
+        difference.incrementDifference(basicPointEntitySet.size());
     }
 
-    private void inDifference(DifferenceEntity difference, Set<PointEntity> pointEntitySet, ScoreCard scoreCard, Boolean driver) {
+    private void inDifference(DifferenceEntity difference, Set<BasicPointEntity> basicPointEntitySet, ScoreCard scoreCard, Boolean driver) {
         if(driver) {
-            pointEntitySet.removeAll(scoreCard.getDriverSet());
+            basicPointEntitySet.removeAll(scoreCard.getDriverSet());
         }
         else{
-            pointEntitySet.removeAll(scoreCard.getTeamSet());
+            basicPointEntitySet.removeAll(scoreCard.getTeamSet());
         }
-        difference.addIn(pointEntitySet);
+        difference.addIn(basicPointEntitySet);
 
     }
 }

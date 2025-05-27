@@ -1,7 +1,7 @@
 package org.f1;
 
 import org.f1.domain.DifferenceEntity;
-import org.f1.domain.PointEntity;
+import org.f1.domain.BasicPointEntity;
 import org.f1.domain.ScoreCard;
 import org.f1.parsing.CSVParsing;
 
@@ -10,8 +10,8 @@ import java.util.stream.Collectors;
 
 public class Main {
 
-    private static Set<? extends PointEntity> DRIVER_SET = CSVParsing.parse("Drivers_Output.csv");
-    private static Set<? extends PointEntity> TEAM_SET = CSVParsing.parse("Teams_Output.csv");
+    private static Set<? extends BasicPointEntity> DRIVER_SET = CSVParsing.oldParse("Drivers_Output.csv");
+    private static Set<? extends BasicPointEntity> TEAM_SET = CSVParsing.oldParse("Teams_Output.csv");
 
 
     private static final Set<ScoreCard> validTeamSet = new HashSet<>();
@@ -58,15 +58,15 @@ public class Main {
     }
 
     private static void driverLoop(
-            Set<PointEntity> previousLevelDriverSet) {
+            Set<BasicPointEntity> previousLevelDriverSet) {
         if (previousLevelDriverSet.size() == 5) {
-            if (!(previousLevelDriverSet.stream().map(PointEntity::getCost).reduce(0d, Double::sum) >= COST_CAP)) {
+            if (!(previousLevelDriverSet.stream().map(BasicPointEntity::getCost).reduce(0d, Double::sum) >= COST_CAP)) {
                 teamLoop(new HashSet<>(), previousLevelDriverSet);
             }
         } else {
-            for (PointEntity driver : DRIVER_SET) {
+            for (BasicPointEntity driver : DRIVER_SET) {
                 if (!previousLevelDriverSet.contains(driver)) {
-                    Set<PointEntity> nextLevelDriverSet = new HashSet<>(previousLevelDriverSet);
+                    Set<BasicPointEntity> nextLevelDriverSet = new HashSet<>(previousLevelDriverSet);
                     nextLevelDriverSet.add(driver);
                     driverLoop(nextLevelDriverSet);
                 }
@@ -75,7 +75,7 @@ public class Main {
     }
 
     private static void teamLoop(
-            Set<PointEntity> previousLevelTeamSet, Set<PointEntity> driverSet) {
+            Set<BasicPointEntity> previousLevelTeamSet, Set<BasicPointEntity> driverSet) {
         if (previousLevelTeamSet.size() == 2) {
             ScoreCard scoreCard = new ScoreCard(driverSet, previousLevelTeamSet);
             if (scoreCard.getCost() <= COST_CAP && scoreCard.getCost() > 94) {
@@ -83,9 +83,9 @@ public class Main {
             }
 
         } else {
-            for (PointEntity team : TEAM_SET) {
+            for (BasicPointEntity team : TEAM_SET) {
                 if (!previousLevelTeamSet.contains(team)) {
-                    Set<PointEntity> nextLevelTeamSet = new HashSet<>(previousLevelTeamSet);
+                    Set<BasicPointEntity> nextLevelTeamSet = new HashSet<>(previousLevelTeamSet);
                     nextLevelTeamSet.add(team);
                     teamLoop(nextLevelTeamSet, driverSet);
                 }

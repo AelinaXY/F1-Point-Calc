@@ -1,6 +1,6 @@
 package org.f1.parsing;
 
-import org.f1.domain.PointEntityV2;
+import org.f1.domain.FullPointEntity;
 
 import java.io.*;
 import java.util.*;
@@ -9,16 +9,13 @@ import static java.util.stream.Collectors.toList;
 
 public class CSVParsing {
 
-    public static Set<PointEntityV2> parse(String fileName) {
+    public static Set<FullPointEntity> oldParse(String fileName) {
 
         List<String> baseList = loadInput(fileName);
 
         String openingLine = baseList.removeFirst();
-        List<String> openingParts = new ArrayList<>(List.of(openingLine.split(",")));
 
-
-
-        Set<PointEntityV2> result = new HashSet<>();
+        Set<FullPointEntity> result = new HashSet<>();
 
         for(String line : baseList){
             List<String> parts = new ArrayList<>(List.of(line.split(",")));
@@ -28,7 +25,7 @@ public class CSVParsing {
             List<Double> pointsList = parts.stream().map(Double::parseDouble).toList();
 
 
-            result.add(new PointEntityV2(name,cost,pointsList));
+            result.add(new FullPointEntity(name,cost,pointsList));
         }
 
         return result;

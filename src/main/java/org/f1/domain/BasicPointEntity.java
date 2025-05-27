@@ -2,7 +2,7 @@ package org.f1.domain;
 
 import java.util.Objects;
 
-public class PointEntity {
+public class BasicPointEntity {
 
     private String name;
     private Double cost;
@@ -10,7 +10,7 @@ public class PointEntity {
     private Double threeRaceAveragePoints;
 
 
-    public PointEntity(String name, Double cost, Double averagePoints, Double threeRaceAveragePoints) {
+    public BasicPointEntity(String name, Double cost, Double averagePoints, Double threeRaceAveragePoints) {
         this.name = name;
         this.cost = cost;
         this.averagePoints = averagePoints;
@@ -57,7 +57,7 @@ public class PointEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PointEntity that = (PointEntity) o;
+        BasicPointEntity that = (BasicPointEntity) o;
         return Double.compare(cost, that.cost) == 0 && Double.compare(averagePoints, that.averagePoints) == 0 && Objects.equals(name, that.name);
     }
 
