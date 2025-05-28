@@ -1,0 +1,106 @@
+package org.f1.calculations;
+
+import org.f1.domain.BasicPointEntity;
+import org.f1.domain.DifferenceEntity;
+import org.f1.domain.FullPointEntity;
+import org.f1.domain.ScoreCard;
+
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+public class RawDataCalculations {
+
+    private final Set<FullPointEntity> driverSet;
+    private final Set<FullPointEntity> teamSet;
+    private final double costCap;
+    private final long transferLimit;
+
+    private static final Set<ScoreCard> validTeamSet = new HashSet<>();
+
+
+    public RawDataCalculations(Set<FullPointEntity> driverSet, Set<FullPointEntity> teamSet, double costCap, long transferLimit) {
+        this.driverSet = driverSet;
+        this.teamSet = teamSet;
+        this.costCap = costCap;
+        this.transferLimit = transferLimit;
+    }
+
+    public void calculate(ScoreCard previousScoreCard) {
+        driverSet.parallelStream().forEach(driver -> {
+            driverLoop(Set.of(driver));
+            System.out.println("Driver " + driver.getName() + " done");
+        });
+
+        System.out.println("Number of valid combinations: " + validTeamSet.size());
+
+        System.out.println("sorting");
+
+
+        System.out.println("Previous scorecard: " + previousScoreCard);
+
+        scoreCardOutput(previousScoreCard, Comparator.comparing(ScoreCard::getAveragePoints));
+
+        scoreCardOutput(previousScoreCard, Comparator.comparing(ScoreCard::getThreeRaceAveragePoints));
+    }
+
+    private void scoreCardOutput(ScoreCard currentScorecard, Comparator<ScoreCard> comparing) {
+        System.out.println("\nAbsolute Score Cards: ----------------------------------------------------------");
+
+        List<ScoreCard> scoreCardList = validTeamSet.stream().sorted(comparing.reversed()).limit(30).toList();
+
+        scoreCardList.forEach(System.out::println);
+
+        System.out.println("\nDifference Entities: ----------------------------------------------------------");
+
+        List<DifferenceEntity> differenceEntityList = scoreCardList.stream().map(currentScorecard::calculateDifference).toList();
+        differenceEntityList = differenceEntityList.stream().filter(sc -> sc.getNumberOfChanges() <= transferLimit).toList();
+
+        differenceEntityList.forEach(System.out::println);
+    }
+
+    private void driverLoop(
+            Set<BasicPointEntity> previousLevelDriverSet) {
+        if (previousLevelDriverSet.size() == 5) {
+            if (!(previousLevelDriverSet.stream().map(BasicPointEntity::getCost).reduce(0d, Double::sum) >= costCap)) {
+                teamLoop(new HashSet<>(), previousLevelDriverSet);
+            }
+        } else {
+            for (BasicPointEntity driver : driverSet) {
+                if (!previousLevelDriverSet.contains(driver)) {
+                    Set<BasicPointEntity> nextLevelDriverSet = new HashSet<>(previousLevelDriverSet);
+                    nextLevelDriverSet.add(driver);
+                    driverLoop(nextLevelDriverSet);
+                }
+            }
+        }
+    }
+
+    private void teamLoop(
+            Set<BasicPointEntity> previousLevelTeamSet, Set<BasicPointEntity> driverSet) {
+        if (previousLevelTeamSet.size() == 2) {
+            ScoreCard scoreCard = new ScoreCard(driverSet, previousLevelTeamSet);
+            if (scoreCard.getCost() <= costCap && scoreCard.getCost() > 94) {
+                validTeamSet.add(scoreCard);
+            }
+
+        } else {
+            for (BasicPointEntity team : teamSet) {
+                if (!previousLevelTeamSet.contains(team)) {
+                    Set<BasicPointEntity> nextLevelTeamSet = new HashSet<>(previousLevelTeamSet);
+                    nextLevelTeamSet.add(team);
+                    teamLoop(nextLevelTeamSet, driverSet);
+                }
+            }
+        }
+    }
+
+    public ScoreCard createPreviousScoreCard(List<String> driverNames, List<String> teamNames){
+        ScoreCard scoreCard = new ScoreCard();
+        driverSet.stream().filter(d -> driverNames.contains(d.getName())).forEach(scoreCard::addDriver);
+        teamSet.stream().filter(t -> teamNames.contains(t.getName())).forEach(scoreCard::addTeam);
+        scoreCard.intialize();
+        return scoreCard;
+    }
+}
