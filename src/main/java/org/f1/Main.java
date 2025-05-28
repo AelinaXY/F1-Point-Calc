@@ -11,9 +11,11 @@ import java.util.stream.Collectors;
 
 public class Main {
 
-    private static Set<? extends BasicPointEntity> DRIVER_SET = CSVParsing.oldParse("Drivers_Output.csv");
-    private static Set<? extends BasicPointEntity> TEAM_SET = CSVParsing.oldParse("Teams_Output.csv");
-    private static Set<FullPointEntity> FULL_SET = CSVParsing.fullParse("Drivers_Full.csv");
+//    private static Set<? extends BasicPointEntity> DRIVER_SET = CSVParsing.oldParse("Drivers_Output.csv");
+//    private static Set<? extends BasicPointEntity> TEAM_SET = CSVParsing.oldParse("Teams_Output.csv");
+    private static Set<FullPointEntity> DRIVER_SET2 = CSVParsing.fullParse("Drivers_Full.csv");
+    private static Set<FullPointEntity> TEAM_SET2 = CSVParsing.fullParse("Teams_Full.csv");
+
 
 
     private static final Set<ScoreCard> validTeamSet = new HashSet<>();
@@ -23,10 +25,10 @@ public class Main {
     public static void main(String[] args) {
         //Drivers no longer driving
         List<String> driversNoLongerExists = List.of("Jack Doohan");
-        DRIVER_SET = DRIVER_SET.stream().filter(d -> !driversNoLongerExists.contains(d.getName())).collect(Collectors.toSet());
+        DRIVER_SET2 = DRIVER_SET2.stream().filter(d -> !driversNoLongerExists.contains(d.getName())).collect(Collectors.toSet());
 
 
-        DRIVER_SET.parallelStream().forEach(driver -> {
+        DRIVER_SET2.parallelStream().forEach(driver -> {
             driverLoop(Set.of(driver));
             System.out.println("Driver " + driver.getName() + " done");
         });
@@ -66,7 +68,7 @@ public class Main {
                 teamLoop(new HashSet<>(), previousLevelDriverSet);
             }
         } else {
-            for (BasicPointEntity driver : DRIVER_SET) {
+            for (BasicPointEntity driver : DRIVER_SET2) {
                 if (!previousLevelDriverSet.contains(driver)) {
                     Set<BasicPointEntity> nextLevelDriverSet = new HashSet<>(previousLevelDriverSet);
                     nextLevelDriverSet.add(driver);
@@ -85,7 +87,7 @@ public class Main {
             }
 
         } else {
-            for (BasicPointEntity team : TEAM_SET) {
+            for (BasicPointEntity team : TEAM_SET2) {
                 if (!previousLevelTeamSet.contains(team)) {
                     Set<BasicPointEntity> nextLevelTeamSet = new HashSet<>(previousLevelTeamSet);
                     nextLevelTeamSet.add(team);
@@ -97,8 +99,8 @@ public class Main {
 
     private static ScoreCard createPreviousScoreCard(List<String> driverNames, List<String> teamNames){
         ScoreCard scoreCard = new ScoreCard();
-        DRIVER_SET.stream().filter(d -> driverNames.contains(d.getName())).forEach(scoreCard::addDriver);
-        TEAM_SET.stream().filter(t -> teamNames.contains(t.getName())).forEach(scoreCard::addTeam);
+        DRIVER_SET2.stream().filter(d -> driverNames.contains(d.getName())).forEach(scoreCard::addDriver);
+        TEAM_SET2.stream().filter(t -> teamNames.contains(t.getName())).forEach(scoreCard::addTeam);
         scoreCard.intialize();
         return scoreCard;
     }

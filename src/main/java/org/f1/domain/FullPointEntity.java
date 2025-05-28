@@ -2,17 +2,18 @@ package org.f1.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class FullPointEntity extends BasicPointEntity {
-    List<Double> points;
+    private List<Race> racePoints;
 
-    public FullPointEntity(String name, Double cost, List<Double> points) {
+    public FullPointEntity(String name, Double cost, List<Race> points) {
         super(name, cost, null, null);
 
-        this.points = new ArrayList<>(points);
+        this.racePoints = new ArrayList<>(points);
 
-        setAveragePoints(calcAveragePoints(this.points));
-        setThreeRaceAveragePoints(calcThreeRaceAverage(this.points));
+        setAveragePoints(calcAveragePoints(this.racePoints.stream().map(Race::totalPoints).collect(Collectors.toList())));
+        setThreeRaceAveragePoints(calcThreeRaceAverage(this.racePoints.stream().map(Race::totalPoints).collect(Collectors.toList())));
     }
 
     private Double calcAveragePoints(List<Double> points) {
