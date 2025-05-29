@@ -1,8 +1,6 @@
 package org.f1;
 
 import org.f1.calculations.RawDataCalculations;
-import org.f1.domain.DifferenceEntity;
-import org.f1.domain.BasicPointEntity;
 import org.f1.domain.FullPointEntity;
 import org.f1.domain.ScoreCard;
 import org.f1.parsing.CSVParsing;

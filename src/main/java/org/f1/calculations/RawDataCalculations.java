@@ -10,25 +10,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class RawDataCalculations {
-
-    private final Set<FullPointEntity> driverSet;
-    private final Set<FullPointEntity> teamSet;
-    private final double costCap;
-    private final long transferLimit;
+public class RawDataCalculations extends AbstractCalculation{
 
     private static final Set<ScoreCard> validTeamSet = new HashSet<>();
 
-
     public RawDataCalculations(Set<FullPointEntity> driverSet, Set<FullPointEntity> teamSet, double costCap, long transferLimit) {
-        this.driverSet = driverSet;
-        this.teamSet = teamSet;
-        this.costCap = costCap;
-        this.transferLimit = transferLimit;
+        super(driverSet, teamSet, costCap, transferLimit);
     }
 
     public void calculate(ScoreCard previousScoreCard) {
-        driverSet.parallelStream().forEach(driver -> {
+        getDriverSet().parallelStream().forEach(driver -> {
             driverLoop(Set.of(driver));
             System.out.println("Driver " + driver.getName() + " done");
         });
@@ -55,7 +46,7 @@ public class RawDataCalculations {
         System.out.println("\nDifference Entities: ----------------------------------------------------------");
 
         List<DifferenceEntity> differenceEntityList = scoreCardList.stream().map(currentScorecard::calculateDifference).toList();
-        differenceEntityList = differenceEntityList.stream().filter(sc -> sc.getNumberOfChanges() <= transferLimit).toList();
+        differenceEntityList = differenceEntityList.stream().filter(sc -> sc.getNumberOfChanges() <= getTransferLimit()).toList();
 
         differenceEntityList.forEach(System.out::println);
     }
@@ -63,11 +54,11 @@ public class RawDataCalculations {
     private void driverLoop(
             Set<BasicPointEntity> previousLevelDriverSet) {
         if (previousLevelDriverSet.size() == 5) {
-            if (!(previousLevelDriverSet.stream().map(BasicPointEntity::getCost).reduce(0d, Double::sum) >= costCap)) {
+            if (!(previousLevelDriverSet.stream().map(BasicPointEntity::getCost).reduce(0d, Double::sum) >= getCostCap())) {
                 teamLoop(new HashSet<>(), previousLevelDriverSet);
             }
         } else {
-            for (BasicPointEntity driver : driverSet) {
+            for (BasicPointEntity driver : getDriverSet()) {
                 if (!previousLevelDriverSet.contains(driver)) {
                     Set<BasicPointEntity> nextLevelDriverSet = new HashSet<>(previousLevelDriverSet);
                     nextLevelDriverSet.add(driver);
@@ -81,12 +72,12 @@ public class RawDataCalculations {
             Set<BasicPointEntity> previousLevelTeamSet, Set<BasicPointEntity> driverSet) {
         if (previousLevelTeamSet.size() == 2) {
             ScoreCard scoreCard = new ScoreCard(driverSet, previousLevelTeamSet);
-            if (scoreCard.getCost() <= costCap && scoreCard.getCost() > 94) {
+            if (scoreCard.getCost() <= getCostCap() && scoreCard.getCost() > 94) {
                 validTeamSet.add(scoreCard);
             }
 
         } else {
-            for (BasicPointEntity team : teamSet) {
+            for (BasicPointEntity team : getTeamSet()) {
                 if (!previousLevelTeamSet.contains(team)) {
                     Set<BasicPointEntity> nextLevelTeamSet = new HashSet<>(previousLevelTeamSet);
                     nextLevelTeamSet.add(team);
@@ -98,8 +89,8 @@ public class RawDataCalculations {
 
     public ScoreCard createPreviousScoreCard(List<String> driverNames, List<String> teamNames){
         ScoreCard scoreCard = new ScoreCard();
-        driverSet.stream().filter(d -> driverNames.contains(d.getName())).forEach(scoreCard::addDriver);
-        teamSet.stream().filter(t -> teamNames.contains(t.getName())).forEach(scoreCard::addTeam);
+        getDriverSet().stream().filter(d -> driverNames.contains(d.getName())).forEach(scoreCard::addDriver);
+        getTeamSet().stream().filter(t -> teamNames.contains(t.getName())).forEach(scoreCard::addTeam);
         scoreCard.intialize();
         return scoreCard;
     }
