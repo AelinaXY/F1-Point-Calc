@@ -1,5 +1,6 @@
 package org.f1;
 
+import org.f1.calculations.AbstractCalculation;
 import org.f1.calculations.RawDataCalculations;
 import org.f1.domain.FullPointEntity;
 import org.f1.domain.ScoreCard;

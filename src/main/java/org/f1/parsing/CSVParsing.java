@@ -54,14 +54,14 @@ public class CSVParsing {
                 String raceName = raceNames.get(i);
 
                 List<Integer> racePointLocations = raceMap.get(raceName);
-                currentRaceBuilder.withName(raceName).withRaceNumber(i);
+                currentRaceBuilder = currentRaceBuilder.withName(raceName).withRaceNumber(i);
 
                 if (racePointLocations.size() == 3) {
-                    currentRaceBuilder.withSprintPoints(Double.valueOf(parts.get(racePointLocations.get(0))))
+                    currentRaceBuilder = currentRaceBuilder.withSprintPoints(Double.valueOf(parts.get(racePointLocations.get(0))))
                             .withQualiPoints(Double.valueOf(parts.get(racePointLocations.get(1))))
                             .withRacePoints(Double.valueOf(parts.get(racePointLocations.get(2))));
                 } else {
-                    currentRaceBuilder.withQualiPoints(Double.valueOf(parts.get(racePointLocations.get(0))))
+                    currentRaceBuilder = currentRaceBuilder.withQualiPoints(Double.valueOf(parts.get(racePointLocations.get(0))))
                             .withRacePoints(Double.valueOf(parts.get(racePointLocations.get(1))));
                 }
                 races.add(currentRaceBuilder.build());

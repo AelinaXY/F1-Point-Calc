@@ -11,7 +11,7 @@ public abstract class AbstractCalculation {
     private final long transferLimit;
 
 
-    protected AbstractCalculation(Set<FullPointEntity> driverSet, Set<FullPointEntity> teamSet, double costCap, long transferLimit) {
+    public AbstractCalculation(Set<FullPointEntity> driverSet, Set<FullPointEntity> teamSet, double costCap, long transferLimit) {
         this.driverSet = driverSet;
         this.teamSet = teamSet;
         this.costCap = costCap;
