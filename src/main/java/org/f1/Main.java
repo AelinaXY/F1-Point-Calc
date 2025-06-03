@@ -1,6 +1,5 @@
 package org.f1;
 
-import org.f1.calculations.AbstractCalculation;
 import org.f1.calculations.RawDataCalculations;
 import org.f1.domain.FullPointEntity;
 import org.f1.domain.ScoreCard;
@@ -20,7 +19,7 @@ public class Main {
         List<String> driversNoLongerExists = List.of("Jack Doohan");
         DRIVER_SET = DRIVER_SET.stream().filter(d -> !driversNoLongerExists.contains(d.getName())).collect(Collectors.toSet());
 
-        RawDataCalculations rawDataCalculations = new RawDataCalculations(DRIVER_SET, TEAM_SET, 102.7, 3l);
+        RawDataCalculations rawDataCalculations = new RawDataCalculations(DRIVER_SET, TEAM_SET, 104.8, 3l);
 
         ScoreCard previousScoreCard = rawDataCalculations.createPreviousScoreCard(List.of("Franco Colapinto", "Liam Lawson", "Isack Hadjar", "Oscar Piastri", "Nico Hulkenberg"), List.of("Mclaren", "Mercedes"));
 
