@@ -1,6 +1,7 @@
 package org.f1;
 
 import org.f1.calculations.RawDataCalculations;
+import org.f1.calculations.RegressionDataCalculations;
 import org.f1.domain.FullPointEntity;
 import org.f1.domain.ScoreCard;
 import org.f1.parsing.CSVParsing;
@@ -20,9 +21,11 @@ public class Main {
         DRIVER_SET = DRIVER_SET.stream().filter(d -> !driversNoLongerExists.contains(d.getName())).collect(Collectors.toSet());
 
         RawDataCalculations rawDataCalculations = new RawDataCalculations(DRIVER_SET, TEAM_SET, 104.8, 3l);
+        RegressionDataCalculations regressionDataCalculations = new RegressionDataCalculations(DRIVER_SET, TEAM_SET, 104.8, 3l);
 
-        ScoreCard previousScoreCard = rawDataCalculations.createPreviousScoreCard(List.of("Franco Colapinto", "Liam Lawson", "Isack Hadjar", "Oscar Piastri", "Nico Hulkenberg"), List.of("Mclaren", "Mercedes"));
-
-        rawDataCalculations.calculate(previousScoreCard);
+//        ScoreCard previousScoreCard = rawDataCalculations.createPreviousScoreCard(List.of("Franco Colapinto", "Liam Lawson", "Isack Hadjar", "Oscar Piastri", "Nico Hulkenberg"), List.of("Mclaren", "Mercedes"));
+//        rawDataCalculations.calculate(previousScoreCard);
+        regressionDataCalculations.regressionCalculation();
     }
+
 }

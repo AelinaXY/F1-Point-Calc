@@ -5,20 +5,20 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class FullPointEntity extends BasicPointEntity {
-    private List<Race> racePoints;
+    private List<Race> raceList;
     private Double updatedAveragePoints;
     private Double updatedThreeRaceAveragePoints;
 
     public FullPointEntity(String name, Double cost, List<Race> points) {
         super(name, cost, null, null);
 
-        this.racePoints = new ArrayList<>(points);
+        this.raceList = new ArrayList<>(points);
 
-        Double avgPoint = calcAveragePoints(this.racePoints.stream().map(Race::totalPoints).collect(Collectors.toList()));
+        Double avgPoint = calcAveragePoints(this.raceList.stream().map(Race::totalPoints).collect(Collectors.toList()));
         setAveragePoints(avgPoint);
         this.updatedAveragePoints = avgPoint;
 
-        Double threeAvgPoint = calcThreeRaceAverage(this.racePoints.stream().map(Race::totalPoints).collect(Collectors.toList()));
+        Double threeAvgPoint = calcThreeRaceAverage(this.raceList.stream().map(Race::totalPoints).collect(Collectors.toList()));
         setThreeRaceAveragePoints(threeAvgPoint);
         this.updatedThreeRaceAveragePoints = threeAvgPoint;
     }
@@ -27,7 +27,7 @@ public class FullPointEntity extends BasicPointEntity {
     {
         List<Race> currentRaces = new ArrayList<>();
 
-        for (Race race : racePoints) {
+        for (Race race : raceList) {
             if(race.name().equals(raceName))
             {
                 break;
@@ -71,5 +71,9 @@ public class FullPointEntity extends BasicPointEntity {
 
     public Double getUpdatedAveragePoints() {
         return updatedAveragePoints;
+    }
+
+    public List<Race> getRaceList() {
+        return raceList;
     }
 }
