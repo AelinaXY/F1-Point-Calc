@@ -1,5 +1,7 @@
 package org.f1.domain;
 
+import org.f1.calculations.ScoreCalculator;
+
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Objects;
@@ -7,18 +9,19 @@ import java.util.Set;
 
 public class ScoreCard {
 
-    private Set<BasicPointEntity> driverSet;
-    private Set<BasicPointEntity> teamSet;
+    private Set<FullPointEntity> driverSet;
+    private Set<FullPointEntity> teamSet;
     private Double cost;
     private Double averagePoints;
     private Double threeRaceAveragePoints;
+    private Double score;
 
     public ScoreCard() {
         this.driverSet = new HashSet<>();
         this.teamSet = new HashSet<>();
     }
 
-    public ScoreCard(Set<BasicPointEntity> driverSet, Set<BasicPointEntity> teamSet) {
+    public ScoreCard(Set<FullPointEntity> driverSet, Set<FullPointEntity> teamSet) {
         this.driverSet = driverSet;
         this.teamSet = teamSet;
         initialize();
@@ -34,35 +37,40 @@ public class ScoreCard {
         threeRaceAveragePoints = this.driverSet.stream().map(BasicPointEntity::getThreeRaceAveragePoints).reduce(0d, Double::sum);
         threeRaceAveragePoints += this.teamSet.stream().map(BasicPointEntity::getThreeRaceAveragePoints).reduce(0d, Double::sum);
 
+        score = this.driverSet.stream().map(ScoreCalculator::calculateScore).reduce(0d, Double::sum);
+        score += this.teamSet.stream().map(ScoreCalculator::calculateScore).reduce(0d, Double::sum);
+
         averagePoints += this.driverSet.stream().sorted(Comparator.comparing(BasicPointEntity::getAveragePoints).reversed()).limit(1).map(BasicPointEntity::getAveragePoints).findFirst().orElse(null);
-        threeRaceAveragePoints += this.driverSet.stream().sorted(Comparator.comparing(BasicPointEntity::getAveragePoints).reversed()).limit(1).map(BasicPointEntity::getThreeRaceAveragePoints).findFirst().orElse(null);
+        threeRaceAveragePoints += this.driverSet.stream().sorted(Comparator.comparing(BasicPointEntity::getThreeRaceAveragePoints).reversed()).limit(1).map(BasicPointEntity::getThreeRaceAveragePoints).findFirst().orElse(null);
+        score += this.driverSet.stream().sorted(Comparator.comparing(ScoreCalculator::calculateScore).reversed()).limit(1).map(ScoreCalculator::calculateScore).findFirst().orElse(null);
+
     }
 
     public void intialize() {
         initialize();
     }
 
-    public void addDriver(BasicPointEntity driver) {
+    public void addDriver(FullPointEntity driver) {
         this.driverSet.add(driver);
     }
 
-    public void addTeam(BasicPointEntity team) {
+    public void addTeam(FullPointEntity team) {
         this.teamSet.add(team);
     }
 
-    public Set<BasicPointEntity> getDriverSet() {
+    public Set<FullPointEntity> getDriverSet() {
         return driverSet;
     }
 
-    public void setDriverSet(Set<BasicPointEntity> driverSet) {
+    public void setDriverSet(Set<FullPointEntity> driverSet) {
         this.driverSet = driverSet;
     }
 
-    public Set<BasicPointEntity> getTeamSet() {
+    public Set<FullPointEntity> getTeamSet() {
         return teamSet;
     }
 
-    public void setTeamSet(Set<BasicPointEntity> teamSet) {
+    public void setTeamSet(Set<FullPointEntity> teamSet) {
         this.teamSet = teamSet;
     }
 
@@ -82,9 +90,8 @@ public class ScoreCard {
         return threeRaceAveragePoints;
     }
 
-
-    public void setAveragePoints(Double averagePoints) {
-        this.averagePoints = averagePoints;
+    public Double getScore() {
+        return score;
     }
 
     @Override

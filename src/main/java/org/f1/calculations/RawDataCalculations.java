@@ -34,6 +34,8 @@ public class RawDataCalculations extends AbstractCalculation{
         scoreCardOutput(previousScoreCard, Comparator.comparing(ScoreCard::getAveragePoints));
 
         scoreCardOutput(previousScoreCard, Comparator.comparing(ScoreCard::getThreeRaceAveragePoints));
+
+        scoreCardOutput(previousScoreCard, Comparator.comparing(ScoreCard::getScore));
     }
 
     private void scoreCardOutput(ScoreCard currentScorecard, Comparator<ScoreCard> comparing) {
@@ -52,15 +54,15 @@ public class RawDataCalculations extends AbstractCalculation{
     }
 
     private void driverLoop(
-            Set<BasicPointEntity> previousLevelDriverSet) {
+            Set<FullPointEntity> previousLevelDriverSet) {
         if (previousLevelDriverSet.size() == 5) {
             if (!(previousLevelDriverSet.stream().map(BasicPointEntity::getCost).reduce(0d, Double::sum) >= getCostCap())) {
                 teamLoop(new HashSet<>(), previousLevelDriverSet);
             }
         } else {
-            for (BasicPointEntity driver : getDriverSet()) {
+            for (FullPointEntity driver : getDriverSet()) {
                 if (!previousLevelDriverSet.contains(driver)) {
-                    Set<BasicPointEntity> nextLevelDriverSet = new HashSet<>(previousLevelDriverSet);
+                    Set<FullPointEntity> nextLevelDriverSet = new HashSet<>(previousLevelDriverSet);
                     nextLevelDriverSet.add(driver);
                     driverLoop(nextLevelDriverSet);
                 }
@@ -69,7 +71,7 @@ public class RawDataCalculations extends AbstractCalculation{
     }
 
     private void teamLoop(
-            Set<BasicPointEntity> previousLevelTeamSet, Set<BasicPointEntity> driverSet) {
+            Set<FullPointEntity> previousLevelTeamSet, Set<FullPointEntity> driverSet) {
         if (previousLevelTeamSet.size() == 2) {
             ScoreCard scoreCard = new ScoreCard(driverSet, previousLevelTeamSet);
             if (scoreCard.getCost() <= getCostCap() && scoreCard.getCost() > 94) {
@@ -77,9 +79,9 @@ public class RawDataCalculations extends AbstractCalculation{
             }
 
         } else {
-            for (BasicPointEntity team : getTeamSet()) {
+            for (FullPointEntity team : getTeamSet()) {
                 if (!previousLevelTeamSet.contains(team)) {
-                    Set<BasicPointEntity> nextLevelTeamSet = new HashSet<>(previousLevelTeamSet);
+                    Set<FullPointEntity> nextLevelTeamSet = new HashSet<>(previousLevelTeamSet);
                     nextLevelTeamSet.add(team);
                     teamLoop(nextLevelTeamSet, driverSet);
                 }

@@ -6,14 +6,37 @@ import java.util.stream.Collectors;
 
 public class FullPointEntity extends BasicPointEntity {
     private List<Race> racePoints;
+    private Double updatedAveragePoints;
+    private Double updatedThreeRaceAveragePoints;
 
     public FullPointEntity(String name, Double cost, List<Race> points) {
         super(name, cost, null, null);
 
         this.racePoints = new ArrayList<>(points);
 
-        setAveragePoints(calcAveragePoints(this.racePoints.stream().map(Race::totalPoints).collect(Collectors.toList())));
-        setThreeRaceAveragePoints(calcThreeRaceAverage(this.racePoints.stream().map(Race::totalPoints).collect(Collectors.toList())));
+        Double avgPoint = calcAveragePoints(this.racePoints.stream().map(Race::totalPoints).collect(Collectors.toList()));
+        setAveragePoints(avgPoint);
+        this.updatedAveragePoints = avgPoint;
+
+        Double threeAvgPoint = calcThreeRaceAverage(this.racePoints.stream().map(Race::totalPoints).collect(Collectors.toList()));
+        setThreeRaceAveragePoints(threeAvgPoint);
+        this.updatedThreeRaceAveragePoints = threeAvgPoint;
+    }
+
+    public void calculateUpdatedPoints(String raceName)
+    {
+        List<Race> currentRaces = new ArrayList<>();
+
+        for (Race race : racePoints) {
+            if(race.name().equals(raceName))
+            {
+                break;
+            }
+            currentRaces.add(race);
+        }
+
+        this.updatedAveragePoints = calcAveragePoints(currentRaces.stream().map(Race::totalPoints).collect(Collectors.toList()));
+        this.updatedThreeRaceAveragePoints = calcThreeRaceAverage(currentRaces.stream().map(Race::totalPoints).collect(Collectors.toList()));
     }
 
     private Double calcAveragePoints(List<Double> points) {
@@ -40,5 +63,13 @@ public class FullPointEntity extends BasicPointEntity {
             if (point < lowest) lowest = point;
         }
         points.remove(lowest);
+    }
+
+    public Double getUpdatedThreeRaceAveragePoints() {
+        return updatedThreeRaceAveragePoints;
+    }
+
+    public Double getUpdatedAveragePoints() {
+        return updatedAveragePoints;
     }
 }

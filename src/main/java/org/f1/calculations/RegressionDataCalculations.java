@@ -13,11 +13,11 @@ public class RegressionDataCalculations extends AbstractCalculation {
 
 
     public void calculate(String race){
+
+
     }
 
     //TODO:
-    //Section 0: Update FullPointEntity to have a score variable created from average and 4d1 average weighted
-
     //Method 1: Take in a FullPointEntity and a race name and output the error value
 
     //Method 2: Take in a Set<FullPointEntity> and calculate the mean square error for each race prediction using the scoring algo
