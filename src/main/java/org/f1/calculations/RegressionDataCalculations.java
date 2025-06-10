@@ -32,7 +32,6 @@ public class RegressionDataCalculations extends AbstractCalculation {
     public Map<String, SquaredErrorValue> calculateMeanSquaredErrorValue(Set<Set<FullPointEntity>> entitySets) {
         Set<FullPointEntity> entitySet = entitySets.stream().flatMap(Set::stream).collect(Collectors.toSet());
         Map<String, SquaredErrorValue> meanSquaredErrorMap = new HashMap<>();
-        int count = 0;
 
         for (FullPointEntity entity : entitySet) {
             List<Race> raceList = new ArrayList<>(entity.getRaceList());
@@ -40,7 +39,6 @@ public class RegressionDataCalculations extends AbstractCalculation {
             for (Race race : raceList) {
                 Double errorValue = calculateErrorValue(entity, race.name());
                 meanSquaredErrorMap.compute(race.name(), (k, v) -> v == null ? new SquaredErrorValue(errorValue) : v.increment(errorValue));
-                count++;
             }
         }
         return meanSquaredErrorMap;
