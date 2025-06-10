@@ -8,15 +8,12 @@ public class DifferenceEntity {
     private Set<BasicPointEntity> out;
     private Set<BasicPointEntity> in;
     private Long numberOfChanges;
-    private Double pointDifference;
-    private Double threeRacePointDifference;
+    private Double scoreDifference;
 
     public DifferenceEntity() {
         out = new HashSet<>();
         in = new HashSet<>();
         numberOfChanges = 0L;
-        pointDifference = 0D;
-        threeRacePointDifference = 0D;
     }
 
     public Set<BasicPointEntity> getOut() {
@@ -43,16 +40,8 @@ public class DifferenceEntity {
         this.numberOfChanges = numberOfChanges;
     }
 
-    public Double getPointDifference() {
-        return pointDifference;
-    }
-
-    public void setPointDifference(Double pointDifference) {
-        this.pointDifference = pointDifference;
-    }
-
-    public void setThreeRacePointDifference(Double pointDifference) {
-        this.threeRacePointDifference = pointDifference;
+    public void setScoreDifference(Double scoreDifference) {
+        this.scoreDifference = scoreDifference;
     }
 
     public void addOut(Set<BasicPointEntity> basicPointEntity)
@@ -75,8 +64,7 @@ public class DifferenceEntity {
                 "out=" + out +
                 ", in=" + in +
                 ", difference=" + numberOfChanges +
-                ", pointDifference=" + pointDifference +
-                ", threeRacePointDifference=" + threeRacePointDifference +
+                ", scoreDifference=" + scoreDifference +
                 '}';
     }
 }

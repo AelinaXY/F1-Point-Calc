@@ -2,6 +2,7 @@ package org.f1.calculations;
 
 import org.f1.domain.FullPointEntity;
 import org.f1.domain.Race;
+import org.f1.domain.ScoreCard;
 import org.f1.domain.SquaredErrorValue;
 
 import java.util.*;
@@ -47,18 +48,37 @@ public class RegressionDataCalculations extends AbstractCalculation {
     public void regressionCalculation() {
         Set<Set<FullPointEntity>> pointEntitySets = Set.of(getDriverSet(), getTeamSet());
 
-        Map<String, SquaredErrorValue> squaredErrorValueMap = calculateMeanSquaredErrorValue(pointEntitySets);
+        Map<List<Double>, Double> scoreWeightMap = new HashMap<>();
 
-        for (Map.Entry<String, SquaredErrorValue> entry : squaredErrorValueMap.entrySet()) {
-            System.out.println(entry.getKey() + ": " + entry.getValue());
+        Set<List<Double>> weightSet = new HashSet<>();
+
+        for (double i = 0.0; i <= 1; i += 0.01) {
+            weightSet.add(List.of(i, 1 - i));
         }
+
+        for (List<Double> weights : weightSet) {
+            ScoreCalculator.setAveragePointWeight(weights.get(0));
+            ScoreCalculator.setAveragePointWeight(weights.get(1));
+            Map<String, SquaredErrorValue> squaredErrorValueMap = calculateMeanSquaredErrorValue(pointEntitySets);
+
+            Double meanSquaredError = 0.0;
+            int count = 0;
+            for (Map.Entry<String, SquaredErrorValue> entry : squaredErrorValueMap.entrySet()) {
+                meanSquaredError += entry.getValue().getValue();
+                count += entry.getValue().getCount();
+            }
+            scoreWeightMap.put(weights, meanSquaredError / count);
+        }
+
+        scoreWeightMap.entrySet().stream().sorted(Map.Entry.comparingByValue()).forEach(System.out::println);
+
     }
 
     //TODO:
     //Method 2: Take in a Set<FullPointEntity> and calculate the mean square error for each race prediction using the scoring algo
     //Output: Set of mean square errors
 
-    //detect outlayers?
+    //detect outliers?
 
 
     //Method 3: Iterate on method 2 to find the lowest error value for weight combinations for scoring algorithm

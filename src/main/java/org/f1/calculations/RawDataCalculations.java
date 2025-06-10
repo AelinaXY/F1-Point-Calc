@@ -31,10 +31,6 @@ public class RawDataCalculations extends AbstractCalculation{
 
         System.out.println("Previous scorecard: " + previousScoreCard);
 
-        scoreCardOutput(previousScoreCard, Comparator.comparing(ScoreCard::getAveragePoints));
-
-        scoreCardOutput(previousScoreCard, Comparator.comparing(ScoreCard::getThreeRaceAveragePoints));
-
         scoreCardOutput(previousScoreCard, Comparator.comparing(ScoreCard::getScore));
     }
 

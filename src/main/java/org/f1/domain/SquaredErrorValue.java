@@ -25,6 +25,14 @@ public class SquaredErrorValue {
         return value / count;
     }
 
+    public Double getValue() {
+        return value;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
     @Override
     public String toString() {
         return "SquaredErrorValue{" +

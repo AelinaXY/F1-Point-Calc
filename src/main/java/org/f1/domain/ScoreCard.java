@@ -12,8 +12,6 @@ public class ScoreCard {
     private Set<FullPointEntity> driverSet;
     private Set<FullPointEntity> teamSet;
     private Double cost;
-    private Double averagePoints;
-    private Double threeRaceAveragePoints;
     private Double score;
 
     public ScoreCard() {
@@ -31,17 +29,10 @@ public class ScoreCard {
     private void initialize() {
         cost = this.driverSet.stream().map(BasicPointEntity::getCost).reduce(0d, Double::sum);
         cost += this.teamSet.stream().map(BasicPointEntity::getCost).reduce(0d, Double::sum);
-        averagePoints = this.driverSet.stream().map(BasicPointEntity::getAveragePoints).reduce(0d, Double::sum);
-        averagePoints += this.teamSet.stream().map(BasicPointEntity::getAveragePoints).reduce(0d, Double::sum);
-
-        threeRaceAveragePoints = this.driverSet.stream().map(BasicPointEntity::getThreeRaceAveragePoints).reduce(0d, Double::sum);
-        threeRaceAveragePoints += this.teamSet.stream().map(BasicPointEntity::getThreeRaceAveragePoints).reduce(0d, Double::sum);
 
         score = this.driverSet.stream().map(ScoreCalculator::calculateScore).reduce(0d, Double::sum);
         score += this.teamSet.stream().map(ScoreCalculator::calculateScore).reduce(0d, Double::sum);
 
-        averagePoints += this.driverSet.stream().sorted(Comparator.comparing(BasicPointEntity::getAveragePoints).reversed()).limit(1).map(BasicPointEntity::getAveragePoints).findFirst().orElse(null);
-        threeRaceAveragePoints += this.driverSet.stream().sorted(Comparator.comparing(BasicPointEntity::getThreeRaceAveragePoints).reversed()).limit(1).map(BasicPointEntity::getThreeRaceAveragePoints).findFirst().orElse(null);
         score += this.driverSet.stream().sorted(Comparator.comparing(ScoreCalculator::calculateScore).reversed()).limit(1).map(ScoreCalculator::calculateScore).findFirst().orElse(null);
 
     }
@@ -82,14 +73,6 @@ public class ScoreCard {
         this.cost = cost;
     }
 
-    public Double getAveragePoints() {
-        return averagePoints;
-    }
-
-    public Double getThreeRaceAveragePoints() {
-        return threeRaceAveragePoints;
-    }
-
     public Double getScore() {
         return score;
     }
@@ -98,8 +81,7 @@ public class ScoreCard {
     public String toString() {
         return "ScoreCard{" +
                 "cost=" + cost +
-                ", averagePoints=" + averagePoints +
-                ", threeRacePoints=" + threeRaceAveragePoints +
+                ", score=" + score +
                 ", drivers=" + driverSet +
                 ", teams=" + teamSet +
                 '}';
@@ -110,12 +92,12 @@ public class ScoreCard {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ScoreCard scoreCard = (ScoreCard) o;
-        return Objects.equals(driverSet, scoreCard.driverSet) && Objects.equals(teamSet, scoreCard.teamSet) && Objects.equals(cost, scoreCard.cost) && Objects.equals(averagePoints, scoreCard.averagePoints);
+        return Objects.equals(driverSet, scoreCard.driverSet) && Objects.equals(teamSet, scoreCard.teamSet) && Objects.equals(cost, scoreCard.cost) && Objects.equals(score, scoreCard.score);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(driverSet, teamSet, cost, averagePoints);
+        return Objects.hash(driverSet, teamSet, cost, score);
     }
 
     public DifferenceEntity calculateDifference(ScoreCard scoreCard) {
@@ -131,9 +113,7 @@ public class ScoreCard {
         inDifference(difference,newDriverSet,this,true);
         inDifference(difference,newTeamSet,this,false);
 
-        difference.setPointDifference(scoreCard.averagePoints-averagePoints);
-        difference.setThreeRacePointDifference(scoreCard.threeRaceAveragePoints-threeRaceAveragePoints);
-
+        difference.setScoreDifference(scoreCard.getScore()- score);
 
         return difference;
     }
