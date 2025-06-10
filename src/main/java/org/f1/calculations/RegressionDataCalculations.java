@@ -60,7 +60,7 @@ public class RegressionDataCalculations extends AbstractCalculation {
 
         for (List<Double> weights : weightSet) {
             ScoreCalculator.setAveragePointWeight(weights.get(0));
-            ScoreCalculator.setAveragePointWeight(weights.get(1));
+            ScoreCalculator.setThreeAveragePointWeight(weights.get(1));
             Map<String, SquaredErrorValue> squaredErrorValueMap = calculateMeanSquaredErrorValue(pointEntitySets);
 
             Double meanSquaredError = 0.0;

@@ -23,10 +23,10 @@ public class Main {
         RawDataCalculations rawDataCalculations = new RawDataCalculations(DRIVER_SET, TEAM_SET, 104.8, 3l);
         RegressionDataCalculations regressionDataCalculations = new RegressionDataCalculations(DRIVER_SET, TEAM_SET, 104.8, 3l);
 
-        ScoreCard previousScoreCard = rawDataCalculations.createPreviousScoreCard(List.of("Franco Colapinto", "Liam Lawson", "Isack Hadjar", "Oscar Piastri", "Nico Hulkenberg"), List.of("Mclaren", "Mercedes"));
-        rawDataCalculations.calculate(previousScoreCard);
+//        ScoreCard previousScoreCard = rawDataCalculations.createPreviousScoreCard(List.of("Franco Colapinto", "Liam Lawson", "Isack Hadjar", "Oscar Piastri", "Nico Hulkenberg"), List.of("Mclaren", "Mercedes"));
+//        rawDataCalculations.calculate(previousScoreCard);
 
-//        regressionDataCalculations.regressionCalculation();
+        regressionDataCalculations.regressionCalculation();
     }
 
 }

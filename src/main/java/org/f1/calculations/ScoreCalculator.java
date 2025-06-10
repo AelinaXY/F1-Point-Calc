@@ -4,8 +4,8 @@ import org.f1.domain.FullPointEntity;
 
 public class ScoreCalculator {
 
-    private static Double averagePointWeight = 0.68;
-    private static Double threeAveragePointWeight = 0.32;
+    private static Double averagePointWeight = 0.67;
+    private static Double threeAveragePointWeight = 0.33;
 
     public static Double calculateScore(FullPointEntity fullPointEntity) {
         double runningTotal = 0.0;
