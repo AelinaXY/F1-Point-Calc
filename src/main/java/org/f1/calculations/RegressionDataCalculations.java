@@ -4,6 +4,7 @@ import org.f1.domain.FullPointEntity;
 import org.f1.domain.Race;
 import org.f1.domain.ScoreCard;
 import org.f1.domain.SquaredErrorValue;
+import org.f1.parsing.CSVParsing;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -46,7 +47,8 @@ public class RegressionDataCalculations extends AbstractCalculation {
     }
 
     public void regressionCalculation() {
-        Set<Set<FullPointEntity>> pointEntitySets = Set.of(getDriverSet(), getTeamSet());
+        Set<FullPointEntity> drivers2024 = CSVParsing.fullParse("Drivers_Full_2024.csv");
+        Set<Set<FullPointEntity>> pointEntitySets = Set.of(getDriverSet(), getTeamSet(), drivers2024);
 
         Map<List<Double>, Double> scoreWeightMap = new HashMap<>();
 

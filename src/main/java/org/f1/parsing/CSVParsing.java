@@ -38,7 +38,7 @@ public class CSVParsing {
             List<String> parts = new ArrayList<>(List.of(line.split(",")));
             parts = parts.stream().map(value -> {
                 if (value.isEmpty()) {
-                    return "0";
+                    return "INVALID VALUE";
                 }
                 return value;
             }).collect(Collectors.toList());
@@ -53,7 +53,19 @@ public class CSVParsing {
                 Race.RaceBuilder currentRaceBuilder = aRaceBuilder();
                 String raceName = raceNames.get(i);
 
+                boolean invalidFlag = false;
                 List<Integer> racePointLocations = raceMap.get(raceName);
+                for (Integer location: racePointLocations) {
+                    if(parts.get(location).equals("INVALID VALUE"))
+                    {
+                        invalidFlag = true;
+                    }
+                }
+                if (invalidFlag)
+                {
+                    continue;
+                }
+
                 currentRaceBuilder = currentRaceBuilder.withName(raceName).withRaceNumber(i);
 
                 if (racePointLocations.size() == 3) {
