@@ -48,12 +48,19 @@ public class RegressionDataCalculations extends AbstractCalculation {
 
     public void regressionCalculation() {
         Set<FullPointEntity> drivers2024 = CSVParsing.fullParse("Drivers_Full_2024.csv");
-        Set<Set<FullPointEntity>> pointEntitySets = Set.of(getDriverSet(), getTeamSet(), drivers2024);
+        Set<FullPointEntity> teams2024 = CSVParsing.fullParse("Teams_Full_2024.csv");
+
+        Set<Set<FullPointEntity>> pointEntitySets = Set.of(getDriverSet(), getTeamSet(), drivers2024, teams2024);
 
         Map<List<Double>, Double> scoreWeightMap = new HashMap<>();
 
         Set<List<Double>> weightSet = new HashSet<>();
 
+//        for (double i = 0.0; i <= 1; i += 0.01) {
+//            for (double j = 0.0; j <= 1-i; j += 0.01) {
+//                weightSet.add(List.of(i, j,1-i-j));
+//            }
+//        }
         for (double i = 0.0; i <= 1; i += 0.01) {
             weightSet.add(List.of(i, 1 - i));
         }
@@ -61,6 +68,7 @@ public class RegressionDataCalculations extends AbstractCalculation {
         for (List<Double> weights : weightSet) {
             ScoreCalculator.setAveragePointWeight(weights.get(0));
             ScoreCalculator.setThreeAveragePointWeight(weights.get(1));
+//            ScoreCalculator.setSimplePredictedPointsWeight(weights.get(2));
             Map<String, SquaredErrorValue> squaredErrorValueMap = calculateMeanSquaredErrorValue(pointEntitySets);
 
             Double meanSquaredError = 0.0;
