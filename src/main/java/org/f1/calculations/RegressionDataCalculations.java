@@ -7,7 +7,10 @@ import org.f1.domain.SquaredErrorValue;
 import org.f1.parsing.CSVParsing;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
+import java.util.stream.Gatherers;
 
 public class RegressionDataCalculations extends AbstractCalculation {
 
@@ -52,23 +55,25 @@ public class RegressionDataCalculations extends AbstractCalculation {
 
         Set<Set<FullPointEntity>> pointEntitySets = Set.of(getDriverSet(), getTeamSet(), drivers2024, teams2024);
 
-        Map<List<Double>, Double> scoreWeightMap = new HashMap<>();
+        ConcurrentMap<List<Double>, Double> scoreWeightMap = new ConcurrentHashMap<>();
 
         Set<List<Double>> weightSet = new HashSet<>();
 
-//        for (double i = 0.0; i <= 1; i += 0.01) {
-//            for (double j = 0.0; j <= 1-i; j += 0.01) {
-//                weightSet.add(List.of(i, j,1-i-j));
-//            }
-//        }
         for (double i = 0.0; i <= 1; i += 0.01) {
-            weightSet.add(List.of(i, 1 - i));
+            for (double j = 0.0; j <= 1-i; j += 0.01) {
+                weightSet.add(List.of(i, j,1-i-j));
+            }
         }
+//        for (double i = 0.0; i <= 1; i += 0.01) {
+//            weightSet.add(List.of(i, 1 - i));
+//        }
 
-        for (List<Double> weights : weightSet) {
-            ScoreCalculator.setAveragePointWeight(weights.get(0));
-            ScoreCalculator.setThreeAveragePointWeight(weights.get(1));
-//            ScoreCalculator.setSimplePredictedPointsWeight(weights.get(2));
+        weightSet.stream().gather(Gatherers.mapConcurrent(100, p -> p)).forEach(w ->
+        {
+            ScoreCalculator.setAveragePointWeight(w.get(0));
+            ScoreCalculator.setThreeAveragePointWeight(w.get(1));
+            ScoreCalculator.setSimplePredictedPointsWeight(w.get(2));
+
             Map<String, SquaredErrorValue> squaredErrorValueMap = calculateMeanSquaredErrorValue(pointEntitySets);
 
             Double meanSquaredError = 0.0;
@@ -77,10 +82,10 @@ public class RegressionDataCalculations extends AbstractCalculation {
                 meanSquaredError += entry.getValue().getValue();
                 count += entry.getValue().getCount();
             }
-            scoreWeightMap.put(weights, meanSquaredError / count);
-        }
+            scoreWeightMap.put(w, meanSquaredError / count);
+        });
 
-        scoreWeightMap.entrySet().stream().sorted(Map.Entry.comparingByValue()).forEach(System.out::println);
+        scoreWeightMap.entrySet().stream().sorted(Map.Entry.comparingByValue()).limit(25).forEach(System.out::println);
 
     }
 

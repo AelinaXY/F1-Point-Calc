@@ -4,9 +4,9 @@ import org.f1.domain.FullPointEntity;
 
 public class ScoreCalculator {
 
-    private static Double averagePointWeight = 0.0;
-    private static Double threeAveragePointWeight = 0.0;
-    private static Double simplePredictedPointsWeight = 0.0;
+    private static Double averagePointWeight = 0.59;
+    private static Double threeAveragePointWeight = 0.32;
+    private static Double simplePredictedPointsWeight = 0.09;
 
 
     public static Double calculateScore(FullPointEntity fullPointEntity) {
@@ -16,16 +16,16 @@ public class ScoreCalculator {
 
         runningTotal += fullPointEntity.getUpdatedThreeRaceAveragePoints() * threeAveragePointWeight;
 
-//        if(fullPointEntity.getSimplePredictedPoints() != null)
-//        {
-//            runningTotal += fullPointEntity.getSimplePredictedPoints() * simplePredictedPointsWeight;
-//        }
-//        else
-//        {
-//            runningTotal += fullPointEntity.getUpdatedAveragePoints() * simplePredictedPointsWeight*(averagePointWeight/(averagePointWeight+threeAveragePointWeight));
-//
-//            runningTotal += fullPointEntity.getUpdatedThreeRaceAveragePoints() * simplePredictedPointsWeight*(threeAveragePointWeight/(averagePointWeight+threeAveragePointWeight));
-//        }
+        if(fullPointEntity.getSimplePredictedPoints() != null)
+        {
+            runningTotal += fullPointEntity.getSimplePredictedPoints() * simplePredictedPointsWeight;
+        }
+        else
+        {
+            runningTotal += fullPointEntity.getUpdatedAveragePoints() * simplePredictedPointsWeight*(averagePointWeight/(averagePointWeight+threeAveragePointWeight));
+
+            runningTotal += fullPointEntity.getUpdatedThreeRaceAveragePoints() * simplePredictedPointsWeight*(threeAveragePointWeight/(averagePointWeight+threeAveragePointWeight));
+        }
 
         return runningTotal;
     }
