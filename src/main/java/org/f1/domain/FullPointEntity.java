@@ -2,7 +2,6 @@ package org.f1.domain;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class FullPointEntity extends BasicPointEntity {
     private List<Race> raceList;

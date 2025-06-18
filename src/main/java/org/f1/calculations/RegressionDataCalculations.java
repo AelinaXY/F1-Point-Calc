@@ -99,6 +99,7 @@ public class RegressionDataCalculations extends AbstractCalculation {
     //Method 3: Iterate on method 2 to find the lowest error value for weight combinations for scoring algorithm
     //Figure out how to optimally calculate the weight combination
     //Linear optimization
+    //Simplex Algorithm
 
 
 }
