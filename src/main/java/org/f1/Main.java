@@ -1,9 +1,8 @@
 package org.f1;
 
-import org.f1.calculations.RawDataCalculations;
-import org.f1.calculations.RegressionDataCalculations;
+import org.f1.calculations.RawDataCalculation;
+import org.f1.calculations.RegressionDataCalculation;
 import org.f1.domain.FullPointEntity;
-import org.f1.domain.ScoreCard;
 import org.f1.parsing.CSVParsing;
 
 import java.util.*;
@@ -20,13 +19,13 @@ public class Main {
         List<String> driversNoLongerExists = List.of("Jack Doohan");
         DRIVER_SET = DRIVER_SET.stream().filter(d -> !driversNoLongerExists.contains(d.getName())).collect(Collectors.toSet());
 
-        RawDataCalculations rawDataCalculations = new RawDataCalculations(DRIVER_SET, TEAM_SET, 106.5, 3l);
-        RegressionDataCalculations regressionDataCalculations = new RegressionDataCalculations(DRIVER_SET, TEAM_SET, 106.5, 3l);
+        RawDataCalculation rawDataCalculation = new RawDataCalculation(DRIVER_SET, TEAM_SET, 106.5, 3l);
+        RegressionDataCalculation regressionDataCalculation = new RegressionDataCalculation(DRIVER_SET, TEAM_SET, 106.5, 3l);
 
 //        ScoreCard previousScoreCard = rawDataCalculations.createPreviousScoreCard(List.of("Franco Colapinto", "Liam Lawson", "Isack Hadjar", "Oscar Piastri", "Nico Hulkenberg"), List.of("Mclaren", "Mercedes"));
 //        rawDataCalculations.calculate(previousScoreCard);
 
-        regressionDataCalculations.regressionCalculation();
+        regressionDataCalculation.regressionCalculation();
     }
 
 

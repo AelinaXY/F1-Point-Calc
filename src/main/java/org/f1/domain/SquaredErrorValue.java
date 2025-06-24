@@ -5,11 +5,6 @@ public class SquaredErrorValue {
     Double value;
     int count;
 
-    public SquaredErrorValue() {
-        value = 0.0;
-        count = 0;
-    }
-
     public SquaredErrorValue(Double value) {
         this.value = value * value;
         this.count = 1;

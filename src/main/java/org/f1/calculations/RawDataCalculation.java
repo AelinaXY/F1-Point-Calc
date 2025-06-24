@@ -10,11 +10,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class RawDataCalculations extends AbstractCalculation{
+public class RawDataCalculation extends AbstractCalculation{
 
     private static final Set<ScoreCard> validTeamSet = new HashSet<>();
 
-    public RawDataCalculations(Set<FullPointEntity> driverSet, Set<FullPointEntity> teamSet, double costCap, long transferLimit) {
+    public RawDataCalculation(Set<FullPointEntity> driverSet, Set<FullPointEntity> teamSet, double costCap, long transferLimit) {
         super(driverSet, teamSet, costCap, transferLimit);
     }
 

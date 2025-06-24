@@ -2,7 +2,6 @@ package org.f1.calculations;
 
 import org.f1.domain.FullPointEntity;
 import org.f1.domain.Race;
-import org.f1.domain.ScoreCard;
 import org.f1.domain.SquaredErrorValue;
 import org.f1.parsing.CSVParsing;
 
@@ -12,10 +11,10 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 import java.util.stream.Gatherers;
 
-public class RegressionDataCalculations extends AbstractCalculation {
+public class RegressionDataCalculation extends AbstractCalculation {
 
 
-    public RegressionDataCalculations(Set<FullPointEntity> driverSet, Set<FullPointEntity> teamSet, double costCap, long transferLimit) {
+    public RegressionDataCalculation(Set<FullPointEntity> driverSet, Set<FullPointEntity> teamSet, double costCap, long transferLimit) {
         super(driverSet, teamSet, costCap, transferLimit);
     }
 
