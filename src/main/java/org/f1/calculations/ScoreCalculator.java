@@ -9,7 +9,7 @@ public class ScoreCalculator {
     private static Double simplePredictedPointsWeight = 0.085;
 
 
-    public static Double calculateScore(FullPointEntity fullPointEntity) {
+    public static Double calculateScore(FullPointEntity fullPointEntity, String race) {
         double runningTotal = 0.0;
 
         runningTotal += fullPointEntity.getUpdatedAveragePoints() * averagePointWeight;

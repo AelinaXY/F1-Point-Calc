@@ -14,8 +14,8 @@ import java.util.stream.Gatherers;
 public class RegressionDataCalculation extends AbstractCalculation {
 
 
-    public RegressionDataCalculation(Set<FullPointEntity> driverSet, Set<FullPointEntity> teamSet, double costCap, long transferLimit) {
-        super(driverSet, teamSet, costCap, transferLimit);
+    public RegressionDataCalculation(Set<FullPointEntity> driverSet, Set<FullPointEntity> teamSet, double costCap, long transferLimit, String raceName) {
+        super(driverSet, teamSet, costCap, transferLimit, raceName);
     }
 
 
@@ -26,7 +26,7 @@ public class RegressionDataCalculation extends AbstractCalculation {
 
         if (actualRace.isPresent()) {
             entity.calculateUpdatedPoints(race);
-            Double expectedScore = ScoreCalculator.calculateScore(entity);
+            Double expectedScore = ScoreCalculator.calculateScore(entity, race);
             Double actualScore = actualRace.get().totalPoints();
             return expectedScore - actualScore;
         }
@@ -59,8 +59,8 @@ public class RegressionDataCalculation extends AbstractCalculation {
         Set<List<Double>> weightSet = new HashSet<>();
 
         for (double i = 0.0; i <= 1; i += 0.01) {
-            for (double j = 0.0; j <= 1-i; j += 0.01) {
-                weightSet.add(List.of(i, j,1-i-j));
+            for (double j = 0.0; j <= 1 - i; j += 0.01) {
+                weightSet.add(List.of(i, j, 1 - i - j));
             }
         }
 //        for (double i = 0.0; i <= 1; i += 0.01) {

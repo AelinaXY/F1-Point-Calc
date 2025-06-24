@@ -10,12 +10,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class RawDataCalculation extends AbstractCalculation{
+public class RawDataCalculation extends AbstractCalculation {
 
     private static final Set<ScoreCard> validTeamSet = new HashSet<>();
 
-    public RawDataCalculation(Set<FullPointEntity> driverSet, Set<FullPointEntity> teamSet, double costCap, long transferLimit) {
-        super(driverSet, teamSet, costCap, transferLimit);
+    public RawDataCalculation(Set<FullPointEntity> driverSet, Set<FullPointEntity> teamSet, double costCap, long transferLimit, String raceName) {
+        super(driverSet, teamSet, costCap, transferLimit, raceName);
     }
 
     public void calculate(ScoreCard previousScoreCard) {
@@ -69,7 +69,7 @@ public class RawDataCalculation extends AbstractCalculation{
     private void teamLoop(
             Set<FullPointEntity> previousLevelTeamSet, Set<FullPointEntity> driverSet) {
         if (previousLevelTeamSet.size() == 2) {
-            ScoreCard scoreCard = new ScoreCard(driverSet, previousLevelTeamSet);
+            ScoreCard scoreCard = new ScoreCard(driverSet, previousLevelTeamSet, getRaceName());
             if (scoreCard.getCost() <= getCostCap() && scoreCard.getCost() > 94) {
                 validTeamSet.add(scoreCard);
             }
@@ -85,11 +85,11 @@ public class RawDataCalculation extends AbstractCalculation{
         }
     }
 
-    public ScoreCard createPreviousScoreCard(List<String> driverNames, List<String> teamNames){
+    public ScoreCard createPreviousScoreCard(List<String> driverNames, List<String> teamNames) {
         ScoreCard scoreCard = new ScoreCard();
         getDriverSet().stream().filter(d -> driverNames.contains(d.getName())).forEach(scoreCard::addDriver);
         getTeamSet().stream().filter(t -> teamNames.contains(t.getName())).forEach(scoreCard::addTeam);
-        scoreCard.intialize();
+        scoreCard.intialize(getRaceName());
         return scoreCard;
     }
 }
