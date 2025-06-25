@@ -1,6 +1,10 @@
 package org.f1.calculations;
 
 import org.f1.domain.FullPointEntity;
+import org.f1.domain.Race;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ScoreCalculator {
 
@@ -12,23 +16,87 @@ public class ScoreCalculator {
     public static Double calculateScore(FullPointEntity fullPointEntity, String race) {
         double runningTotal = 0.0;
 
-        runningTotal += fullPointEntity.getUpdatedAveragePoints() * averagePointWeight;
+        ScoreCalculatorHelper scores = calculateUpdatedPoints(fullPointEntity, race);
 
-        runningTotal += fullPointEntity.getUpdatedThreeRaceAveragePoints() * threeAveragePointWeight;
+        runningTotal += scores.averagePoints * averagePointWeight;
 
-        if(fullPointEntity.getSimplePredictedPoints() != null)
-        {
-            runningTotal += fullPointEntity.getSimplePredictedPoints() * simplePredictedPointsWeight;
-        }
-        else
-        {
-            runningTotal += fullPointEntity.getUpdatedAveragePoints() * simplePredictedPointsWeight*(averagePointWeight/(averagePointWeight+threeAveragePointWeight));
+        runningTotal += scores.threeAveragePoints * threeAveragePointWeight;
 
-            runningTotal += fullPointEntity.getUpdatedThreeRaceAveragePoints() * simplePredictedPointsWeight*(threeAveragePointWeight/(averagePointWeight+threeAveragePointWeight));
+        if (scores.simplePredictedPoints != null) {
+            runningTotal += scores.simplePredictedPoints * simplePredictedPointsWeight;
+        } else {
+            runningTotal += scores.averagePoints * simplePredictedPointsWeight * (averagePointWeight / (averagePointWeight + threeAveragePointWeight));
+
+            runningTotal += scores.threeAveragePoints * simplePredictedPointsWeight * (threeAveragePointWeight / (averagePointWeight + threeAveragePointWeight));
         }
 
         return runningTotal;
     }
+
+    private static ScoreCalculatorHelper calculateUpdatedPoints(FullPointEntity fullPointEntity, String raceName) {
+        List<String> raceNameList = fullPointEntity.getRaceNameList();
+
+        if (!raceNameList.contains(raceName)) {
+            return new ScoreCalculatorHelper(fullPointEntity.getAveragePoints(),
+                    fullPointEntity.getThreeRaceAveragePoints(),
+                    fullPointEntity.getSimplePredictedPoints());
+        }
+        List<Race> currentRaces = new ArrayList<>();
+
+        for (Race race : fullPointEntity.getRaceList()) {
+            if (race.name().equals(raceName)) {
+                break;
+            }
+            currentRaces.add(race);
+        }
+
+        List<Double> points = currentRaces.stream().map(Race::totalPoints).toList();
+        return
+                new ScoreCalculatorHelper(
+                        calcAveragePoints(new ArrayList<>(points)),
+                        calcThreeRaceAverage(new ArrayList<>(points)),
+                        calcSimplePredictedPoints(new ArrayList<>(points)));
+    }
+
+    public static Double calcSimplePredictedPoints(List<Double> points) {
+        if (points.size() > 2) {
+            Double gradient = 0.0;
+            for (int i = 1; i < points.size(); i++) {
+                gradient += ((points.get(i - 1) - points.get(i))) / points.size() - 1;
+            }
+            return points.getLast() + gradient;
+        }
+        return null;
+    }
+
+    public static Double calcAveragePoints(List<Double> points) {
+        return points.stream().mapToDouble(Double::doubleValue).average().getAsDouble();
+    }
+
+    public static Double calcThreeRaceAverage(List<Double> points) {
+        Double lowest = 1000.0;
+        switch (points.size()) {
+            case 0:
+                return null;
+            case 1:
+                return points.getFirst();
+            case 2, 3:
+                removeLowest(points, lowest);
+                return calcAveragePoints(points);
+            default:
+                points = new ArrayList<>(points.subList(points.size() - 4, points.size()));
+                removeLowest(points, lowest);
+                return calcAveragePoints(points);
+        }
+    }
+
+    private static void removeLowest(List<Double> points, Double lowest) {
+        for (Double point : points) {
+            if (point < lowest) lowest = point;
+        }
+        points.remove(lowest);
+    }
+
 
     public static void setAveragePointWeight(Double averagePointWeight) {
         ScoreCalculator.averagePointWeight = averagePointWeight;
@@ -40,5 +108,8 @@ public class ScoreCalculator {
 
     public static void setSimplePredictedPointsWeight(Double simplePredictedPointsWeight) {
         ScoreCalculator.simplePredictedPointsWeight = simplePredictedPointsWeight;
+    }
+
+    public record ScoreCalculatorHelper(Double averagePoints, Double threeAveragePoints, Double simplePredictedPoints) {
     }
 }

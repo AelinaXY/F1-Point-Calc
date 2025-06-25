@@ -69,7 +69,7 @@ public class RawDataCalculation extends AbstractCalculation {
     private void teamLoop(
             Set<FullPointEntity> previousLevelTeamSet, Set<FullPointEntity> driverSet) {
         if (previousLevelTeamSet.size() == 2) {
-            ScoreCard scoreCard = new ScoreCard(driverSet, previousLevelTeamSet, getRaceName());
+            ScoreCard scoreCard = new ScoreCard(driverSet, previousLevelTeamSet, getRaceName(), getCostCap());
             if (scoreCard.getCost() <= getCostCap() && scoreCard.getCost() > 94) {
                 validTeamSet.add(scoreCard);
             }
@@ -89,7 +89,7 @@ public class RawDataCalculation extends AbstractCalculation {
         ScoreCard scoreCard = new ScoreCard();
         getDriverSet().stream().filter(d -> driverNames.contains(d.getName())).forEach(scoreCard::addDriver);
         getTeamSet().stream().filter(t -> teamNames.contains(t.getName())).forEach(scoreCard::addTeam);
-        scoreCard.intialize(getRaceName());
+        scoreCard.intialize(getRaceName(), getCostCap());
         return scoreCard;
     }
 }

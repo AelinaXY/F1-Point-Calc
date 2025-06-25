@@ -25,7 +25,6 @@ public class RegressionDataCalculation extends AbstractCalculation {
         Optional<Race> actualRace = raceList.stream().filter(race1 -> race1.name().equals(race)).findFirst();
 
         if (actualRace.isPresent()) {
-            entity.calculateUpdatedPoints(race);
             Double expectedScore = ScoreCalculator.calculateScore(entity, race);
             Double actualScore = actualRace.get().totalPoints();
             return expectedScore - actualScore;
@@ -42,7 +41,7 @@ public class RegressionDataCalculation extends AbstractCalculation {
             raceList.removeFirst();
             for (Race race : raceList) {
                 Double errorValue = calculateErrorValue(entity, race.name());
-                meanSquaredErrorMap.compute(race.name(), (k, v) -> v == null ? new SquaredErrorValue(errorValue) : v.increment(errorValue));
+                meanSquaredErrorMap.compute(race.name(), (_, v) -> v == null ? new SquaredErrorValue(errorValue) : v.increment(errorValue));
             }
         }
         return meanSquaredErrorMap;

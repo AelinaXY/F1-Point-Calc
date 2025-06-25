@@ -2,10 +2,9 @@ package org.f1.domain;
 
 import org.f1.calculations.ScoreCalculator;
 
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ScoreCard {
 
@@ -19,26 +18,29 @@ public class ScoreCard {
         this.teamSet = new HashSet<>();
     }
 
-    public ScoreCard(Set<FullPointEntity> driverSet, Set<FullPointEntity> teamSet, String race) {
+    public ScoreCard(Set<FullPointEntity> driverSet, Set<FullPointEntity> teamSet, String race, double costCap) {
         this.driverSet = driverSet;
         this.teamSet = teamSet;
-        initialize(race);
+        initialize(race, costCap);
 
     }
 
-    private void initialize(String race) {
+    private void initialize(String race, double costCap) {
         cost = this.driverSet.stream().map(BasicPointEntity::getCost).reduce(0d, Double::sum);
         cost += this.teamSet.stream().map(BasicPointEntity::getCost).reduce(0d, Double::sum);
 
-        score = this.driverSet.stream().map(d -> ScoreCalculator.calculateScore(d, race)).reduce(0d, Double::sum);
+        if (cost <= costCap && cost > 94) {
+        List<Double> driverPointSet = this.driverSet.stream().map(d -> ScoreCalculator.calculateScore(d, race)).sorted(Comparator.reverseOrder()).toList();
+        score = driverPointSet.stream().reduce(0d, Double::sum);
         score += this.teamSet.stream().map(d -> ScoreCalculator.calculateScore(d, race)).reduce(0d, Double::sum);
 
-        score += this.driverSet.stream().sorted(Comparator.comparing(d -> ScoreCalculator.calculateScore((FullPointEntity) d, race)).reversed()).limit(1).map(d -> ScoreCalculator.calculateScore(d, race)).findFirst().orElse(null);
+        score += driverPointSet.getFirst();
+        }
 
     }
 
-    public void intialize(String race) {
-        initialize(race);
+    public void intialize(String race, double costCap) {
+        initialize(race, costCap);
     }
 
     public void addDriver(FullPointEntity driver) {
