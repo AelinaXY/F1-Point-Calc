@@ -5,10 +5,7 @@ import org.f1.domain.DifferenceEntity;
 import org.f1.domain.FullPointEntity;
 import org.f1.domain.ScoreCard;
 
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class RawDataCalculation extends AbstractCalculation {
 
@@ -69,7 +66,7 @@ public class RawDataCalculation extends AbstractCalculation {
     private void teamLoop(
             Set<FullPointEntity> previousLevelTeamSet, Set<FullPointEntity> driverSet) {
         if (previousLevelTeamSet.size() == 2) {
-            ScoreCard scoreCard = new ScoreCard(driverSet, previousLevelTeamSet, getRaceName(), getCostCap());
+            ScoreCard scoreCard = new ScoreCard(new ArrayList<>(driverSet), new ArrayList<>(previousLevelTeamSet), getRaceName(), getCostCap());
             if (scoreCard.getCost() <= getCostCap() && scoreCard.getCost() > 94) {
                 validTeamSet.add(scoreCard);
             }

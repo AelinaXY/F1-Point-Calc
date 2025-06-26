@@ -6,8 +6,6 @@ import org.f1.domain.FullPointEntity;
 import org.f1.domain.ScoreCard;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentSkipListSet;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 public class RawDataCalculationV2 extends AbstractCalculation {
 
@@ -26,11 +24,11 @@ public class RawDataCalculationV2 extends AbstractCalculation {
         driverList.parallelStream()
                 .map(d ->
                         new AbstractMap.SimpleEntry<FullPointEntity, List<FullPointEntity>>(d,
-                                new ArrayList<>(driverList.subList(driverList.indexOf(d)+1, driverList.size()))))
+                                new ArrayList<>(driverList.subList(driverList.indexOf(d) + 1, driverList.size()))))
                 .forEach(driver -> {
-            driverLoop(List.of(driver.getKey()), driver.getValue());
-            System.out.println("Driver " + driver.getKey().getName() + " done");
-        });
+                    driverLoop(List.of(driver.getKey()), driver.getValue());
+                    System.out.println("Driver " + driver.getKey().getName() + " done");
+                });
 
         System.out.println("Number of valid combinations: " + validTeamSet.size());
 
@@ -65,7 +63,7 @@ public class RawDataCalculationV2 extends AbstractCalculation {
             }
         } else {
             for (FullPointEntity driver : loopDriverList) {
-                List<FullPointEntity> newDriverList = new ArrayList<>(loopDriverList.subList(loopDriverList.indexOf(driver)+1, loopDriverList.size()));
+                List<FullPointEntity> newDriverList = new ArrayList<>(loopDriverList.subList(loopDriverList.indexOf(driver) + 1, loopDriverList.size()));
                 if (newDriverList.size() + previousLevelDriverSet.size() >= 5) {
                     List<FullPointEntity> nextLevelDriverSet = new ArrayList<>(previousLevelDriverSet);
                     nextLevelDriverSet.add(driver);
@@ -78,8 +76,8 @@ public class RawDataCalculationV2 extends AbstractCalculation {
     private void teamLoop(
             List<FullPointEntity> previousLevelTeamSet, List<FullPointEntity> driverSet, List<FullPointEntity> loopTeamList) {
         if (previousLevelTeamSet.size() == 2) {
-            ScoreCard scoreCard = new ScoreCard(new HashSet<>(driverSet), new HashSet<>(previousLevelTeamSet), getRaceName(), getCostCap());
-            if (scoreCard.getCost() <= getCostCap() && scoreCard.getCost() > 94) {
+            ScoreCard scoreCard = new ScoreCard(driverSet, previousLevelTeamSet, getRaceName(), getCostCap());
+            if (scoreCard.getCost() <= getCostCap() && scoreCard.getCost() > getCostCap() - 5) {
                 validTeamSet.add(scoreCard);
             }
 

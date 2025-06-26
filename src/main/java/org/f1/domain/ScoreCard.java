@@ -3,38 +3,40 @@ package org.f1.domain;
 import org.f1.calculations.ScoreCalculator;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ScoreCard {
 
-    private Set<FullPointEntity> driverSet;
-    private Set<FullPointEntity> teamSet;
-    private Double cost;
-    private Double score;
+    private List<FullPointEntity> driverList;
+    private List<FullPointEntity> teamList;
+    private Double cost = 0.0;
+    private Double score = 0.0;
 
     public ScoreCard() {
-        this.driverSet = new HashSet<>();
-        this.teamSet = new HashSet<>();
+        this.driverList = new ArrayList<>();
+        this.teamList = new ArrayList<>();
     }
 
-    public ScoreCard(Set<FullPointEntity> driverSet, Set<FullPointEntity> teamSet, String race, double costCap) {
-        this.driverSet = driverSet;
-        this.teamSet = teamSet;
+    public ScoreCard(List<FullPointEntity> driverList, List<FullPointEntity> teamList, String race, double costCap) {
+        this.driverList = driverList;
+        this.teamList = teamList;
         initialize(race, costCap);
 
     }
 
     private void initialize(String race, double costCap) {
-        cost = this.driverSet.stream().map(BasicPointEntity::getCost).reduce(0d, Double::sum);
-        cost += this.teamSet.stream().map(BasicPointEntity::getCost).reduce(0d, Double::sum);
+        for (FullPointEntity driver : driverList) {
+            cost += driver.getCost();
+        }
+        for (FullPointEntity team : teamList) {
+            cost += team.getCost();
+        }
 
-        if (cost <= costCap && cost > 94) {
-        List<Double> driverPointSet = this.driverSet.stream().map(d -> ScoreCalculator.calculateScore(d, race)).sorted(Comparator.reverseOrder()).toList();
-        score = driverPointSet.stream().reduce(0d, Double::sum);
-        score += this.teamSet.stream().map(d -> ScoreCalculator.calculateScore(d, race)).reduce(0d, Double::sum);
+        if (cost <= costCap && cost > costCap - 5) {
+            List<Double> driverPointSet = this.driverList.stream().map(d -> ScoreCalculator.calculateScore(d, race)).sorted(Comparator.reverseOrder()).toList();
+            score = driverPointSet.stream().reduce(0d, Double::sum);
+            score += this.teamList.stream().map(d -> ScoreCalculator.calculateScore(d, race)).reduce(0d, Double::sum);
 
-        score += driverPointSet.getFirst();
+            score += driverPointSet.getFirst();
         }
 
     }
@@ -44,27 +46,27 @@ public class ScoreCard {
     }
 
     public void addDriver(FullPointEntity driver) {
-        this.driverSet.add(driver);
+        this.driverList.add(driver);
     }
 
     public void addTeam(FullPointEntity team) {
-        this.teamSet.add(team);
+        this.teamList.add(team);
     }
 
-    public Set<FullPointEntity> getDriverSet() {
-        return driverSet;
+    public List<FullPointEntity> getDriverList() {
+        return driverList;
     }
 
-    public void setDriverSet(Set<FullPointEntity> driverSet) {
-        this.driverSet = driverSet;
+    public void setDriverList(List<FullPointEntity> driverList) {
+        this.driverList = driverList;
     }
 
-    public Set<FullPointEntity> getTeamSet() {
-        return teamSet;
+    public List<FullPointEntity> getTeamList() {
+        return teamList;
     }
 
-    public void setTeamSet(Set<FullPointEntity> teamSet) {
-        this.teamSet = teamSet;
+    public void setTeamList(List<FullPointEntity> teamList) {
+        this.teamList = teamList;
     }
 
     public Double getCost() {
@@ -84,8 +86,8 @@ public class ScoreCard {
         return "ScoreCard{" +
                 "cost=" + cost +
                 ", score=" + score +
-                ", drivers=" + driverSet +
-                ", teams=" + teamSet +
+                ", drivers=" + driverList +
+                ", teams=" + teamList +
                 '}';
     }
 
@@ -94,20 +96,20 @@ public class ScoreCard {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ScoreCard scoreCard = (ScoreCard) o;
-        return Objects.equals(driverSet, scoreCard.driverSet) && Objects.equals(teamSet, scoreCard.teamSet) && Objects.equals(cost, scoreCard.cost) && Objects.equals(score, scoreCard.score);
+        return Objects.equals(driverList, scoreCard.driverList) && Objects.equals(teamList, scoreCard.teamList) && Objects.equals(cost, scoreCard.cost) && Objects.equals(score, scoreCard.score);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(driverSet, teamSet, cost, score);
+        return Objects.hash(driverList, teamList, cost, score);
     }
 
     public DifferenceEntity calculateDifference(ScoreCard scoreCard) {
         DifferenceEntity difference = new DifferenceEntity();
-        Set<BasicPointEntity> oldDriverSet = new HashSet<>(driverSet);
-        Set<BasicPointEntity> oldTeamSet = new HashSet<>(teamSet);
-        Set<BasicPointEntity> newDriverSet = new HashSet<>(scoreCard.getDriverSet());
-        Set<BasicPointEntity> newTeamSet = new HashSet<>(scoreCard.getTeamSet());
+        Set<BasicPointEntity> oldDriverSet = new HashSet<>(driverList);
+        Set<BasicPointEntity> oldTeamSet = new HashSet<>(teamList);
+        Set<BasicPointEntity> newDriverSet = new HashSet<>(scoreCard.getDriverList());
+        Set<BasicPointEntity> newTeamSet = new HashSet<>(scoreCard.getTeamList());
 
         outDifference(difference, oldDriverSet, scoreCard, true);
         outDifference(difference, oldTeamSet, scoreCard, false);
@@ -122,9 +124,9 @@ public class ScoreCard {
 
     private void outDifference(DifferenceEntity difference, Set<BasicPointEntity> basicPointEntitySet, ScoreCard scoreCard, Boolean driver) {
         if (driver) {
-            basicPointEntitySet.removeAll(scoreCard.getDriverSet());
+            basicPointEntitySet.removeAll(scoreCard.getDriverList());
         } else {
-            basicPointEntitySet.removeAll(scoreCard.getTeamSet());
+            basicPointEntitySet.removeAll(scoreCard.getTeamList());
         }
         difference.addOut(basicPointEntitySet);
         difference.incrementDifference(basicPointEntitySet.size());
@@ -132,9 +134,9 @@ public class ScoreCard {
 
     private void inDifference(DifferenceEntity difference, Set<BasicPointEntity> basicPointEntitySet, ScoreCard scoreCard, Boolean driver) {
         if (driver) {
-            basicPointEntitySet.removeAll(scoreCard.getDriverSet());
+            basicPointEntitySet.removeAll(scoreCard.getDriverList());
         } else {
-            basicPointEntitySet.removeAll(scoreCard.getTeamSet());
+            basicPointEntitySet.removeAll(scoreCard.getTeamList());
         }
         difference.addIn(basicPointEntitySet);
 
