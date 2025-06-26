@@ -88,14 +88,15 @@ public class RegressionDataCalculation extends AbstractCalculation {
     }
 
     //TODO:
-    //Method 2: Take in a Set<FullPointEntity> and calculate the mean square error for each race prediction using the scoring algo
-    //Output: Set of mean square errors
+    //Weekend [Quali score + Race score (+Sprint score)]
 
-    //detect outliers?
+    //If race = Singapore
+    //then Monaco[total points] *= 1.2
+    //then everthing else reduced so weights equal number of races
 
 
-    //Method 3: Iterate on method 2 to find the lowest error value for weight combinations for scoring algorithm
-    //Figure out how to optimally calculate the weight combination
+
+    //MAYBE:
     //Linear optimization
     //Simplex Algorithm
 

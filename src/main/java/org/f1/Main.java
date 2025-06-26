@@ -1,6 +1,7 @@
 package org.f1;
 
 import org.f1.calculations.RawDataCalculation;
+import org.f1.calculations.RawDataCalculationV2;
 import org.f1.calculations.RegressionDataCalculation;
 import org.f1.domain.FullPointEntity;
 import org.f1.domain.ScoreCard;
@@ -21,13 +22,13 @@ public class Main {
         List<String> driversNoLongerExists = List.of("Jack Doohan");
         DRIVER_SET = DRIVER_SET.stream().filter(d -> !driversNoLongerExists.contains(d.getName())).collect(Collectors.toSet());
 
-        RawDataCalculation rawDataCalculation = new RawDataCalculation(DRIVER_SET, TEAM_SET, 106.5, 3L, RACE_NAME);
+        RawDataCalculationV2 rawDataCalculation = new RawDataCalculationV2(DRIVER_SET, TEAM_SET, 106.5, 3L, RACE_NAME);
         RegressionDataCalculation regressionDataCalculation = new RegressionDataCalculation(DRIVER_SET, TEAM_SET, 106.5, 3L, RACE_NAME);
 
-//        ScoreCard previousScoreCard = rawDataCalculation.createPreviousScoreCard(List.of("Franco Colapinto", "Liam Lawson", "Isack Hadjar", "Oscar Piastri", "Nico Hulkenberg"), List.of("Mclaren", "Mercedes"));
-//        rawDataCalculation.calculate(previousScoreCard);
+        ScoreCard previousScoreCard = rawDataCalculation.createPreviousScoreCard(List.of("Franco Colapinto", "Liam Lawson", "Isack Hadjar", "Oscar Piastri", "Nico Hulkenberg"), List.of("Mclaren", "Mercedes"));
+        rawDataCalculation.calculate(previousScoreCard);
 
-        regressionDataCalculation.regressionCalculation();
+//        regressionDataCalculation.regressionCalculation();
     }
 
 
@@ -40,6 +41,10 @@ public class Main {
 
 //    After Canada
 //    [0.635, 0.2800000000000001, 0.08499999999999991]=266.8458486748592
+
+
+    //OLD CPU TIME: 9919ms
+    //NEW CPU TIME: 410ms
 
 
 }
