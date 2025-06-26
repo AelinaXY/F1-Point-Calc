@@ -83,7 +83,7 @@ public class RawDataCalculationV2 extends AbstractCalculation {
 
         } else {
             for (FullPointEntity team : loopTeamList) {
-                List<FullPointEntity> newTeamList = new ArrayList<>(loopTeamList.subList(loopTeamList.indexOf(team), loopTeamList.size()));
+                List<FullPointEntity> newTeamList = new ArrayList<>(loopTeamList.subList(loopTeamList.indexOf(team)+1, loopTeamList.size()));
                 if (newTeamList.size() + previousLevelTeamSet.size() >= 2) {
                     List<FullPointEntity> nextLevelTeamSet = new ArrayList<>(previousLevelTeamSet);
                     nextLevelTeamSet.add(team);
