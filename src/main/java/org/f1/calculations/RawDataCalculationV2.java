@@ -6,6 +6,7 @@ import org.f1.domain.FullPointEntity;
 import org.f1.domain.ScoreCard;
 
 import java.util.*;
+import java.util.stream.IntStream;
 
 public class RawDataCalculationV2 extends AbstractCalculation {
 
@@ -21,10 +22,11 @@ public class RawDataCalculationV2 extends AbstractCalculation {
     }
 
     public void calculate(ScoreCard previousScoreCard) {
-        driverList.parallelStream()
-                .map(d ->
-                        new AbstractMap.SimpleEntry<FullPointEntity, List<FullPointEntity>>(d,
-                                new ArrayList<>(driverList.subList(driverList.indexOf(d) + 1, driverList.size()))))
+        IntStream.range(0, driverList.size())
+                .parallel()
+                .mapToObj(i ->
+                        new AbstractMap.SimpleEntry<FullPointEntity, List<FullPointEntity>>(driverList.get(i),
+                                new ArrayList<>(driverList.subList(i + 1, driverList.size()))))
                 .forEach(driver -> {
                     driverLoop(List.of(driver.getKey()), driver.getValue());
                     System.out.println("Driver " + driver.getKey().getName() + " done");
