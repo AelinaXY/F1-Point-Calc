@@ -6,6 +6,7 @@ import org.f1.domain.FullPointEntity;
 import org.f1.domain.ScoreCard;
 
 import java.util.*;
+import java.util.stream.IntStream;
 
 public class RawDataCalculationV2 extends AbstractCalculation {
 
@@ -21,10 +22,11 @@ public class RawDataCalculationV2 extends AbstractCalculation {
     }
 
     public void calculate(ScoreCard previousScoreCard) {
-        driverList.parallelStream()
-                .map(d ->
-                        new AbstractMap.SimpleEntry<FullPointEntity, List<FullPointEntity>>(d,
-                                new ArrayList<>(driverList.subList(driverList.indexOf(d) + 1, driverList.size()))))
+        IntStream.range(0, driverList.size())
+                .parallel()
+                .mapToObj(i ->
+                        new AbstractMap.SimpleEntry<FullPointEntity, List<FullPointEntity>>(driverList.get(i),
+                                new ArrayList<>(driverList.subList(i + 1, driverList.size()))))
                 .forEach(driver -> {
                     driverLoop(List.of(driver.getKey()), driver.getValue());
                     System.out.println("Driver " + driver.getKey().getName() + " done");
@@ -56,41 +58,60 @@ public class RawDataCalculationV2 extends AbstractCalculation {
     }
 
     private void driverLoop(
-            List<FullPointEntity> previousLevelDriverSet, List<FullPointEntity> loopDriverList) {
-        if (previousLevelDriverSet.size() == 5) {
-            if (!(previousLevelDriverSet.stream().map(BasicPointEntity::getCost).reduce(0d, Double::sum) >= getCostCap())) {
-                teamLoop(new ArrayList<>(), previousLevelDriverSet, teamList);
+            List<FullPointEntity> previousLevelDriverList, List<FullPointEntity> loopDriverList) {
+        if (previousLevelDriverList.size() == 5) {
+            if (getTeamCost(previousLevelDriverList) <= getCostCap()) {
+                teamLoop(new ArrayList<>(), previousLevelDriverList, teamList);
             }
         } else {
-            for (FullPointEntity driver : loopDriverList) {
-                List<FullPointEntity> newDriverList = new ArrayList<>(loopDriverList.subList(loopDriverList.indexOf(driver) + 1, loopDriverList.size()));
-                if (newDriverList.size() + previousLevelDriverSet.size() >= 5) {
-                    List<FullPointEntity> nextLevelDriverSet = new ArrayList<>(previousLevelDriverSet);
-                    nextLevelDriverSet.add(driver);
-                    driverLoop(nextLevelDriverSet, newDriverList);
+            for (int i = 0; i < loopDriverList.size(); i++) {
+                List<FullPointEntity> newDriverList = new ArrayList<>(loopDriverList.subList(i + 1, loopDriverList.size()));
+                if (newDriverList.size() + previousLevelDriverList.size() >= 5) {
+                    List<FullPointEntity> nextLevelDriverList = new ArrayList<>(previousLevelDriverList);
+                    nextLevelDriverList.add(loopDriverList.get(i));
+
+                    if (getTeamCost(nextLevelDriverList) <= getCostCap()) {
+                        driverLoop(nextLevelDriverList, newDriverList);
+                    }
+
                 }
             }
         }
     }
 
     private void teamLoop(
-            List<FullPointEntity> previousLevelTeamSet, List<FullPointEntity> driverSet, List<FullPointEntity> loopTeamList) {
-        if (previousLevelTeamSet.size() == 2) {
-            ScoreCard scoreCard = new ScoreCard(driverSet, previousLevelTeamSet, getRaceName(), getCostCap());
-            if (scoreCard.getCost() <= getCostCap() && scoreCard.getCost() > getCostCap() - 5) {
+            List<FullPointEntity> previousLevelTeamList, List<FullPointEntity> driverList, List<FullPointEntity> loopTeamList) {
+        if (previousLevelTeamList.size() == 2) {
+            if (getTeamCost(driverList, previousLevelTeamList) <= getCostCap() && getTeamCost(driverList, previousLevelTeamList) > getCostCap() - 5) {
+                ScoreCard scoreCard = new ScoreCard(driverList, previousLevelTeamList, getRaceName(), getCostCap());
                 validTeamSet.add(scoreCard);
             }
 
         } else {
-            for (FullPointEntity team : loopTeamList) {
-                List<FullPointEntity> newTeamList = new ArrayList<>(loopTeamList.subList(loopTeamList.indexOf(team)+1, loopTeamList.size()));
-                if (newTeamList.size() + previousLevelTeamSet.size() >= 2) {
-                    List<FullPointEntity> nextLevelTeamSet = new ArrayList<>(previousLevelTeamSet);
-                    nextLevelTeamSet.add(team);
-                    teamLoop(nextLevelTeamSet, driverSet, newTeamList);
+            for (int i = 0; i < loopTeamList.size(); i++) {
+                List<FullPointEntity> newTeamList = new ArrayList<>(loopTeamList.subList(i + 1, loopTeamList.size()));
+                if (newTeamList.size() + previousLevelTeamList.size() >= 2) {
+                    List<FullPointEntity> nextLevelTeamList = new ArrayList<>(previousLevelTeamList);
+                    nextLevelTeamList.add(loopTeamList.get(i));
+                    if (getTeamCost(driverList, nextLevelTeamList) <= getCostCap()) {
+                        teamLoop(nextLevelTeamList, driverList, newTeamList);
+                    }
                 }
             }
+
         }
+    }
+
+    @SafeVarargs
+    private double getTeamCost(List<? extends BasicPointEntity>... entityList) {
+        double currentCost = 0D;
+
+        for (List<? extends BasicPointEntity> basicPointEntityList : entityList) {
+            for (BasicPointEntity basicPointEntity : basicPointEntityList) {
+                currentCost += basicPointEntity.getCost();
+            }
+        }
+        return currentCost;
     }
 
     public ScoreCard createPreviousScoreCard(List<String> driverNames, List<String> teamNames) {
