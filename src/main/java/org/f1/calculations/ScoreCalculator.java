@@ -2,15 +2,21 @@ package org.f1.calculations;
 
 import org.f1.domain.FullPointEntity;
 import org.f1.domain.Race;
+import org.f1.domain.Track;
+import org.f1.parsing.CSVParsing;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ScoreCalculator {
 
-    private static Double averagePointWeight = 0.635;
-    private static Double threeAveragePointWeight = 0.28;
-    private static Double simplePredictedPointsWeight = 0.085;
+    private static Double averagePointWeight = 0.58;
+    private static Double threeAveragePointWeight = 0.36;
+    private static Double simplePredictedPointsWeight = 0.06;
+    private static Double trackSimilarityWeight = 0.13;
+
+    private static final Map<String, Track> TRACK_MAP = CSVParsing.parseTracks("Tracks_Normalised.csv");
 
 
     public static Double calculateScore(FullPointEntity fullPointEntity, String race) {
@@ -36,11 +42,11 @@ public class ScoreCalculator {
     private static ScoreCalculatorHelper calculateUpdatedPoints(FullPointEntity fullPointEntity, String raceName) {
         List<String> raceNameList = fullPointEntity.getRaceNameList();
 
-        if (!raceNameList.contains(raceName)) {
-            return new ScoreCalculatorHelper(fullPointEntity.getAveragePoints(),
-                    fullPointEntity.getThreeRaceAveragePoints(),
-                    fullPointEntity.getSimplePredictedPoints());
-        }
+//        if (!raceNameList.contains(raceName)) {
+//            return new ScoreCalculatorHelper(fullPointEntity.getAveragePoints(),
+//                    fullPointEntity.getThreeRaceAveragePoints(),
+//                    fullPointEntity.getSimplePredictedPoints());
+//        }
         List<Race> currentRaces = new ArrayList<>();
 
         for (Race race : fullPointEntity.getRaceList()) {
@@ -50,7 +56,20 @@ public class ScoreCalculator {
             currentRaces.add(race);
         }
 
-        List<Double> points = currentRaces.stream().map(Race::totalPoints).toList();
+        Map<String, Double> trackSimilarities = TRACK_MAP.get(raceName).getDistanceToOtherTrack();
+
+        List<Double> points = currentRaces.stream().map(r ->
+                {
+                    String currentRaceName = r.name();
+                    double similarity = trackSimilarities.get(currentRaceName);
+
+                    double runningTotal = r.totalPoints();
+
+                    runningTotal += r.totalPoints() * similarity * trackSimilarityWeight;
+                    return runningTotal;
+                }
+        ).toList();
+
         return
                 new ScoreCalculatorHelper(
                         calcAveragePoints(new ArrayList<>(points)),
@@ -108,6 +127,10 @@ public class ScoreCalculator {
 
     public static void setSimplePredictedPointsWeight(Double simplePredictedPointsWeight) {
         ScoreCalculator.simplePredictedPointsWeight = simplePredictedPointsWeight;
+    }
+
+    public static void setTrackSimilarityWeight(Double trackSimilarityWeight) {
+        ScoreCalculator.trackSimilarityWeight = trackSimilarityWeight;
     }
 
     public record ScoreCalculatorHelper(Double averagePoints, Double threeAveragePoints, Double simplePredictedPoints) {

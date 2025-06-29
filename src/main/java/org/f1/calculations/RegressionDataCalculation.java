@@ -48,8 +48,8 @@ public class RegressionDataCalculation extends AbstractCalculation {
     }
 
     public void regressionCalculation() {
-        Set<FullPointEntity> drivers2024 = CSVParsing.fullParse("Drivers_Full_2024.csv");
-        Set<FullPointEntity> teams2024 = CSVParsing.fullParse("Teams_Full_2024.csv");
+        Set<FullPointEntity> drivers2024 = CSVParsing.parseFullPointEntities("Drivers_Full_2024.csv");
+        Set<FullPointEntity> teams2024 = CSVParsing.parseFullPointEntities("Teams_Full_2024.csv");
 
         Set<Set<FullPointEntity>> pointEntitySets = Set.of(getDriverSet(), getTeamSet(), drivers2024, teams2024);
 
@@ -65,12 +65,18 @@ public class RegressionDataCalculation extends AbstractCalculation {
 //        for (double i = 0.0; i <= 1; i += 0.01) {
 //            weightSet.add(List.of(i, 1 - i));
 //        }
+//
+//        for (double i = 0.0; i <= 1; i += 0.01) {
+//            weightSet.add(List.of(i));
+//        }
 
         weightSet.stream().gather(Gatherers.mapConcurrent(100, p -> p)).forEach(w ->
         {
             ScoreCalculator.setAveragePointWeight(w.get(0));
             ScoreCalculator.setThreeAveragePointWeight(w.get(1));
             ScoreCalculator.setSimplePredictedPointsWeight(w.get(2));
+
+//            ScoreCalculator.setTrackSimilarityWeight(w.get(0));
 
             Map<String, SquaredErrorValue> squaredErrorValueMap = calculateMeanSquaredErrorValue(pointEntitySets);
 

@@ -2,6 +2,7 @@ package org.f1.parsing;
 
 import org.f1.domain.FullPointEntity;
 import org.f1.domain.Race;
+import org.f1.domain.Track;
 
 import java.io.*;
 import java.util.*;
@@ -9,10 +10,11 @@ import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 import static org.f1.domain.Race.RaceBuilder.aRaceBuilder;
+import static org.f1.domain.Track.TrackBuilder.aTrackBuilder;
 
 public class CSVParsing {
 
-    public static Set<FullPointEntity> fullParse(String fileName) {
+    public static Set<FullPointEntity> parseFullPointEntities(String fileName) {
         Set<FullPointEntity> result = new HashSet<>();
 
         List<String> baseList = loadInput(fileName);
@@ -55,14 +57,12 @@ public class CSVParsing {
 
                 boolean invalidFlag = false;
                 List<Integer> racePointLocations = raceMap.get(raceName);
-                for (Integer location: racePointLocations) {
-                    if(parts.get(location).equals("INVALID VALUE"))
-                    {
+                for (Integer location : racePointLocations) {
+                    if (parts.get(location).equals("INVALID VALUE")) {
                         invalidFlag = true;
                     }
                 }
-                if (invalidFlag)
-                {
+                if (invalidFlag) {
                     continue;
                 }
 
@@ -82,6 +82,67 @@ public class CSVParsing {
         }
 
         return result;
+    }
+
+    public static Map<String, Track> parseTracks(String fileName) {
+        Map<String, Track> result = new HashMap<>();
+
+        List<String> baseList = loadInput(fileName);
+        String openingLine = baseList.removeFirst();
+
+
+        for (String line : baseList) {
+            List<String> values = List.of(line.split(","));
+            Track.TrackBuilder trackBuilder = aTrackBuilder();
+
+            trackBuilder
+                    .withTrackName(values.get(0))
+                    .withAvgTemp(Double.valueOf(values.get(1)))
+                    .withAvgRain(Double.valueOf(values.get(2)))
+                    .withTrackLength(Double.valueOf(values.get(3)))
+                    .withPitLaneTimeLoss(Double.valueOf(values.get(4)))
+                    .withFastestLap(Double.valueOf(values.get(5)))
+                    .withTopSpeed(Double.valueOf(values.get(6)))
+                    .withNumberOfCorners(Double.valueOf(values.get(7)))
+                    .withAvgOvertakes(Double.valueOf(values.get(8)));
+
+            Track track = trackBuilder.build();
+
+            result.put(track.getTrackName(), track);
+        }
+
+        List<Track> trackList = result.values().stream().toList();
+
+
+        for (Track track1 : trackList) {
+            List<Track> subsequentTrackList = new ArrayList<>(trackList.subList(trackList.indexOf(track1) + 1, trackList.size()));
+            for (Track track2 : subsequentTrackList) {
+
+                double distance = calculateDistance(track1, track2);
+
+                double similarity = 1 - distance;
+
+                result.get(track1.getTrackName()).addTrackRelationship(track2.getTrackName(), similarity);
+                result.get(track2.getTrackName()).addTrackRelationship(track1.getTrackName(), similarity);
+            }
+        }
+
+        return result;
+    }
+
+    private static double calculateDistance(Track track1, Track track2) {
+        double runningTotal = 0.0;
+
+        runningTotal += Math.pow(track1.getAvgTemp() - track2.getAvgTemp(), 2);
+        runningTotal += Math.pow(track1.getAvgRain() - track2.getAvgRain(), 2);
+        runningTotal += Math.pow(track1.getTrackLength() - track2.getTrackLength(), 2);
+        runningTotal += Math.pow(track1.getPitLaneTimeLoss() - track2.getPitLaneTimeLoss(), 2);
+        runningTotal += Math.pow(track1.getFastestLap() - track2.getFastestLap(), 2);
+        runningTotal += Math.pow(track1.getTopSpeed() - track2.getTopSpeed(), 2);
+        runningTotal += Math.pow(track1.getNumberOfCorners() - track2.getNumberOfCorners(), 2);
+        runningTotal += Math.pow(track1.getAvgOvertakes() - track2.getAvgOvertakes(), 2);
+
+        return Math.sqrt(runningTotal);
     }
 
     private static List<String> loadInput(String fileName) {
