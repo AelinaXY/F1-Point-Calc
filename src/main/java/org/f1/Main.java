@@ -22,10 +22,10 @@ public class Main {
         List<String> driversNoLongerExists = List.of("Jack Doohan");
         DRIVER_SET = DRIVER_SET.stream().filter(d -> !driversNoLongerExists.contains(d.getName())).collect(Collectors.toSet());
 
-        RawDataCalculationV2 rawDataCalculation = new RawDataCalculationV2(DRIVER_SET, TEAM_SET, 106.5, 3L, RACE_NAME);
-        RegressionDataCalculation regressionDataCalculation = new RegressionDataCalculation(DRIVER_SET, TEAM_SET, 106.5, 3L, RACE_NAME);
-//
-        ScoreCard previousScoreCard = rawDataCalculation.createPreviousScoreCard(List.of("Franco Colapinto", "Liam Lawson", "Isack Hadjar", "Oscar Piastri", "Nico Hulkenberg"), List.of("Mclaren", "Mercedes"));
+        RawDataCalculationV2 rawDataCalculation = new RawDataCalculationV2(DRIVER_SET, TEAM_SET, 109.5, 2L, RACE_NAME);
+        RegressionDataCalculation regressionDataCalculation = new RegressionDataCalculation(DRIVER_SET, TEAM_SET, 109.4, 2L, RACE_NAME);
+
+        ScoreCard previousScoreCard = rawDataCalculation.createPreviousScoreCard(List.of("Fernando Alonso", "Oliver Bearman", "Gabriel Bortoleto", "Oscar Piastri", "Nico Hulkenberg"), List.of("Mclaren", "Mercedes"));
         rawDataCalculation.calculate(previousScoreCard);
 
 //        regressionDataCalculation.regressionCalculation();
@@ -44,6 +44,9 @@ public class Main {
 
 //    With Track Similarity Mapping
 //    [0.5800000000000003, 0.36000000000000015, 0.059999999999999554]=264.6386895301757
+
+//    After Austria
+//    [0.5600000000000003, 0.38000000000000017, 0.059999999999999554]=269.9495371224135
 
 
 

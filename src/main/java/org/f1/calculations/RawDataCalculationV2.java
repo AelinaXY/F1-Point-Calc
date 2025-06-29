@@ -66,7 +66,7 @@ public class RawDataCalculationV2 extends AbstractCalculation {
         } else {
             for (FullPointEntity driver : loopDriverList) {
                 List<FullPointEntity> newDriverList = new ArrayList<>(loopDriverList.subList(loopDriverList.indexOf(driver) + 1, loopDriverList.size()));
-                if (newDriverList.size() + previousLevelDriverSet.size() >= 5) {
+                if (newDriverList.size() + previousLevelDriverSet.size() >= 4) {
                     List<FullPointEntity> nextLevelDriverSet = new ArrayList<>(previousLevelDriverSet);
                     nextLevelDriverSet.add(driver);
                     driverLoop(nextLevelDriverSet, newDriverList);

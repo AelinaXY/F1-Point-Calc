@@ -56,24 +56,24 @@ public class RegressionDataCalculation extends AbstractCalculation {
         ConcurrentMap<List<Double>, Double> scoreWeightMap = new ConcurrentHashMap<>();
 
         Set<List<Double>> weightSet = new HashSet<>();
-//
-//        for (double i = 0.0; i <= 1; i += 0.01) {
-//            for (double j = 0.0; j <= 1 - i; j += 0.01) {
-//                weightSet.add(List.of(i, j, 1 - i - j));
-//            }
-//        }
-//
-        for (double i = 0.0; i <= 2; i += 0.01) {
-            weightSet.add(List.of(i));
+
+        for (double i = 0.0; i <= 1; i += 0.01) {
+            for (double j = 0.0; j <= 1 - i; j += 0.01) {
+                weightSet.add(List.of(i, j, 1 - i - j));
+            }
         }
+
+//        for (double i = 0.0; i <= 2; i += 0.01) {
+//            weightSet.add(List.of(i));
+//        }
 
         weightSet.stream().gather(Gatherers.mapConcurrent(100, p -> p)).forEach(w ->
         {
-//            ScoreCalculator.setAveragePointWeight(w.get(0));
-//            ScoreCalculator.setThreeAveragePointWeight(w.get(1));
-//            ScoreCalculator.setSimplePredictedPointsWeight(w.get(2));
+            ScoreCalculator.setAveragePointWeight(w.get(0));
+            ScoreCalculator.setThreeAveragePointWeight(w.get(1));
+            ScoreCalculator.setSimplePredictedPointsWeight(w.get(2));
 
-                        ScoreCalculator.setTrackSimilarityWeight(w.get(0));
+//                        ScoreCalculator.setTrackSimilarityWeight(w.get(0));
 
 
             Map<String, SquaredErrorValue> squaredErrorValueMap = calculateMeanSquaredErrorValue(pointEntitySets);
