@@ -11,12 +11,12 @@ import java.util.Map;
 
 public class ScoreCalculator {
 
-    private static Double averagePointWeight = 0.58;
-    private static Double threeAveragePointWeight = 0.36;
+    private static Double averagePointWeight = 0.56;
+    private static Double threeAveragePointWeight = 0.38;
     private static Double simplePredictedPointsWeight = 0.06;
-    private static Double trackSimilarityWeight = 0.13;
+    private static Double trackSimilarityWeight = 0.14;
 
-    private static final Map<String, Track> TRACK_MAP = CSVParsing.parseTracks("Tracks_Normalised.csv");
+    private static Map<String, Track> TRACK_MAP = CSVParsing.parseTracks("Tracks_Normalised.csv");
 
 
     public static Double calculateScore(FullPointEntity fullPointEntity, String race) {
@@ -133,6 +133,14 @@ public class ScoreCalculator {
         ScoreCalculator.trackSimilarityWeight = trackSimilarityWeight;
     }
 
+    public static void setTrackMap(Map<String, Track> trackMap) {
+        TRACK_MAP = trackMap;
+    }
+
+    public static Map<String, Track> getTrackMap()
+    {
+        return TRACK_MAP;
+    }
     public record ScoreCalculatorHelper(Double averagePoints, Double threeAveragePoints, Double simplePredictedPoints) {
     }
 }

@@ -114,11 +114,17 @@ public class CSVParsing {
         List<Track> trackList = result.values().stream().toList();
 
 
+        updateTrackDistances(trackList, result, List.of(1d,1d,1d,1d,1d,1d,1d,1d));
+
+        return result;
+    }
+
+    public static void updateTrackDistances(List<Track> trackList, Map<String, Track> result, List<Double> weightList) {
         for (Track track1 : trackList) {
             List<Track> subsequentTrackList = new ArrayList<>(trackList.subList(trackList.indexOf(track1) + 1, trackList.size()));
             for (Track track2 : subsequentTrackList) {
 
-                double distance = calculateDistance(track1, track2);
+                double distance = calculateDistance(track1, track2, weightList);
 
                 double similarity = 1 - distance;
 
@@ -126,21 +132,20 @@ public class CSVParsing {
                 result.get(track2.getTrackName()).addTrackRelationship(track1.getTrackName(), similarity);
             }
         }
-
-        return result;
     }
 
-    private static double calculateDistance(Track track1, Track track2) {
+    private static double calculateDistance(Track track1, Track track2, List<Double> weightList) {
         double runningTotal = 0.0;
 
-        runningTotal += Math.pow(track1.getAvgTemp() - track2.getAvgTemp(), 2);
-        runningTotal += Math.pow(track1.getAvgRain() - track2.getAvgRain(), 2);
-        runningTotal += Math.pow(track1.getTrackLength() - track2.getTrackLength(), 2);
-        runningTotal += Math.pow(track1.getPitLaneTimeLoss() - track2.getPitLaneTimeLoss(), 2);
-        runningTotal += Math.pow(track1.getFastestLap() - track2.getFastestLap(), 2);
-        runningTotal += Math.pow(track1.getTopSpeed() - track2.getTopSpeed(), 2);
-        runningTotal += Math.pow(track1.getNumberOfCorners() - track2.getNumberOfCorners(), 2);
-        runningTotal += Math.pow(track1.getAvgOvertakes() - track2.getAvgOvertakes(), 2);
+        runningTotal += Math.pow(track1.getAvgTemp() - track2.getAvgTemp(), 2) * weightList.get(0);
+        runningTotal += Math.pow(track1.getAvgRain() - track2.getAvgRain(), 2) * weightList.get(1);
+        runningTotal += Math.pow(track1.getTrackLength() - track2.getTrackLength(), 2) * weightList.get(2);
+        runningTotal += Math.pow(track1.getPitLaneTimeLoss() - track2.getPitLaneTimeLoss(), 2) * weightList.get(3);
+        runningTotal += Math.pow(track1.getFastestLap() - track2.getFastestLap(), 2) * weightList.get(4);
+        runningTotal += Math.pow(track1.getTopSpeed() - track2.getTopSpeed(), 2) * weightList.get(5);
+        runningTotal += Math.pow(track1.getNumberOfCorners() - track2.getNumberOfCorners(), 2) * weightList.get(6);
+        runningTotal += Math.pow(track1.getAvgOvertakes() - track2.getAvgOvertakes(), 2) * weightList.get(7);
+
 
         return Math.sqrt(runningTotal);
     }

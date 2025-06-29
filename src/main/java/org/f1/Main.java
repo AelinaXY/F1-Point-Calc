@@ -24,7 +24,7 @@ public class Main {
 
         RawDataCalculationV2 rawDataCalculation = new RawDataCalculationV2(DRIVER_SET, TEAM_SET, 106.5, 3L, RACE_NAME);
         RegressionDataCalculation regressionDataCalculation = new RegressionDataCalculation(DRIVER_SET, TEAM_SET, 106.5, 3L, RACE_NAME);
-
+//
         ScoreCard previousScoreCard = rawDataCalculation.createPreviousScoreCard(List.of("Franco Colapinto", "Liam Lawson", "Isack Hadjar", "Oscar Piastri", "Nico Hulkenberg"), List.of("Mclaren", "Mercedes"));
         rawDataCalculation.calculate(previousScoreCard);
 
