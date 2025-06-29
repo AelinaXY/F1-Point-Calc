@@ -40,7 +40,7 @@ public class ScoreCalculator {
     }
 
     private static ScoreCalculatorHelper calculateUpdatedPoints(FullPointEntity fullPointEntity, String raceName) {
-        List<String> raceNameList = fullPointEntity.getRaceNameList();
+//        List<String> raceNameList = fullPointEntity.getRaceNameList();
 
 //        if (!raceNameList.contains(raceName)) {
 //            return new ScoreCalculatorHelper(fullPointEntity.getAveragePoints(),
