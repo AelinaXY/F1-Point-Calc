@@ -114,7 +114,7 @@ public class CSVParsing {
         List<Track> trackList = result.values().stream().toList();
 
 
-        updateTrackDistances(trackList, result, List.of(1d,1d,1d,1d,1d,1d,1d,1d));
+        updateTrackDistances(trackList, result, List.of(-1d,0.2d,31d,4.2d,-2.6d,10.4d,1.8d,4.8d));
 
         return result;
     }

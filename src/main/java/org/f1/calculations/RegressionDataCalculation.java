@@ -53,27 +53,55 @@ public class RegressionDataCalculation extends AbstractCalculation {
 
         Set<Set<FullPointEntity>> pointEntitySets = Set.of(getDriverSet(), getTeamSet(), drivers2024, teams2024);
 
-        ConcurrentMap<List<Double>, Double> scoreWeightMap = new ConcurrentHashMap<>();
-
-        Set<List<Double>> weightSet = new HashSet<>();
-
-        for (double i = 0.0; i <= 1; i += 0.01) {
-            for (double j = 0.0; j <= 1 - i; j += 0.01) {
-                weightSet.add(List.of(i, j, 1 - i - j));
-            }
-        }
+//        for (double i = 0.0; i <= 1; i += 0.01) {
+//            for (double j = 0.0; j <= 1 - i; j += 0.01) {
+//                weightSet.add(List.of(i, j, 1 - i - j));
+//            }
+//        }
 
 //        for (double i = 0.0; i <= 2; i += 0.01) {
 //            weightSet.add(List.of(i));
 //        }
 
+        List<Double> baseWeights = new ArrayList<>(List.of(1d, 1d, 1d, 1d, 1d, 1d, 1d, 1d));
+        int baseIndex = 0;
+
+        for (int i = 0; i < 100; i++) {
+            Set<List<Double>> weightSet = new HashSet<>();
+            ConcurrentMap<List<Double>, Double> scoreWeightMap = new ConcurrentHashMap<>();
+
+            double valueToIterate = baseWeights.get(baseIndex);
+            for (double j = valueToIterate - 1; j <= valueToIterate + 1; j += 0.01) {
+                List<Double> newWeights = new ArrayList<>(baseWeights);
+                newWeights.set(baseIndex, j);
+                weightSet.add(newWeights);
+            }
+
+            Map.Entry<List<Double>, Double> bestWeights = calculateRegression(weightSet, pointEntitySets, scoreWeightMap);
+            System.out.println(bestWeights);
+
+            if (baseIndex == 2) {
+                baseIndex = 0;
+            } else {
+                baseIndex++;
+            }
+            baseWeights = bestWeights.getKey();
+
+        }
+
+
+    }
+
+    private Map.Entry<List<Double>, Double> calculateRegression(Set<List<Double>> weightSet, Set<Set<FullPointEntity>> pointEntitySets, ConcurrentMap<List<Double>, Double> scoreWeightMap) {
         weightSet.stream().gather(Gatherers.mapConcurrent(100, p -> p)).forEach(w ->
         {
             ScoreCalculator.setAveragePointWeight(w.get(0));
             ScoreCalculator.setThreeAveragePointWeight(w.get(1));
             ScoreCalculator.setSimplePredictedPointsWeight(w.get(2));
 
-//                        ScoreCalculator.setTrackSimilarityWeight(w.get(0));
+//            ScoreCalculator.setTrackSimilarityWeight(w.get(0));
+
+//            CSVParsing.updateTrackDistances(ScoreCalculator.getTrackMap().values().stream().toList(),ScoreCalculator.getTrackMap(),w);
 
 
             Map<String, SquaredErrorValue> squaredErrorValueMap = calculateMeanSquaredErrorValue(pointEntitySets);
@@ -87,8 +115,8 @@ public class RegressionDataCalculation extends AbstractCalculation {
             scoreWeightMap.put(w, meanSquaredError / count);
         });
 
-        scoreWeightMap.entrySet().stream().sorted(Map.Entry.comparingByValue()).limit(25).forEach(System.out::println);
-
+//        scoreWeightMap.entrySet().stream().sorted(Map.Entry.comparingByValue()).limit(25).forEach(System.out::println);
+        return scoreWeightMap.entrySet().stream().min(Map.Entry.comparingByValue()).get();
     }
 
     //TODO:
