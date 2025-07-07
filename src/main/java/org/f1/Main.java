@@ -4,7 +4,6 @@ import org.f1.calculations.RawDataCalculationV2;
 import org.f1.calculations.RegressionDataCalculation;
 import org.f1.domain.FullPointEntity;
 import org.f1.domain.ScoreCard;
-import org.f1.domain.Track;
 import org.f1.parsing.CSVParsing;
 
 import java.util.*;
@@ -15,15 +14,15 @@ public class Main {
 
     private static Set<FullPointEntity> DRIVER_SET = CSVParsing.parseFullPointEntities("Drivers_Full.csv");
     private static Set<FullPointEntity> TEAM_SET = CSVParsing.parseFullPointEntities("Teams_Full.csv");
-    private static final String RACE_NAME = "Britain";
+    private static final String RACE_NAME = "Belgium";
 
     public static void main(String[] args) {
         //Drivers no longer driving
         List<String> driversNoLongerExists = List.of("Jack Doohan");
         DRIVER_SET = DRIVER_SET.stream().filter(d -> !driversNoLongerExists.contains(d.getName())).collect(Collectors.toSet());
 
-        RawDataCalculationV2 rawDataCalculation = new RawDataCalculationV2(DRIVER_SET, TEAM_SET, 109.5, 2L, RACE_NAME);
-        RegressionDataCalculation regressionDataCalculation = new RegressionDataCalculation(DRIVER_SET, TEAM_SET, 109.4, 2L, RACE_NAME);
+        RawDataCalculationV2 rawDataCalculation = new RawDataCalculationV2(DRIVER_SET, TEAM_SET, 111.9, 3L, RACE_NAME);
+        RegressionDataCalculation regressionDataCalculation = new RegressionDataCalculation(DRIVER_SET, TEAM_SET, 111.9, 3L, RACE_NAME);
 
         ScoreCard previousScoreCard = rawDataCalculation.createPreviousScoreCard(List.of("Fernando Alonso", "Oliver Bearman", "Gabriel Bortoleto", "Oscar Piastri", "Nico Hulkenberg"), List.of("Mclaren", "Mercedes"));
         rawDataCalculation.calculate(previousScoreCard);

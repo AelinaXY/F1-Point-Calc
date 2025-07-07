@@ -71,7 +71,7 @@ public class RegressionDataCalculation extends AbstractCalculation {
             ConcurrentMap<List<Double>, Double> scoreWeightMap = new ConcurrentHashMap<>();
 
             double valueToIterate = baseWeights.get(baseIndex);
-            for (double j = valueToIterate - 1; j <= valueToIterate + 1; j += 0.01) {
+            for (double j = valueToIterate - 5; j <= valueToIterate + 5; j += 0.02) {
                 List<Double> newWeights = new ArrayList<>(baseWeights);
                 newWeights.set(baseIndex, j);
                 weightSet.add(newWeights);
@@ -80,7 +80,7 @@ public class RegressionDataCalculation extends AbstractCalculation {
             Map.Entry<List<Double>, Double> bestWeights = calculateRegression(weightSet, pointEntitySets, scoreWeightMap);
             System.out.println(bestWeights);
 
-            if (baseIndex == 2) {
+            if (baseIndex == 7) {
                 baseIndex = 0;
             } else {
                 baseIndex++;
@@ -101,7 +101,7 @@ public class RegressionDataCalculation extends AbstractCalculation {
 
 //            ScoreCalculator.setTrackSimilarityWeight(w.get(0));
 
-//            CSVParsing.updateTrackDistances(ScoreCalculator.getTrackMap().values().stream().toList(),ScoreCalculator.getTrackMap(),w);
+            CSVParsing.updateTrackDistances(ScoreCalculator.getTrackMap().values().stream().toList(),ScoreCalculator.getTrackMap(),w);
 
 
             Map<String, SquaredErrorValue> squaredErrorValueMap = calculateMeanSquaredErrorValue(pointEntitySets);
