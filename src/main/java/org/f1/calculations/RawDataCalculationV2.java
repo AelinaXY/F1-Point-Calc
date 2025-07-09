@@ -10,15 +10,18 @@ import java.util.stream.IntStream;
 
 public class RawDataCalculationV2 extends AbstractCalculation {
 
+    private ScoreCalculatorInterface scoreCalculator;
+
     private static final Set<ScoreCard> validTeamSet = Collections.synchronizedSet(new HashSet<>());
 
     private List<FullPointEntity> driverList;
     private List<FullPointEntity> teamList;
 
-    public RawDataCalculationV2(Set<FullPointEntity> driverSet, Set<FullPointEntity> teamSet, double costCap, long transferLimit, String raceName) {
-        super(driverSet, teamSet, costCap, transferLimit, raceName);
+    public RawDataCalculationV2(Set<FullPointEntity> driverSet, Set<FullPointEntity> teamSet, double costCap, long transferLimit, String raceName, boolean isSprint, ScoreCalculatorInterface calculator) {
+        super(driverSet, teamSet, costCap, transferLimit, raceName, isSprint);
         driverList = new ArrayList<>(driverSet);
         teamList = new ArrayList<>(teamSet);
+        scoreCalculator = calculator;
     }
 
     public void calculate(ScoreCard previousScoreCard) {
@@ -78,14 +81,14 @@ public class RawDataCalculationV2 extends AbstractCalculation {
     private void teamLoop(
             List<FullPointEntity> previousLevelTeamSet, List<FullPointEntity> driverSet, List<FullPointEntity> loopTeamList) {
         if (previousLevelTeamSet.size() == 2) {
-            ScoreCard scoreCard = new ScoreCard(driverSet, previousLevelTeamSet, getRaceName(), getCostCap());
+            ScoreCard scoreCard = new ScoreCard(driverSet, previousLevelTeamSet, getRaceName(), getCostCap(), isSprint(), scoreCalculator);
             if (scoreCard.getCost() <= getCostCap() && scoreCard.getCost() > getCostCap() - 5) {
                 validTeamSet.add(scoreCard);
             }
 
         } else {
             for (FullPointEntity team : loopTeamList) {
-                List<FullPointEntity> newTeamList = new ArrayList<>(loopTeamList.subList(loopTeamList.indexOf(team)+1, loopTeamList.size()));
+                List<FullPointEntity> newTeamList = new ArrayList<>(loopTeamList.subList(loopTeamList.indexOf(team) + 1, loopTeamList.size()));
                 if (newTeamList.size() + previousLevelTeamSet.size() >= 1) {
                     List<FullPointEntity> nextLevelTeamSet = new ArrayList<>(previousLevelTeamSet);
                     nextLevelTeamSet.add(team);
@@ -99,7 +102,7 @@ public class RawDataCalculationV2 extends AbstractCalculation {
         ScoreCard scoreCard = new ScoreCard();
         getDriverSet().stream().filter(d -> driverNames.contains(d.getName())).forEach(scoreCard::addDriver);
         getTeamSet().stream().filter(t -> teamNames.contains(t.getName())).forEach(scoreCard::addTeam);
-        scoreCard.intialize(getRaceName(), getCostCap());
+        scoreCard.intialize(getRaceName(), getCostCap(), isSprint(), scoreCalculator);
         return scoreCard;
     }
 }

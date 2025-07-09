@@ -2,6 +2,7 @@ package org.f1;
 
 import org.f1.calculations.RawDataCalculationV2;
 import org.f1.calculations.RegressionDataCalculation;
+import org.f1.calculations.ScoreCalculator;
 import org.f1.domain.FullPointEntity;
 import org.f1.domain.ScoreCard;
 import org.f1.parsing.CSVParsing;
@@ -15,19 +16,22 @@ public class Main {
     private static Set<FullPointEntity> DRIVER_SET = CSVParsing.parseFullPointEntities("Drivers_Full.csv");
     private static Set<FullPointEntity> TEAM_SET = CSVParsing.parseFullPointEntities("Teams_Full.csv");
     private static final String RACE_NAME = "Belgium";
+    private static final boolean IS_SPRINT = true;
 
     public static void main(String[] args) {
         //Drivers no longer driving
         List<String> driversNoLongerExists = List.of("Jack Doohan");
         DRIVER_SET = DRIVER_SET.stream().filter(d -> !driversNoLongerExists.contains(d.getName())).collect(Collectors.toSet());
 
-        RawDataCalculationV2 rawDataCalculation = new RawDataCalculationV2(DRIVER_SET, TEAM_SET, 111.9, 3L, RACE_NAME);
+        RawDataCalculationV2 rawDataCalculation = new RawDataCalculationV2(DRIVER_SET, TEAM_SET, 111.9, 3L, RACE_NAME, IS_SPRINT, new ScoreCalculator());
         RegressionDataCalculation regressionDataCalculation = new RegressionDataCalculation(DRIVER_SET, TEAM_SET, 111.9, 3L, RACE_NAME);
 
         ScoreCard previousScoreCard = rawDataCalculation.createPreviousScoreCard(List.of("Fernando Alonso", "Oliver Bearman", "Gabriel Bortoleto", "Oscar Piastri", "Nico Hulkenberg"), List.of("Mclaren", "Mercedes"));
         rawDataCalculation.calculate(previousScoreCard);
 
 //        regressionDataCalculation.regressionCalculation();
+
+//        regressionDataCalculation.compareScoreCalculators();
     }
 
 
@@ -50,6 +54,13 @@ public class Main {
 //    With improved regression
 //    [0.54, 0.46, 0]=257.85154744896784
 
+//    After Britain
+//    Average: 0.36
+//    4d1Avg: 0.57
+//    Forecast: 0.01
+//    Track Similarity: 0.144
+//    Sprint Mult: 1.13
+//    MSE: 258.9
 
 
     //OLD CPU TIME: 9919ms

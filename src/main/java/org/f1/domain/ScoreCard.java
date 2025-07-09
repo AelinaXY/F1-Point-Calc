@@ -1,6 +1,7 @@
 package org.f1.domain;
 
 import org.f1.calculations.ScoreCalculator;
+import org.f1.calculations.ScoreCalculatorInterface;
 
 import java.util.*;
 
@@ -16,14 +17,14 @@ public class ScoreCard {
         this.teamList = new ArrayList<>();
     }
 
-    public ScoreCard(List<FullPointEntity> driverList, List<FullPointEntity> teamList, String race, double costCap) {
+    public ScoreCard(List<FullPointEntity> driverList, List<FullPointEntity> teamList, String race, double costCap, boolean isSprint, ScoreCalculatorInterface scoreCalculator) {
         this.driverList = driverList;
         this.teamList = teamList;
-        initialize(race, costCap);
+        initialize(race, costCap, isSprint, scoreCalculator);
 
     }
 
-    private void initialize(String race, double costCap) {
+    private void initialize(String race, double costCap, boolean isSprint, ScoreCalculatorInterface calculator) {
         for (FullPointEntity driver : driverList) {
             cost += driver.getCost();
         }
@@ -32,17 +33,17 @@ public class ScoreCard {
         }
 
         if (cost <= costCap && cost > costCap - 5) {
-            List<Double> driverPointSet = this.driverList.stream().map(d -> ScoreCalculator.calculateScore(d, race)).sorted(Comparator.reverseOrder()).toList();
+            List<Double> driverPointSet = this.driverList.stream().map(d -> calculator.calculateScore(d, race, isSprint)).sorted(Comparator.reverseOrder()).toList();
             score = driverPointSet.stream().reduce(0d, Double::sum);
-            score += this.teamList.stream().map(d -> ScoreCalculator.calculateScore(d, race)).reduce(0d, Double::sum);
+            score += this.teamList.stream().map(d -> calculator.calculateScore(d, race, isSprint)).reduce(0d, Double::sum);
 
             score += driverPointSet.getFirst();
         }
 
     }
 
-    public void intialize(String race, double costCap) {
-        initialize(race, costCap);
+    public void intialize(String race, double costCap, boolean isSprint, ScoreCalculatorInterface scoreCalculator) {
+        initialize(race, costCap, isSprint, scoreCalculator);
     }
 
     public void addDriver(FullPointEntity driver) {

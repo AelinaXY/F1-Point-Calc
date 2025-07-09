@@ -9,33 +9,48 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ScoreCalculator {
+public class ScoreCalculator implements ScoreCalculatorInterface {
 
-    private static Double averagePointWeight = 0.61;
-    private static Double threeAveragePointWeight = 0.40;
+    private static Double averagePointWeight = 0.36;
+    private static Double threeAveragePointWeight = 0.57;
     private static Double simplePredictedPointsWeight = 0.01;
-    private static Double trackSimilarityWeight = 0.16;
+    private static Double trackSimilarityWeight = 0.144;
+    private static Double sprintWeight = 1.13;
 
     private static Map<String, Track> TRACK_MAP = CSVParsing.parseTracks("Tracks_Normalised.csv");
 
 
-    public static Double calculateScore(FullPointEntity fullPointEntity, String race) {
+    @Override
+    public Double calculateScore(FullPointEntity fullPointEntity, String race, boolean isSprint) {
         double runningTotal = 0.0;
 
         ScoreCalculatorHelper scores = calculateUpdatedPoints(fullPointEntity, race);
 
-        runningTotal += scores.averagePoints * averagePointWeight;
+        if (isSprint) {
+            runningTotal += scores.averagePoints * averagePointWeight * sprintWeight;
 
-        runningTotal += scores.threeAveragePoints * threeAveragePointWeight;
+            runningTotal += scores.threeAveragePoints * threeAveragePointWeight * sprintWeight;
 
-        if (scores.simplePredictedPoints != null) {
-            runningTotal += scores.simplePredictedPoints * simplePredictedPointsWeight;
+            if (scores.simplePredictedPoints != null) {
+                runningTotal += scores.simplePredictedPoints * simplePredictedPointsWeight * sprintWeight;
+            } else {
+                runningTotal += scores.averagePoints * simplePredictedPointsWeight * (averagePointWeight / (averagePointWeight + threeAveragePointWeight)) * sprintWeight;
+
+                runningTotal += scores.threeAveragePoints * simplePredictedPointsWeight * (threeAveragePointWeight / (averagePointWeight + threeAveragePointWeight)) * sprintWeight;
+            }
         } else {
-            runningTotal += scores.averagePoints * simplePredictedPointsWeight * (averagePointWeight / (averagePointWeight + threeAveragePointWeight));
+            runningTotal += scores.averagePoints * averagePointWeight;
 
-            runningTotal += scores.threeAveragePoints * simplePredictedPointsWeight * (threeAveragePointWeight / (averagePointWeight + threeAveragePointWeight));
+            runningTotal += scores.threeAveragePoints * threeAveragePointWeight;
+
+            if (scores.simplePredictedPoints != null) {
+                runningTotal += scores.simplePredictedPoints * simplePredictedPointsWeight;
+            } else {
+                runningTotal += scores.averagePoints * simplePredictedPointsWeight * (averagePointWeight / (averagePointWeight + threeAveragePointWeight));
+
+                runningTotal += scores.threeAveragePoints * simplePredictedPointsWeight * (threeAveragePointWeight / (averagePointWeight + threeAveragePointWeight));
+            }
         }
-
         return runningTotal;
     }
 
@@ -139,6 +154,10 @@ public class ScoreCalculator {
 
     public static void setTrackMap(Map<String, Track> trackMap) {
         TRACK_MAP = trackMap;
+    }
+
+    public static void setSprintWeight(Double sprintWeight) {
+        ScoreCalculator.sprintWeight = sprintWeight;
     }
 
     public static Map<String, Track> getTrackMap() {
