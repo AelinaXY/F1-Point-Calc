@@ -78,9 +78,9 @@ public class ScoreCalculator implements ScoreCalculatorInterface {
                     String currentRaceName = r.name();
                     double similarity = trackSimilarities.get(currentRaceName);
 
-                    double runningTotal = r.totalPoints();
+                    double runningTotal = r.qualiPoints();
 
-                    runningTotal += r.totalPoints() * similarity * trackSimilarityWeight;
+                    runningTotal += r.qualiPoints() * similarity * trackSimilarityWeight;
                     return runningTotal;
                 }
         ).toList();

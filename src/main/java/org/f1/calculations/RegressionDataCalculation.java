@@ -12,6 +12,8 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 import java.util.stream.Gatherers;
 
+import static org.f1.enums.EntityType.*;
+
 public class RegressionDataCalculation extends AbstractCalculation {
 
     private ScoreCalculator scoreCalculatorV1 = new ScoreCalculator();
@@ -31,7 +33,7 @@ public class RegressionDataCalculation extends AbstractCalculation {
 
         if (actualRace.isPresent()) {
             Double expectedScore = calculator.calculateScore(entity, race, actualRace.get().isSprint());
-            Double actualScore = actualRace.get().totalPoints();
+            Double actualScore = actualRace.get().qualiPoints();
             return expectedScore - actualScore;
         }
         return Double.NaN;
@@ -65,8 +67,8 @@ public class RegressionDataCalculation extends AbstractCalculation {
     }
 
     public void compareScoreCalculators() {
-        Set<FullPointEntity> drivers2024 = CSVParsing.parseFullPointEntities("Drivers_Full_2024.csv");
-        Set<FullPointEntity> teams2024 = CSVParsing.parseFullPointEntities("Teams_Full_2024.csv");
+        Set<FullPointEntity> drivers2024 = CSVParsing.parseFullPointEntities("Drivers_Full_2024.csv", DRIVER);
+        Set<FullPointEntity> teams2024 = CSVParsing.parseFullPointEntities("Teams_Full_2024.csv", TEAM);
 
         Set<Set<FullPointEntity>> pointEntitySets = Set.of(getDriverSet(), getTeamSet(), drivers2024, teams2024);
 
@@ -80,8 +82,8 @@ public class RegressionDataCalculation extends AbstractCalculation {
     }
 
     public void regressionCalculation() {
-        Set<FullPointEntity> drivers2024 = CSVParsing.parseFullPointEntities("Drivers_Full_2024.csv");
-        Set<FullPointEntity> teams2024 = CSVParsing.parseFullPointEntities("Teams_Full_2024.csv");
+        Set<FullPointEntity> drivers2024 = CSVParsing.parseFullPointEntities("Drivers_Full_2024.csv", DRIVER);
+        Set<FullPointEntity> teams2024 = CSVParsing.parseFullPointEntities("Teams_Full_2024.csv", TEAM);
 
         Set<Set<FullPointEntity>> pointEntitySets = Set.of(getDriverSet(), getTeamSet(), drivers2024, teams2024);
 
