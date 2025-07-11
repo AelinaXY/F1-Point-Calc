@@ -3,6 +3,7 @@ package org.f1.parsing;
 import org.f1.domain.FullPointEntity;
 import org.f1.domain.Race;
 import org.f1.domain.Track;
+import org.f1.enums.EntityType;
 
 import java.io.*;
 import java.util.*;
@@ -14,7 +15,7 @@ import static org.f1.domain.Track.TrackBuilder.aTrackBuilder;
 
 public class CSVParsing {
 
-    public static Set<FullPointEntity> parseFullPointEntities(String fileName) {
+    public static Set<FullPointEntity> parseFullPointEntities(String fileName, EntityType entityType) {
         Set<FullPointEntity> result = new HashSet<>();
 
         List<String> baseList = loadInput(fileName);
@@ -78,7 +79,7 @@ public class CSVParsing {
                 }
                 races.add(currentRaceBuilder.build());
             }
-            result.add(new FullPointEntity(name, cost, races));
+            result.add(new FullPointEntity(name, cost, races, entityType));
         }
 
         return result;
@@ -114,7 +115,7 @@ public class CSVParsing {
         List<Track> trackList = result.values().stream().toList();
 
 
-        updateTrackDistances(trackList, result, List.of(-1d,0.2d,31d,4.2d,-2.6d,10.4d,1.8d,4.8d));
+        updateTrackDistances(trackList, result, List.of(-1d, 0.2d, 31d, 4.2d, -2.6d, 10.4d, 1.8d, 4.8d));
 
         return result;
     }

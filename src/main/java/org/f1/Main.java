@@ -3,6 +3,7 @@ package org.f1;
 import org.f1.calculations.RawDataCalculationV2;
 import org.f1.calculations.RegressionDataCalculation;
 import org.f1.calculations.ScoreCalculator;
+import org.f1.calculations.ScoreCalculatorV2;
 import org.f1.domain.FullPointEntity;
 import org.f1.domain.ScoreCard;
 import org.f1.parsing.CSVParsing;
@@ -10,11 +11,13 @@ import org.f1.parsing.CSVParsing;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.f1.enums.EntityType.*;
+
 
 public class Main {
 
-    private static Set<FullPointEntity> DRIVER_SET = CSVParsing.parseFullPointEntities("Drivers_Full.csv");
-    private static Set<FullPointEntity> TEAM_SET = CSVParsing.parseFullPointEntities("Teams_Full.csv");
+    private static Set<FullPointEntity> DRIVER_SET = CSVParsing.parseFullPointEntities("Drivers_Full.csv", DRIVER);
+    private static Set<FullPointEntity> TEAM_SET = CSVParsing.parseFullPointEntities("Teams_Full.csv", TEAM);
     private static final String RACE_NAME = "Belgium";
     private static final boolean IS_SPRINT = true;
 
@@ -23,17 +26,18 @@ public class Main {
         List<String> driversNoLongerExists = List.of("Jack Doohan");
         DRIVER_SET = DRIVER_SET.stream().filter(d -> !driversNoLongerExists.contains(d.getName())).collect(Collectors.toSet());
 
-        RawDataCalculationV2 rawDataCalculation = new RawDataCalculationV2(DRIVER_SET, TEAM_SET, 111.9, 3L, RACE_NAME, IS_SPRINT, new ScoreCalculator());
+        RawDataCalculationV2 rawDataCalculation = new RawDataCalculationV2(DRIVER_SET, TEAM_SET, 111.9, 3L, RACE_NAME, IS_SPRINT, new ScoreCalculatorV2());
         RegressionDataCalculation regressionDataCalculation = new RegressionDataCalculation(DRIVER_SET, TEAM_SET, 111.9, 3L, RACE_NAME);
 
-        ScoreCard previousScoreCard = rawDataCalculation.createPreviousScoreCard(List.of("Fernando Alonso", "Oliver Bearman", "Gabriel Bortoleto", "Oscar Piastri", "Nico Hulkenberg"), List.of("Mclaren", "Mercedes"));
-        rawDataCalculation.calculate(previousScoreCard);
+//        ScoreCard previousScoreCard = rawDataCalculation.createPreviousScoreCard(List.of("Fernando Alonso", "Oliver Bearman", "Gabriel Bortoleto", "Oscar Piastri", "Nico Hulkenberg"), List.of("Mclaren", "Mercedes"));
+//        rawDataCalculation.calculate(previousScoreCard);
 
 //        regressionDataCalculation.regressionCalculation();
 
-//        regressionDataCalculation.compareScoreCalculators();
+        regressionDataCalculation.compareScoreCalculators();
     }
 
+    //TEAMS FLOW VS DRIVERS FLOW
 
     //VIRTUAL THREADS AND STREAM GATHERERS!!!
 
