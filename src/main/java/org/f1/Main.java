@@ -26,15 +26,15 @@ public class Main {
         List<String> driversNoLongerExists = List.of("Jack Doohan");
         DRIVER_SET = DRIVER_SET.stream().filter(d -> !driversNoLongerExists.contains(d.getName())).collect(Collectors.toSet());
 
-        RawDataCalculationV2 rawDataCalculation = new RawDataCalculationV2(DRIVER_SET, TEAM_SET, 111.9, 3L, RACE_NAME, IS_SPRINT, new ScoreCalculatorV2());
+        RawDataCalculationV2 rawDataCalculation = new RawDataCalculationV2(DRIVER_SET, TEAM_SET, 111.9, 3L, RACE_NAME, IS_SPRINT, new ScoreCalculator());
         RegressionDataCalculation regressionDataCalculation = new RegressionDataCalculation(DRIVER_SET, TEAM_SET, 111.9, 3L, RACE_NAME);
 
-//        ScoreCard previousScoreCard = rawDataCalculation.createPreviousScoreCard(List.of("Fernando Alonso", "Oliver Bearman", "Gabriel Bortoleto", "Oscar Piastri", "Nico Hulkenberg"), List.of("Mclaren", "Mercedes"));
-//        rawDataCalculation.calculate(previousScoreCard);
+        ScoreCard previousScoreCard = rawDataCalculation.createPreviousScoreCard(List.of("Fernando Alonso", "Oliver Bearman", "Gabriel Bortoleto", "Oscar Piastri", "Nico Hulkenberg"), List.of("Mclaren", "Mercedes"));
+        rawDataCalculation.calculate(previousScoreCard);
 
 //        regressionDataCalculation.regressionCalculation();
 
-        regressionDataCalculation.compareScoreCalculators();
+//        regressionDataCalculation.compareScoreCalculators();
     }
 
     //TEAMS FLOW VS DRIVERS FLOW
@@ -59,12 +59,12 @@ public class Main {
 //    [0.54, 0.46, 0]=257.85154744896784
 
 //    After Britain
-//    Average: 0.36
-//    4d1Avg: 0.57
+//    Average: 0.43
+//    4d1Avg: 0.49
 //    Forecast: 0.01
-//    Track Similarity: 0.144
-//    Sprint Mult: 1.13
-//    MSE: 258.9
+//    Track Similarity: 0.134
+//    Sprint Mult: 1.15
+//    MSE: 242.57
 
 
     //OLD CPU TIME: 9919ms

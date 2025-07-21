@@ -33,7 +33,7 @@ public class RegressionDataCalculation extends AbstractCalculation {
 
         if (actualRace.isPresent()) {
             Double expectedScore = calculator.calculateScore(entity, race, actualRace.get().isSprint());
-            Double actualScore = actualRace.get().qualiPoints();
+            Double actualScore = actualRace.get().totalPoints();
             return expectedScore - actualScore;
         }
         return Double.NaN;
@@ -115,10 +115,10 @@ public class RegressionDataCalculation extends AbstractCalculation {
                 weightSet.add(newWeights);
             }
 
-            Map.Entry<List<Double>, Double> bestWeights = calculateRegression(weightSet, pointEntitySets, scoreWeightMap, scoreCalculatorV2);
+            Map.Entry<List<Double>, Double> bestWeights = calculateRegression(weightSet, pointEntitySets, scoreWeightMap, scoreCalculatorV1);
             System.out.println(bestWeights);
 
-            if (baseIndex == 0) {
+            if (baseIndex == 4) {
                 baseIndex = 0;
             } else {
                 baseIndex++;
@@ -137,10 +137,11 @@ public class RegressionDataCalculation extends AbstractCalculation {
     private Map.Entry<List<Double>, Double> calculateRegression(Set<List<Double>> weightSet, Set<Set<FullPointEntity>> pointEntitySets, ConcurrentMap<List<Double>, Double> scoreWeightMap, ScoreCalculatorInterface calculator) {
         weightSet.stream().gather(Gatherers.mapConcurrent(100, p -> p)).forEach(w ->
         {
-//            ScoreCalculator.setAveragePointWeight(w.get(0));
-//            ScoreCalculator.setThreeAveragePointWeight(w.get(1));
-//            ScoreCalculator.setSimplePredictedPointsWeight(w.get(2));
-//            ScoreCalculator.setSprintWeight(w.get(4));
+            ScoreCalculator.setAveragePointWeight(w.get(0));
+            ScoreCalculator.setThreeAveragePointWeight(w.get(1));
+            ScoreCalculator.setSimplePredictedPointsWeight(w.get(2));
+            ScoreCalculator.setTrackSimilarityWeight(w.get(3));
+            ScoreCalculator.setSprintWeight(w.get(4));
 //
 //
 //            scoreCalculatorV2.setTrackSimilarityWeight(w.get(0));

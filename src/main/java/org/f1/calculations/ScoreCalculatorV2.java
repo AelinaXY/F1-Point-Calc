@@ -2,12 +2,9 @@ package org.f1.calculations;
 
 import org.f1.domain.FullPointEntity;
 import org.f1.domain.Race;
-import org.f1.domain.Track;
-import org.f1.parsing.CSVParsing;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class ScoreCalculatorV2 implements ScoreCalculatorInterface {
 
@@ -51,7 +48,7 @@ public class ScoreCalculatorV2 implements ScoreCalculatorInterface {
 
             if (lastFourRunningTotal < 0.61) {
                 return 0.0;
-            } else if (lastFourRunningTotal > meanPoints * 2.0)
+            } else if (lastFourRunningTotal > meanPoints * 2)
             {
                 return lastFourRunningTotal;
             }
