@@ -59,12 +59,12 @@ public class Main {
 //    [0.54, 0.46, 0]=257.85154744896784
 
 //    After Britain
-//    Average: 0.43
-//    4d1Avg: 0.49
+//    Average: 0.49
+//    4d1Avg: 0.44
 //    Forecast: 0.01
 //    Track Similarity: 0.134
 //    Sprint Mult: 1.15
-//    MSE: 242.57
+//    MSE: 242.4
 
 
     //OLD CPU TIME: 9919ms

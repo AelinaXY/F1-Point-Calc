@@ -100,7 +100,7 @@ public class RegressionDataCalculation extends AbstractCalculation {
 //            weightSet.add(List.of(i));
 //        }
 
-        List<Double> baseWeights = new ArrayList<>(List.of(1d, 0.58d, 0.1d, 0.164d, 1.11d, 1d, 1d, 1d));
+        List<Double> baseWeights = new ArrayList<>(List.of(0.43d, 0.49d, 0.1d, 0.134d, 1.15d, 1d, 1d, 1d));
         int baseIndex = 0;
         RegressionResolution resolution = new RegressionResolution(2d, 0.01d);
 
