@@ -1,9 +1,6 @@
 package org.f1;
 
-import org.f1.calculations.RawDataCalculationV2;
-import org.f1.calculations.RegressionDataCalculation;
-import org.f1.calculations.ScoreCalculator;
-import org.f1.calculations.ScoreCalculatorV2;
+import org.f1.calculations.*;
 import org.f1.domain.FullPointEntity;
 import org.f1.domain.ScoreCard;
 import org.f1.parsing.CSVParsing;
