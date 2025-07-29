@@ -15,16 +15,16 @@ public class Main {
 
     private static Set<FullPointEntity> DRIVER_SET = CSVParsing.parseFullPointEntities("Drivers_Full.csv", DRIVER);
     private static Set<FullPointEntity> TEAM_SET = CSVParsing.parseFullPointEntities("Teams_Full.csv", TEAM);
-    private static final String RACE_NAME = "Belgium";
-    private static final boolean IS_SPRINT = true;
+    private static final String RACE_NAME = "Hungary";
+    private static final boolean IS_SPRINT = false;
 
     public static void main(String[] args) {
         //Drivers no longer driving
         List<String> driversNoLongerExists = List.of("Jack Doohan");
         DRIVER_SET = DRIVER_SET.stream().filter(d -> !driversNoLongerExists.contains(d.getName())).collect(Collectors.toSet());
 
-        RawDataCalculationV2 rawDataCalculation = new RawDataCalculationV2(DRIVER_SET, TEAM_SET, 111.9, 3L, RACE_NAME, IS_SPRINT, new ScoreCalculator());
-        RegressionDataCalculation regressionDataCalculation = new RegressionDataCalculation(DRIVER_SET, TEAM_SET, 111.9, 3L, RACE_NAME);
+        RawDataCalculationV2 rawDataCalculation = new RawDataCalculationV2(DRIVER_SET, TEAM_SET, 114.2, 3L, RACE_NAME, IS_SPRINT, new ScoreCalculator());
+        RegressionDataCalculation regressionDataCalculation = new RegressionDataCalculation(DRIVER_SET, TEAM_SET, 114.2, 3L, RACE_NAME);
 
         ScoreCard previousScoreCard = rawDataCalculation.createPreviousScoreCard(List.of("Fernando Alonso", "Oliver Bearman", "Gabriel Bortoleto", "Oscar Piastri", "Nico Hulkenberg"), List.of("Mclaren", "Mercedes"));
         rawDataCalculation.calculate(previousScoreCard);
@@ -63,9 +63,11 @@ public class Main {
 //    Sprint Mult: 1.15
 //    MSE: 242.4
 
-
-    //OLD CPU TIME: 9919ms
-    //NEW CPU TIME: 410ms
-
-
+//    After Belgium
+//    Average: 0.48
+//    4d1Avg: 0.44
+//    Forecast: 0.01
+//    Track Similarity: 0.114
+//    Sprint Mult: 1.18
+//    MSE: 241.3
 }

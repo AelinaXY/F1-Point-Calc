@@ -11,11 +11,11 @@ import java.util.Map;
 
 public class ScoreCalculator implements ScoreCalculatorInterface {
 
-    private static Double averagePointWeight = 0.49;
+    private static Double averagePointWeight = 0.48;
     private static Double threeAveragePointWeight = 0.44;
     private static Double simplePredictedPointsWeight = 0.01;
-    private static Double trackSimilarityWeight = 0.134;
-    private static Double sprintWeight = 1.15;
+    private static Double trackSimilarityWeight = 0.114;
+    private static Double sprintWeight = 1.18;
 
     private static Map<String, Track> TRACK_MAP = CSVParsing.parseTracks("Tracks_Normalised.csv");
 
