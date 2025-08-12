@@ -4,13 +4,14 @@ import org.f1.calculations.*;
 import org.f1.domain.FullPointEntity;
 import org.f1.domain.ScoreCard;
 import org.f1.parsing.CSVParsing;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.f1.enums.EntityType.*;
 
-
+@SpringBootApplication()
 public class Main {
 
     private static Set<FullPointEntity> DRIVER_SET = CSVParsing.parseFullPointEntities("Drivers_Full.csv", DRIVER);

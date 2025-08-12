@@ -1,0 +1,16 @@
+services:
+  postgres-db:
+    image: postgres:latest
+    container_name: f1-db
+    healthcheck:
+      test: [ "CMD", "sh", "-c", "pg_isready --username=f1 --host=127.0.0.1 --port=5432 --dbname=tfgm" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=f1
+      - POSTGRES_USER=f1
+      - POSTGRES_PASSWORD=pass
