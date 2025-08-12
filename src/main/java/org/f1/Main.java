@@ -18,7 +18,7 @@ public class Main {
 
     private static Set<FullPointEntity> DRIVER_SET = CSVParsing.parseFullPointEntities("Drivers_Full.csv", DRIVER);
     private static Set<FullPointEntity> TEAM_SET = CSVParsing.parseFullPointEntities("Teams_Full.csv", TEAM);
-    private static final String RACE_NAME = "Hungary";
+    private static final String RACE_NAME = "Netherlands";
     private static final boolean IS_SPRINT = false;
 
     public static void main(String[] args) {
@@ -26,10 +26,10 @@ public class Main {
         List<String> driversNoLongerExists = List.of("Jack Doohan");
         DRIVER_SET = DRIVER_SET.stream().filter(d -> !driversNoLongerExists.contains(d.getName())).collect(Collectors.toSet());
 
-        RawDataCalculationV2 rawDataCalculation = new RawDataCalculationV2(DRIVER_SET, TEAM_SET, 114.2, 3L, RACE_NAME, IS_SPRINT, new ScoreCalculator());
-        RegressionDataCalculation regressionDataCalculation = new RegressionDataCalculation(DRIVER_SET, TEAM_SET, 114.2, 3L, RACE_NAME);
+        RawDataCalculationV2 rawDataCalculation = new RawDataCalculationV2(DRIVER_SET, TEAM_SET, 114.9, 3L, RACE_NAME, IS_SPRINT, new ScoreCalculator());
+        RegressionDataCalculation regressionDataCalculation = new RegressionDataCalculation(DRIVER_SET, TEAM_SET, 114.9, 3L, RACE_NAME);
 
-        ScoreCard previousScoreCard = rawDataCalculation.createPreviousScoreCard(List.of("Fernando Alonso", "Oliver Bearman", "Gabriel Bortoleto", "Oscar Piastri", "Nico Hulkenberg"), List.of("Mclaren", "Mercedes"));
+        ScoreCard previousScoreCard = rawDataCalculation.createPreviousScoreCard(List.of("Pierre Gasly", "Liam Lawson", "Gabriel Bortoleto", "Oscar Piastri", "Nico Hulkenberg"), List.of("Mclaren", "Ferrari"));
         rawDataCalculation.calculate(previousScoreCard);
 
 //        regressionDataCalculation.regressionCalculation();
