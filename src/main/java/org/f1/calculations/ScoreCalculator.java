@@ -4,6 +4,7 @@ import org.f1.domain.FullPointEntity;
 import org.f1.domain.Race;
 import org.f1.domain.Track;
 import org.f1.parsing.CSVParsing;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,7 @@ public class ScoreCalculator implements ScoreCalculatorInterface {
 
 
     @Override
+    @Cacheable("calculateScorev1")
     public Double calculateScore(FullPointEntity fullPointEntity, String race, boolean isSprint) {
         double runningTotal = 0.0;
 

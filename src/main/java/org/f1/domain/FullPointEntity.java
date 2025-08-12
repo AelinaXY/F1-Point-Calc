@@ -5,6 +5,7 @@ import org.f1.enums.EntityType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class FullPointEntity extends BasicPointEntity {
     private List<Race> raceList;
@@ -54,5 +55,18 @@ public class FullPointEntity extends BasicPointEntity {
 
     public boolean isTeam() {
         return entityType == EntityType.TEAM;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        FullPointEntity that = (FullPointEntity) o;
+        return Objects.equals(raceList, that.raceList) && Objects.equals(raceNameList, that.raceNameList) && Objects.equals(simplePredictedPoints, that.simplePredictedPoints) && entityType == that.entityType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), raceList, raceNameList, simplePredictedPoints, entityType);
     }
 }
