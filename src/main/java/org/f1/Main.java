@@ -73,4 +73,12 @@ public class Main {
 //    Track Similarity: 0.114
 //    Sprint Mult: 1.18
 //    MSE: 241.3
+
+//    After Hungary
+//    Average: 0.47
+//    4d1Avg: 0.45
+//    Forecast: 0.01
+//    Track Similarity: 0.114
+//    Sprint Mult: 1.17
+//    MSE: 239.9
 }
