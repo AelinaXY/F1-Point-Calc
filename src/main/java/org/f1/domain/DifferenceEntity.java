@@ -9,6 +9,7 @@ public class DifferenceEntity {
     private Set<BasicPointEntity> in;
     private Long numberOfChanges;
     private Double scoreDifference;
+    private Double costChangeDifference;
 
     public DifferenceEntity() {
         out = new HashSet<>();
@@ -44,17 +45,15 @@ public class DifferenceEntity {
         this.scoreDifference = scoreDifference;
     }
 
-    public void addOut(Set<BasicPointEntity> basicPointEntity)
-    {
+    public void addOut(Set<BasicPointEntity> basicPointEntity) {
         this.out.addAll(basicPointEntity);
     }
-    public void addIn(Set<BasicPointEntity> basicPointEntity)
-    {
+
+    public void addIn(Set<BasicPointEntity> basicPointEntity) {
         this.in.addAll(basicPointEntity);
     }
 
-    public void incrementDifference(long count)
-    {
+    public void incrementDifference(long count) {
         this.numberOfChanges += count;
     }
 
@@ -65,6 +64,11 @@ public class DifferenceEntity {
                 ", in=" + in +
                 ", difference=" + numberOfChanges +
                 ", scoreDifference=" + scoreDifference +
+                ", costChangeDifference=" + costChangeDifference +
                 '}';
+    }
+
+    public void setCostChangeDifference(Double costChangeDifference) {
+        this.costChangeDifference = costChangeDifference;
     }
 }

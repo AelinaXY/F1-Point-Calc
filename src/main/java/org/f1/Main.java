@@ -20,13 +20,14 @@ public class Main {
     private static Set<FullPointEntity> TEAM_SET = CSVParsing.parseFullPointEntities("Teams_Full.csv", TEAM);
     private static final String RACE_NAME = "Netherlands";
     private static final boolean IS_SPRINT = false;
+    private static final int RACES_LEFT = 9;
 
     public static void main(String[] args) {
         //Drivers no longer driving
         List<String> driversNoLongerExists = List.of("Jack Doohan");
         DRIVER_SET = DRIVER_SET.stream().filter(d -> !driversNoLongerExists.contains(d.getName())).collect(Collectors.toSet());
 
-        RawDataCalculationV2 rawDataCalculation = new RawDataCalculationV2(DRIVER_SET, TEAM_SET, 114.9, 3L, RACE_NAME, IS_SPRINT, new ScoreCalculator());
+        RawDataCalculationV2 rawDataCalculation = new RawDataCalculationV2(DRIVER_SET, TEAM_SET, 114.9, 3L, RACE_NAME, IS_SPRINT, new ScoreCalculator(), RACES_LEFT);
         RegressionDataCalculation regressionDataCalculation = new RegressionDataCalculation(DRIVER_SET, TEAM_SET, 114.9, 3L, RACE_NAME);
 
         ScoreCard previousScoreCard = rawDataCalculation.createPreviousScoreCard(List.of("Pierre Gasly", "Liam Lawson", "Gabriel Bortoleto", "Oscar Piastri", "Nico Hulkenberg"), List.of("Mclaren", "Ferrari"));
@@ -35,6 +36,12 @@ public class Main {
 //        regressionDataCalculation.regressionCalculation();
 
 //        regressionDataCalculation.compareScoreCalculators();
+
+//        DRIVER_SET.addAll(TEAM_SET);
+//        for(FullPointEntity entity: DRIVER_SET)
+//        {
+//            System.out.printf("Expected Change of %s: %s%n", entity.getName(), CostCalculator.calculateCostChange(entity, "Netherlands", false, new ScoreCalculator()));
+//        }
     }
 
     //TEAMS FLOW VS DRIVERS FLOW

@@ -1,6 +1,6 @@
 package org.f1.domain;
 
-import org.f1.calculations.ScoreCalculator;
+import org.f1.calculations.CostCalculator;
 import org.f1.calculations.ScoreCalculatorInterface;
 
 import java.util.*;
@@ -11,26 +11,31 @@ public class ScoreCard {
     private List<FullPointEntity> teamList;
     private Double cost = 0.0;
     private Double score = 0.0;
+    private Double costChange = 0.0;
 
     public ScoreCard() {
         this.driverList = new ArrayList<>();
         this.teamList = new ArrayList<>();
     }
 
-    public ScoreCard(List<FullPointEntity> driverList, List<FullPointEntity> teamList, String race, double costCap, boolean isSprint, ScoreCalculatorInterface scoreCalculator) {
+    public ScoreCard(List<FullPointEntity> driverList, List<FullPointEntity> teamList, String race, double costCap, boolean isSprint, ScoreCalculatorInterface scoreCalculator, int racesLeft) {
         this.driverList = driverList;
         this.teamList = teamList;
-        initialize(race, costCap, isSprint, scoreCalculator);
+        initialize(race, costCap, isSprint, scoreCalculator, racesLeft);
 
     }
 
-    private void initialize(String race, double costCap, boolean isSprint, ScoreCalculatorInterface calculator) {
+    private void initialize(String race, double costCap, boolean isSprint, ScoreCalculatorInterface calculator, int racesLeft) {
         for (FullPointEntity driver : driverList) {
             cost += driver.getCost();
+            costChange += CostCalculator.calculateCostChange(driver, race, isSprint, calculator);
         }
         for (FullPointEntity team : teamList) {
             cost += team.getCost();
+            costChange += CostCalculator.calculateCostChange(team, race, isSprint, calculator);
+
         }
+
 
         if (cost <= costCap && cost > costCap - 5) {
             List<Double> driverPointSet = this.driverList.stream().map(d -> calculator.calculateScore(d, race, isSprint)).sorted(Comparator.reverseOrder()).toList();
@@ -38,12 +43,13 @@ public class ScoreCard {
             score += this.teamList.stream().map(d -> calculator.calculateScore(d, race, isSprint)).reduce(0d, Double::sum);
 
             score += driverPointSet.getFirst();
+            score += costChange * 1.0 * racesLeft;
         }
 
     }
 
-    public void intialize(String race, double costCap, boolean isSprint, ScoreCalculatorInterface scoreCalculator) {
-        initialize(race, costCap, isSprint, scoreCalculator);
+    public void intialize(String race, double costCap, boolean isSprint, ScoreCalculatorInterface scoreCalculator, int racesLeft) {
+        initialize(race, costCap, isSprint, scoreCalculator, racesLeft);
     }
 
     public void addDriver(FullPointEntity driver) {
@@ -82,11 +88,16 @@ public class ScoreCard {
         return score;
     }
 
+    public Double getCostChange() {
+        return costChange;
+    }
+
     @Override
     public String toString() {
         return "ScoreCard{" +
                 "cost=" + cost +
                 ", score=" + score +
+                ", costChange=" + costChange +
                 ", drivers=" + driverList +
                 ", teams=" + teamList +
                 '}';
@@ -119,6 +130,7 @@ public class ScoreCard {
         inDifference(difference, newTeamSet, this, false);
 
         difference.setScoreDifference(scoreCard.getScore() - score);
+        difference.setCostChangeDifference(scoreCard.getCostChange() - costChange);
 
         return difference;
     }
