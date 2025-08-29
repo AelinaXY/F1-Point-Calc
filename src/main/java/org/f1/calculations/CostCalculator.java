@@ -12,10 +12,10 @@ public class CostCalculator {
     public static final double POOR = 0.9;
     public static final double GOOD = 1.195;
 
-    public static Double calculateCostChange(FullPointEntity fullPointEntity, String raceName, boolean isSprint, ScoreCalculatorInterface calculator) {
+    public static Double calculateCostChange(FullPointEntity fullPointEntity, String raceName, Double driverPredScore) {
         Double currentCost = fullPointEntity.getCost();
 
-        List<Double> scoreList = calculateRaceList(fullPointEntity, raceName, isSprint, calculator);
+        List<Double> scoreList = calculateRaceList(fullPointEntity, raceName, driverPredScore);
 
         if (scoreList.isEmpty()) {
             return 0d;
@@ -34,23 +34,20 @@ public class CostCalculator {
     private static Double calculateChange(Double averageResult, Double currentCost, Double range) {
         double budgetScore = averageResult / currentCost;
 
-       if(budgetScore < TERRIBLE)
-       {
-           return -range;
-       }
-       if(budgetScore < POOR)
-       {
-           return -(range/3);
-       }
-       if(budgetScore < GOOD)
-       {
-           return range/3;
-       }
-       return range;
+        if (budgetScore < TERRIBLE) {
+            return -range;
+        }
+        if (budgetScore < POOR) {
+            return -(range / 3);
+        }
+        if (budgetScore < GOOD) {
+            return range / 3;
+        }
+        return range;
 
     }
 
-    private static List<Double> calculateRaceList(FullPointEntity fullPointEntity, String raceName, boolean isSprint, ScoreCalculatorInterface calculator) {
+    private static List<Double> calculateRaceList(FullPointEntity fullPointEntity, String raceName, Double driverPredScore) {
         List<Double> iterableRaceList = new ArrayList<>();
 
         for (Race race : fullPointEntity.getRaceList()) {
@@ -63,7 +60,7 @@ public class CostCalculator {
                 iterableRaceList.removeFirst();
             }
         }
-        iterableRaceList.add(calculator.calculateScore(fullPointEntity,raceName,isSprint));
+        iterableRaceList.add(driverPredScore);
         iterableRaceList.removeFirst();
 
         return iterableRaceList;

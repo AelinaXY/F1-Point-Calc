@@ -28,21 +28,32 @@ public class ScoreCard {
     private void initialize(String race, double costCap, boolean isSprint, ScoreCalculatorInterface calculator, int racesLeft) {
         for (FullPointEntity driver : driverList) {
             cost += driver.getCost();
-            costChange += CostCalculator.calculateCostChange(driver, race, isSprint, calculator);
         }
         for (FullPointEntity team : teamList) {
             cost += team.getCost();
-            costChange += CostCalculator.calculateCostChange(team, race, isSprint, calculator);
-
         }
 
 
         if (cost <= costCap && cost > costCap - 5) {
-            List<Double> driverPointSet = this.driverList.stream().map(d -> calculator.calculateScore(d, race, isSprint)).sorted(Comparator.reverseOrder()).toList();
-            score = driverPointSet.stream().reduce(0d, Double::sum);
-            score += this.teamList.stream().map(d -> calculator.calculateScore(d, race, isSprint)).reduce(0d, Double::sum);
+            List<Double> driverScoreList = new ArrayList<>();
+            List<Double> teamScoreList = new ArrayList<>();
 
-            score += driverPointSet.getFirst();
+            for (FullPointEntity driver : driverList) {
+                Double driverScore = calculator.calculateScore(driver, race, isSprint);
+                driverScoreList.add(driverScore);
+                costChange += CostCalculator.calculateCostChange(driver, race, driverScore);
+            }
+            for (FullPointEntity team : teamList) {
+                Double teamScore = calculator.calculateScore(team, race, isSprint);
+                teamScoreList.add(teamScore);
+                costChange += CostCalculator.calculateCostChange(team, race, teamScore);
+            }
+
+            driverScoreList = driverScoreList.stream().sorted(Comparator.reverseOrder()).toList();
+            score = driverScoreList.stream().reduce(0d, Double::sum);
+            score += teamScoreList.stream().reduce(0d, Double::sum);
+
+            score += driverScoreList.getFirst();
             score += costChange * 1.0 * racesLeft;
         }
 
