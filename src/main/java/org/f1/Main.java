@@ -1,6 +1,7 @@
 package org.f1;
 
 import org.f1.calculations.*;
+import org.f1.domain.BasicPointEntity;
 import org.f1.domain.FullPointEntity;
 import org.f1.domain.ScoreCard;
 import org.f1.parsing.CSVParsing;
@@ -18,29 +19,33 @@ public class Main {
 
     private static Set<FullPointEntity> DRIVER_SET = CSVParsing.parseFullPointEntities("Drivers_Full.csv", DRIVER);
     private static Set<FullPointEntity> TEAM_SET = CSVParsing.parseFullPointEntities("Teams_Full.csv", TEAM);
-    private static final String RACE_NAME = "Netherlands";
+    private static final String RACE_NAME = "Italy";
     private static final boolean IS_SPRINT = false;
-    private static final int RACES_LEFT = 9;
+    private static final int RACES_LEFT = 8;
 
     public static void main(String[] args) {
         //Drivers no longer driving
         List<String> driversNoLongerExists = List.of("Jack Doohan");
         DRIVER_SET = DRIVER_SET.stream().filter(d -> !driversNoLongerExists.contains(d.getName())).collect(Collectors.toSet());
 
-        RawDataCalculationV2 rawDataCalculation = new RawDataCalculationV2(DRIVER_SET, TEAM_SET, 114.9, 3L, RACE_NAME, IS_SPRINT, new ScoreCalculator(), RACES_LEFT);
-        RegressionDataCalculation regressionDataCalculation = new RegressionDataCalculation(DRIVER_SET, TEAM_SET, 114.9, 3L, RACE_NAME);
+        RawDataCalculationV2 rawDataCalculation = new RawDataCalculationV2(DRIVER_SET, TEAM_SET, 117.8, 2L, RACE_NAME, IS_SPRINT, new ScoreCalculator(), RACES_LEFT);
+        RegressionDataCalculation regressionDataCalculation = new RegressionDataCalculation(DRIVER_SET, TEAM_SET, 117.8, 2L, RACE_NAME);
 
-        ScoreCard previousScoreCard = rawDataCalculation.createPreviousScoreCard(List.of("Pierre Gasly", "Liam Lawson", "Gabriel Bortoleto", "Oscar Piastri", "Nico Hulkenberg"), List.of("Mclaren", "Ferrari"));
+        ScoreCard previousScoreCard = rawDataCalculation.createPreviousScoreCard(List.of("Lance Stroll", "Liam Lawson", "Gabriel Bortoleto", "Oscar Piastri", "Nico Hulkenberg"), List.of("Mclaren", "Mercedes"));
         rawDataCalculation.calculate(previousScoreCard);
 
 //        regressionDataCalculation.regressionCalculation();
 
 //        regressionDataCalculation.compareScoreCalculators();
 
+
+//        ScoreCalculator calc = new ScoreCalculator();
+//
 //        DRIVER_SET.addAll(TEAM_SET);
-//        for(FullPointEntity entity: DRIVER_SET)
+//        List<FullPointEntity> sortedList = DRIVER_SET.stream().sorted(Comparator.comparing(BasicPointEntity::getName)).toList();
+//        for(FullPointEntity entity: sortedList)
 //        {
-//            System.out.printf("Expected Change of %s: %s%n", entity.getName(), CostCalculator.calculateCostChange(entity, "Netherlands", false, new ScoreCalculator()));
+//            System.out.printf("Expected Change of %s: %s%n", entity.getName(), CostCalculator.calculateCostChange(entity, RACE_NAME, calc.calculateScore(entity, RACE_NAME, IS_SPRINT)));
 //        }
     }
 

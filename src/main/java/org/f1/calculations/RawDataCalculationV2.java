@@ -45,7 +45,7 @@ public class RawDataCalculationV2 extends AbstractCalculation {
 
         System.out.println("Previous scorecard: " + previousScoreCard);
 
-        scoreCardOutput(previousScoreCard, Comparator.comparing(ScoreCard::getScore));
+        scoreCardOutput(previousScoreCard, Comparator.comparing(m -> m.getScore() + m.getEffectiveScoreIncrease()));
     }
 
     private void scoreCardOutput(ScoreCard currentScorecard, Comparator<ScoreCard> comparing) {

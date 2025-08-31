@@ -12,6 +12,7 @@ public class ScoreCard {
     private Double cost = 0.0;
     private Double score = 0.0;
     private Double costChange = 0.0;
+    private Double effectiveScoreIncrease = 0.0;
 
     public ScoreCard() {
         this.driverList = new ArrayList<>();
@@ -54,7 +55,7 @@ public class ScoreCard {
             score += teamScoreList.stream().reduce(0d, Double::sum);
 
             score += driverScoreList.getFirst();
-            score += costChange * 1.0 * racesLeft;
+            effectiveScoreIncrease += costChange * 0.7 * racesLeft;
         }
 
     }
@@ -164,5 +165,13 @@ public class ScoreCard {
         }
         difference.addIn(basicPointEntitySet);
 
+    }
+
+    public Double getEffectiveScoreIncrease() {
+        return effectiveScoreIncrease;
+    }
+
+    public void setEffectiveScoreIncrease(Double effectiveScoreIncrease) {
+        this.effectiveScoreIncrease = effectiveScoreIncrease;
     }
 }
