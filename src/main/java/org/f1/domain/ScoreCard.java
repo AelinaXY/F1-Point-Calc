@@ -110,6 +110,7 @@ public class ScoreCard {
                 "cost=" + cost +
                 ", score=" + score +
                 ", costChange=" + costChange +
+                ", effectiveScoreIncrease=" + effectiveScoreIncrease +
                 ", drivers=" + driverList +
                 ", teams=" + teamList +
                 '}';

@@ -35,16 +35,21 @@ public class CostCalculator {
         double budgetScore = averageResult / currentCost;
 
         if (budgetScore < TERRIBLE) {
-            return -range;
+            return costFloor(currentCost, -range);
         }
         if (budgetScore < POOR) {
-            return -(range / 3);
+            return costFloor(currentCost, -(range / 3));
         }
         if (budgetScore < GOOD) {
             return range / 3;
         }
         return range;
+    }
 
+    private static Double costFloor(Double currentCost, Double costChange) {
+        if (currentCost + costChange < 4.5d) {
+            return -(currentCost - 4.5d);
+        } else return costChange;
     }
 
     private static List<Double> calculateRaceList(FullPointEntity fullPointEntity, String raceName, Double driverPredScore) {
