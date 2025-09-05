@@ -28,7 +28,7 @@ public class Main {
         List<String> driversNoLongerExists = List.of("Jack Doohan");
         DRIVER_SET = DRIVER_SET.stream().filter(d -> !driversNoLongerExists.contains(d.getName())).collect(Collectors.toSet());
 
-        RawDataCalculationV2 rawDataCalculation = new RawDataCalculationV2(DRIVER_SET, TEAM_SET, 117.8, 10L, RACE_NAME, IS_SPRINT, new ScoreCalculator(), RACES_LEFT);
+        RawDataCalculationV2 rawDataCalculation = new RawDataCalculationV2(DRIVER_SET, TEAM_SET, 117.8, 2L, RACE_NAME, IS_SPRINT, new ScoreCalculator(), RACES_LEFT);
         RegressionDataCalculation regressionDataCalculation = new RegressionDataCalculation(DRIVER_SET, TEAM_SET, 117.8, 2L, RACE_NAME);
 
         ScoreCard previousScoreCard = rawDataCalculation.createPreviousScoreCard(List.of("Lance Stroll", "Liam Lawson", "Gabriel Bortoleto", "Oscar Piastri", "Nico Hulkenberg"), List.of("Mclaren", "Mercedes"));
