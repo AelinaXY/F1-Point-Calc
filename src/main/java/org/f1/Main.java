@@ -19,9 +19,9 @@ public class Main {
 
     private static Set<FullPointEntity> DRIVER_SET = CSVParsing.parseFullPointEntities("Drivers_Full.csv", DRIVER);
     private static Set<FullPointEntity> TEAM_SET = CSVParsing.parseFullPointEntities("Teams_Full.csv", TEAM);
-    private static final String RACE_NAME = "Italy";
+    private static final String RACE_NAME = "Azerbaijan";
     private static final boolean IS_SPRINT = false;
-    private static final int RACES_LEFT = 8;
+    private static final int RACES_LEFT = 7;
 
     public static void main(String[] args) {
         //Drivers no longer driving
@@ -31,7 +31,7 @@ public class Main {
         RawDataCalculationV2 rawDataCalculation = new RawDataCalculationV2(DRIVER_SET, TEAM_SET, 117.8, 2L, RACE_NAME, IS_SPRINT, new ScoreCalculator(), RACES_LEFT);
         RegressionDataCalculation regressionDataCalculation = new RegressionDataCalculation(DRIVER_SET, TEAM_SET, 117.8, 2L, RACE_NAME);
 
-        ScoreCard previousScoreCard = rawDataCalculation.createPreviousScoreCard(List.of("Lance Stroll", "Liam Lawson", "Gabriel Bortoleto", "Oscar Piastri", "Nico Hulkenberg"), List.of("Mclaren", "Mercedes"));
+        ScoreCard previousScoreCard = rawDataCalculation.createPreviousScoreCard(List.of("Isack Hadjar", "Fernando Alonso", "Gabriel Bortoleto", "Oscar Piastri", "Nico Hulkenberg"), List.of("Mclaren", "Mercedes"));
         rawDataCalculation.calculate(previousScoreCard);
 
 //        regressionDataCalculation.regressionCalculation();

@@ -15,6 +15,8 @@ import static org.f1.domain.Track.TrackBuilder.aTrackBuilder;
 
 public class CSVParsing {
 
+    public static final int GARBAGE_COLUMNS = 7;
+
     public static Set<FullPointEntity> parseFullPointEntities(String fileName, EntityType entityType) {
         Set<FullPointEntity> result = new HashSet<>();
 
@@ -24,7 +26,9 @@ public class CSVParsing {
         List<String> openingLineParts = new ArrayList<>(List.of(openingLine.split(",")));
         openingLineParts.removeFirst();
         openingLineParts.removeFirst();
-        openingLineParts = openingLineParts.subList(0, openingLineParts.size() - 6);
+        openingLineParts.removeFirst();
+
+        openingLineParts = openingLineParts.subList(0, openingLineParts.size() - GARBAGE_COLUMNS);
 
         List<Integer> tempIntegerList = new ArrayList<>();
         LinkedHashMap<String, List<Integer>> raceMap = new LinkedHashMap<>();
@@ -47,6 +51,7 @@ public class CSVParsing {
             }).collect(Collectors.toList());
 
             String name = parts.removeFirst();
+            Double baseCost = Double.parseDouble(parts.removeFirst());
             Double cost = Double.parseDouble(parts.removeFirst());
 
             List<String> raceNames = raceMap.sequencedKeySet().stream().toList();
@@ -79,7 +84,7 @@ public class CSVParsing {
                 }
                 races.add(currentRaceBuilder.build());
             }
-            result.add(new FullPointEntity(name, cost, races, entityType));
+            result.add(new FullPointEntity(name, cost, races, entityType, baseCost));
         }
 
         return result;

@@ -12,11 +12,13 @@ public class FullPointEntity extends BasicPointEntity {
     private List<String> raceNameList;
     private Double simplePredictedPoints;
     private EntityType entityType;
+    private Double baseCost;
 
-    public FullPointEntity(String name, Double cost, List<Race> points, EntityType entityType) {
+    public FullPointEntity(String name, Double cost, List<Race> points, EntityType entityType, Double baseCost) {
         super(name, cost, null, null);
 
         this.raceList = new ArrayList<>(points);
+        this.baseCost = baseCost;
 
         List<Double> pointsList = raceList.stream().map(Race::totalPoints).toList();
 
@@ -68,5 +70,13 @@ public class FullPointEntity extends BasicPointEntity {
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), raceList, raceNameList, simplePredictedPoints, entityType);
+    }
+
+    public Double getBaseCost() {
+        return baseCost;
+    }
+
+    public void setBaseCost(Double baseCost) {
+        this.baseCost = baseCost;
     }
 }
