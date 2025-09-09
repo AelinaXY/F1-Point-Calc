@@ -6,6 +6,7 @@ import org.f1.domain.FullPointEntity;
 import org.f1.domain.ScoreCard;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class RawDataCalculationV2 extends AbstractCalculation {
@@ -27,7 +28,7 @@ public class RawDataCalculationV2 extends AbstractCalculation {
         this.racesLeft = racesLeft;
     }
 
-    public void calculate(ScoreCard previousScoreCard) {
+    public Map<ScoreCard, DifferenceEntity> calculate(ScoreCard previousScoreCard, boolean consoleLog) {
         IntStream.range(0, driverList.size())
                 .parallel()
                 .mapToObj(i ->
@@ -35,32 +36,22 @@ public class RawDataCalculationV2 extends AbstractCalculation {
                                 new ArrayList<>(driverList.subList(i + 1, driverList.size()))))
                 .forEach(driver -> {
                     driverLoop(List.of(driver.getKey()), driver.getValue());
-                    System.out.println("Driver " + driver.getKey().getName() + " done");
+                    if (consoleLog) {
+                        System.out.println("Driver " + driver.getKey().getName() + " done");
+                    }
                 });
 
         System.out.println("Number of valid combinations: " + validTeamSet.size());
 
-        System.out.println("sorting");
-
-
-        System.out.println("Previous scorecard: " + previousScoreCard);
-
-        scoreCardOutput(previousScoreCard, Comparator.comparing(m -> m.getScore() + m.getEffectiveScoreIncrease()));
+        return scoreCardOutput(previousScoreCard, Comparator.comparing(m -> m.getScore() + m.getEffectiveScoreIncrease()));
     }
 
-    private void scoreCardOutput(ScoreCard currentScorecard, Comparator<ScoreCard> comparing) {
-        System.out.println("\nAbsolute Score Cards: ----------------------------------------------------------");
-
+    private Map<ScoreCard, DifferenceEntity> scoreCardOutput(ScoreCard currentScorecard, Comparator<ScoreCard> comparing) {
         List<ScoreCard> scoreCardList = validTeamSet.stream().sorted(comparing.reversed()).limit(30).toList();
 
-        scoreCardList.forEach(System.out::println);
-
-        System.out.println("\nDifference Entities: ----------------------------------------------------------");
-
-        List<DifferenceEntity> differenceEntityList = scoreCardList.stream().map(currentScorecard::calculateDifference).toList();
-        differenceEntityList = differenceEntityList.stream().filter(sc -> sc.getNumberOfChanges() <= getTransferLimit()).toList();
-
-        differenceEntityList.forEach(System.out::println);
+        return scoreCardList.stream()
+                .map(sc -> new AbstractMap.SimpleEntry<>(sc, currentScorecard.calculateDifference(sc)))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (a, _) -> a, LinkedHashMap::new));
     }
 
     private void driverLoop(

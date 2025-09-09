@@ -2,9 +2,11 @@ package org.f1;
 
 import org.f1.calculations.*;
 import org.f1.domain.BasicPointEntity;
+import org.f1.domain.DifferenceEntity;
 import org.f1.domain.FullPointEntity;
 import org.f1.domain.ScoreCard;
 import org.f1.parsing.CSVParsing;
+import org.jooq.meta.derby.sys.Sys;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 
@@ -32,8 +34,9 @@ public class Main {
         RegressionDataCalculation regressionDataCalculation = new RegressionDataCalculation(DRIVER_SET, TEAM_SET, 119.1, 3L, RACE_NAME);
 
         ScoreCard previousScoreCard = rawDataCalculation.createPreviousScoreCard(List.of("Isack Hadjar", "Fernando Alonso", "Gabriel Bortoleto", "Oscar Piastri", "Nico Hulkenberg"), List.of("Mclaren", "Mercedes"));
-        rawDataCalculation.calculate(previousScoreCard);
+        Map<ScoreCard, DifferenceEntity> outputMap = rawDataCalculation.calculate(previousScoreCard, true);
 
+        printTeamMap(outputMap);
 //        regressionDataCalculation.regressionCalculation();
 
 //        regressionDataCalculation.compareScoreCalculators();
@@ -47,6 +50,13 @@ public class Main {
 //        {
 //            System.out.printf("Expected Change of %s: %s%n", entity.getName(), CostCalculator.calculateCostChange(entity, RACE_NAME, calc.calculateScore(entity, RACE_NAME, IS_SPRINT)));
 //        }
+    }
+
+    public static void printTeamMap(Map<ScoreCard, DifferenceEntity> outputMap) {
+        System.out.println("ScoreCards:");
+        outputMap.keySet().forEach(System.out::println);
+        System.out.println("Difference Entities:");
+        outputMap.values().forEach(System.out::println);
     }
 
     //TEAMS FLOW VS DRIVERS FLOW
