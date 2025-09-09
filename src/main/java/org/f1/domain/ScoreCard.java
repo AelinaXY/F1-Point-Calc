@@ -19,14 +19,19 @@ public class ScoreCard {
         this.teamList = new ArrayList<>();
     }
 
-    public ScoreCard(List<FullPointEntity> driverList, List<FullPointEntity> teamList, String race, double costCap, boolean isSprint, ScoreCalculatorInterface scoreCalculator, int racesLeft) {
+    public ScoreCard(List<FullPointEntity> driverList, List<FullPointEntity> teamList, String race, double costCap, boolean isSprint, ScoreCalculatorInterface scoreCalculator, int racesLeft, double costCapMult) {
         this.driverList = driverList;
         this.teamList = teamList;
-        initialize(race, costCap, isSprint, scoreCalculator, racesLeft);
+        initialize(race, costCap, isSprint, scoreCalculator, racesLeft, costCapMult);
 
     }
 
-    private void initialize(String race, double costCap, boolean isSprint, ScoreCalculatorInterface calculator, int racesLeft) {
+    private void initialize(String race, double costCap, boolean isSprint, ScoreCalculatorInterface calculator, int racesLeft, double costCapMult) {
+        cost = 0.0;
+        score = 0.0;
+        costChange = 0.0;
+        effectiveScoreIncrease = 0.0;
+
         for (FullPointEntity driver : driverList) {
             cost += driver.getCost();
         }
@@ -55,13 +60,13 @@ public class ScoreCard {
             score += teamScoreList.stream().reduce(0d, Double::sum);
 
             score += driverScoreList.getFirst();
-            effectiveScoreIncrease += costChange * 0.7 * racesLeft;
+            effectiveScoreIncrease += costChange * costCapMult * racesLeft;
         }
 
     }
 
-    public void intialize(String race, double costCap, boolean isSprint, ScoreCalculatorInterface scoreCalculator, int racesLeft) {
-        initialize(race, costCap, isSprint, scoreCalculator, racesLeft);
+    public void intialize(String race, double costCap, boolean isSprint, ScoreCalculatorInterface scoreCalculator, int racesLeft, double costCapMult) {
+        initialize(race, costCap, isSprint, scoreCalculator, racesLeft, costCapMult);
     }
 
     public void addDriver(FullPointEntity driver) {

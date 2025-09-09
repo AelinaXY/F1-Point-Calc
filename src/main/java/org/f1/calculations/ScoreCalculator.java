@@ -117,7 +117,7 @@ public class ScoreCalculator implements ScoreCalculatorInterface {
         Double lowest = 1000.0;
         switch (points.size()) {
             case 0:
-                return null;
+                return 0d;
             case 1:
                 return points.getFirst();
             case 2, 3:

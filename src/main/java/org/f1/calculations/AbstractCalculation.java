@@ -7,10 +7,10 @@ import java.util.Set;
 public abstract class AbstractCalculation {
     private final Set<FullPointEntity> driverSet;
     private final Set<FullPointEntity> teamSet;
-    private final double costCap;
-    private final long transferLimit;
-    private final String raceName;
-    private final boolean isSprint;
+    private double costCap;
+    private long transferLimit;
+    private String raceName;
+    private boolean isSprint;
 
 
     public AbstractCalculation(Set<FullPointEntity> driverSet, Set<FullPointEntity> teamSet, double costCap, long transferLimit, String raceName, boolean isSprint) {
@@ -44,5 +44,21 @@ public abstract class AbstractCalculation {
 
     public boolean isSprint() {
         return isSprint;
+    }
+
+    public void setCostCap(double costCap) {
+        this.costCap = costCap;
+    }
+
+    public void setTransferLimit(long transferLimit) {
+        this.transferLimit = transferLimit;
+    }
+
+    public void setRaceName(String raceName) {
+        this.raceName = raceName;
+    }
+
+    public void setSprint(boolean sprint) {
+        isSprint = sprint;
     }
 }

@@ -19,16 +19,18 @@ public class RawDataCalculationV2 extends AbstractCalculation {
     private List<FullPointEntity> teamList;
 
     private int racesLeft;
+    private double costCapMult;
 
-    public RawDataCalculationV2(Set<FullPointEntity> driverSet, Set<FullPointEntity> teamSet, double costCap, long transferLimit, String raceName, boolean isSprint, ScoreCalculatorInterface calculator, int racesLeft) {
+    public RawDataCalculationV2(Set<FullPointEntity> driverSet, Set<FullPointEntity> teamSet, double costCap, long transferLimit, String raceName, boolean isSprint, ScoreCalculatorInterface calculator, int racesLeft, double costCapMult) {
         super(driverSet, teamSet, costCap, transferLimit, raceName, isSprint);
         driverList = new ArrayList<>(driverSet);
         teamList = new ArrayList<>(teamSet);
         scoreCalculator = calculator;
         this.racesLeft = racesLeft;
+        this.costCapMult = costCapMult;
     }
 
-    public Map<ScoreCard, DifferenceEntity> calculate(ScoreCard previousScoreCard, boolean consoleLog) {
+    public SequencedMap<ScoreCard, DifferenceEntity> calculate(ScoreCard previousScoreCard, boolean consoleLog) {
         IntStream.range(0, driverList.size())
                 .parallel()
                 .mapToObj(i ->
@@ -40,13 +42,14 @@ public class RawDataCalculationV2 extends AbstractCalculation {
                         System.out.println("Driver " + driver.getKey().getName() + " done");
                     }
                 });
-
-        System.out.println("Number of valid combinations: " + validTeamSet.size());
+        if (consoleLog) {
+            System.out.println("Number of valid combinations: " + validTeamSet.size());
+        }
 
         return scoreCardOutput(previousScoreCard, Comparator.comparing(m -> m.getScore() + m.getEffectiveScoreIncrease()));
     }
 
-    private Map<ScoreCard, DifferenceEntity> scoreCardOutput(ScoreCard currentScorecard, Comparator<ScoreCard> comparing) {
+    private SequencedMap<ScoreCard, DifferenceEntity> scoreCardOutput(ScoreCard currentScorecard, Comparator<ScoreCard> comparing) {
         List<ScoreCard> scoreCardList = validTeamSet.stream().sorted(comparing.reversed()).limit(30).toList();
 
         return scoreCardList.stream()
@@ -75,7 +78,7 @@ public class RawDataCalculationV2 extends AbstractCalculation {
     private void teamLoop(
             List<FullPointEntity> previousLevelTeamSet, List<FullPointEntity> driverSet, List<FullPointEntity> loopTeamList) {
         if (previousLevelTeamSet.size() == 2) {
-            ScoreCard scoreCard = new ScoreCard(driverSet, previousLevelTeamSet, getRaceName(), getCostCap(), isSprint(), scoreCalculator, racesLeft);
+            ScoreCard scoreCard = new ScoreCard(driverSet, previousLevelTeamSet, getRaceName(), getCostCap(), isSprint(), scoreCalculator, racesLeft, costCapMult);
             if (scoreCard.getCost() <= getCostCap() && scoreCard.getCost() > getCostCap() - 5) {
                 validTeamSet.add(scoreCard);
             }
@@ -92,11 +95,39 @@ public class RawDataCalculationV2 extends AbstractCalculation {
         }
     }
 
-    public ScoreCard createPreviousScoreCard(List<String> driverNames, List<String> teamNames) {
+    public ScoreCard createPreviousScoreCard(List<String> driverNames, List<String> teamNames, double costCapMult) {
         ScoreCard scoreCard = new ScoreCard();
         getDriverSet().stream().filter(d -> driverNames.contains(d.getName())).forEach(scoreCard::addDriver);
         getTeamSet().stream().filter(t -> teamNames.contains(t.getName())).forEach(scoreCard::addTeam);
-        scoreCard.intialize(getRaceName(), getCostCap(), isSprint(), scoreCalculator, racesLeft);
+        scoreCard.intialize(getRaceName(), getCostCap(), isSprint(), scoreCalculator, racesLeft, costCapMult);
         return scoreCard;
+    }
+
+    public void resetValues() {
+        validTeamSet.clear();
+    }
+
+    public List<FullPointEntity> getDriverList() {
+        return driverList;
+    }
+
+    public void setDriverList(List<FullPointEntity> driverList) {
+        this.driverList = driverList;
+    }
+
+    public List<FullPointEntity> getTeamList() {
+        return teamList;
+    }
+
+    public void setTeamList(List<FullPointEntity> teamList) {
+        this.teamList = teamList;
+    }
+
+    public int getRacesLeft() {
+        return racesLeft;
+    }
+
+    public void setRacesLeft(int racesLeft) {
+        this.racesLeft = racesLeft;
     }
 }

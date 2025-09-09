@@ -30,11 +30,11 @@ public class Main {
         List<String> driversNoLongerExists = List.of("Jack Doohan");
         DRIVER_SET = DRIVER_SET.stream().filter(d -> !driversNoLongerExists.contains(d.getName())).collect(Collectors.toSet());
 
-        RawDataCalculationV2 rawDataCalculation = new RawDataCalculationV2(DRIVER_SET, TEAM_SET, 119.1, 3L, RACE_NAME, IS_SPRINT, new ScoreCalculator(), RACES_LEFT);
+        RawDataCalculationV2 rawDataCalculation = new RawDataCalculationV2(DRIVER_SET, TEAM_SET, 119.1, 3L, RACE_NAME, IS_SPRINT, new ScoreCalculator(), RACES_LEFT, 0.7);
         RegressionDataCalculation regressionDataCalculation = new RegressionDataCalculation(DRIVER_SET, TEAM_SET, 119.1, 3L, RACE_NAME);
 
-        ScoreCard previousScoreCard = rawDataCalculation.createPreviousScoreCard(List.of("Isack Hadjar", "Fernando Alonso", "Gabriel Bortoleto", "Oscar Piastri", "Nico Hulkenberg"), List.of("Mclaren", "Mercedes"));
-        Map<ScoreCard, DifferenceEntity> outputMap = rawDataCalculation.calculate(previousScoreCard, true);
+        ScoreCard previousScoreCard = rawDataCalculation.createPreviousScoreCard(List.of("Isack Hadjar", "Fernando Alonso", "Gabriel Bortoleto", "Oscar Piastri", "Nico Hulkenberg"), List.of("Mclaren", "Mercedes"), 0.7);
+        SequencedMap<ScoreCard, DifferenceEntity> outputMap = rawDataCalculation.calculate(previousScoreCard, true);
 
         printTeamMap(outputMap);
 //        regressionDataCalculation.regressionCalculation();
@@ -52,11 +52,11 @@ public class Main {
 //        }
     }
 
-    public static void printTeamMap(Map<ScoreCard, DifferenceEntity> outputMap) {
+    public static void printTeamMap(SequencedMap<ScoreCard, DifferenceEntity> outputMap) {
         System.out.println("ScoreCards:");
-        outputMap.keySet().forEach(System.out::println);
+        outputMap.sequencedKeySet().forEach(System.out::println);
         System.out.println("Difference Entities:");
-        outputMap.values().forEach(System.out::println);
+        outputMap.sequencedValues().forEach(System.out::println);
     }
 
     //TEAMS FLOW VS DRIVERS FLOW
