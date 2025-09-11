@@ -1,14 +1,13 @@
 package org.f1.modes;
 
 import org.f1.agents.CostCapMultAgent;
-import org.f1.calculations.ActualScoreCalculator;
-import org.f1.calculations.RawDataCalculationV2;
-import org.f1.calculations.ScoreCalculator;
+import org.f1.calculations.*;
 import org.f1.domain.DifferenceEntity;
 import org.f1.domain.FullPointEntity;
 import org.f1.domain.ScoreCard;
 import org.f1.parsing.CSVParsing;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Gatherers;
@@ -25,9 +24,6 @@ public class SeasonSimulator {
 
     public static void main(String[] args) {
         List<CostCapMultAgent> agents = new ArrayList<>();
-        //List of Races
-
-        //Set all driver and team costs to their base price
 
         for (FullPointEntity driver : DRIVER_SET) {
             driver.setCost(driver.getBaseCost());
@@ -35,25 +31,51 @@ public class SeasonSimulator {
         for (FullPointEntity team : TEAM_SET) {
             team.setCost(team.getBaseCost());
         }
-        RawDataCalculationV2 rawDataCalculation = new RawDataCalculationV2(DRIVER_SET, TEAM_SET, 100, 3L, RACE_NAMES_2024.getFirst(), false, new ActualScoreCalculator(), RACE_NAMES_2024.size(), 0);
+        RawDataCalculationV2 rawDataCalculation = new RawDataCalculationV2(DRIVER_SET, TEAM_SET, 100, 3L, RACE_NAMES_2024.getFirst(), false, new ScoreCalculator(), RACE_NAMES_2024.size(), 0);
 
         ScoreCard previousScoreCard = rawDataCalculation.createPreviousScoreCard(List.of(), List.of(), 0);
         SequencedMap<ScoreCard, DifferenceEntity> outputMap = rawDataCalculation.calculate(previousScoreCard, false);
 
 
-        for (double i = 0.0d; i <= 2.0d; i += 0.5) {
-            agents.add(new CostCapMultAgent(outputMap.firstEntry().getKey(),
-                    new LinkedHashMap<>(),
-                    100d,
-                    0d,
-                    i));
+        for (double i = 0.0d; i <= 2.0d; i += 0.4) {
+            int j = 0;
+            for(ScoreCard scoreCard : outputMap.keySet() ) {
+                agents.add(new CostCapMultAgent(scoreCard,
+                        new LinkedHashMap<>(),
+                        119.1,
+                        0d,
+                        i));
+                j++;
+                if(j == 4)
+                {
+                  break;
+                }
+            }
         }
 
         agents.stream().gather(Gatherers.mapConcurrent(100, a -> a)).forEach(agent -> {
             Set<FullPointEntity> agentsDrivers = CSVParsing.parseFullPointEntities("Drivers_Full_2024.csv", DRIVER);
             Set<FullPointEntity> agentsTeams = CSVParsing.parseFullPointEntities("Teams_Full_2024.csv", DRIVER);
 
+            for (FullPointEntity driver : agentsDrivers) {
+                driver.setCost(driver.getBaseCost());
+            }
+            for (FullPointEntity team : agentsTeams) {
+                team.setCost(team.getBaseCost());
+            }
+
             ActualScoreCalculator actualScoreCalculator = new ActualScoreCalculator();
+
+//            for( int i = 0; i < RACE_NAMES_2024.size()-7; i++ ) {
+//                String raceName = RACE_NAMES_2024.get(i);
+//                for (FullPointEntity driver : agentsDrivers) {
+//                    changeCost(driver, actualScoreCalculator, raceName);
+//                }
+//                for (FullPointEntity team : agentsTeams) {
+//                    changeCost(team, actualScoreCalculator, raceName);
+//                }
+//            }
+
 
             RawDataCalculationV2 scoreCalculator = new RawDataCalculationV2(agentsDrivers, agentsTeams, 100, 3L, "blank", false, new ScoreCalculator(), 24, agent.getCostCapMultiplier());
             for (int i = 0; i < RACE_NAMES_2024.size(); i++) {
@@ -82,25 +104,26 @@ public class SeasonSimulator {
 
                 agent.addScore(agent.getCurrentScoreCard().getScore());
                 agent.addCostCap(agent.getCurrentScoreCard().getCostChange());
+
+                for (FullPointEntity driver : agentsDrivers) {
+                    changeCost(driver, actualScoreCalculator, raceName);
+                }
+                for (FullPointEntity team : agentsTeams) {
+                    changeCost(team, actualScoreCalculator, raceName);
+                }
             }
             System.out.println("agent complete");
         });
 
-        agents.stream().sorted((a,b) -> a.getScore() > b.getScore() ? -1 : 1).forEach(agent -> {
-            System.out.println(agent);
-        });
+        LinkedHashMap<Double, Double> resultMap = agents.stream().collect(Collectors.toMap(CostCapMultAgent::getCostCapMultiplier, a -> a.getScore()/5, Double::sum, LinkedHashMap::new));
 
+        resultMap.sequencedEntrySet().stream().sorted(Map.Entry.comparingByValue()).forEach(a -> System.out.println("CostCapMult:" + a.getKey() + "| Score:" + a.getValue()));
+    }
 
-        //Loop through every race
-        //Inside loop take all the agents and their current team and costcap and work out their best team
-        //Replace team with new best team
-        //Update costcap and update score with their actual score
+    private static void changeCost(FullPointEntity entity, ActualScoreCalculator actualScoreCalculator, String raceName) {
+        Double score = actualScoreCalculator.calculateScore(entity, raceName, SPRINTS_2024.contains(raceName));
+        Double costChange = CostCalculator.calculateCostChange(entity, raceName, score);
 
-        //At the end of the loop go through all drivers and use their actual score to work out their cost change and change the cost to reflect this
-
-
-        //At the end loop through the agents outputting their score and how much their costcapchangemult was
-
-
+        entity.setCost(entity.getCost() + costChange);
     }
 }
