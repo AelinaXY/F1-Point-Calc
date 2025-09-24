@@ -6,7 +6,6 @@ import org.f1.domain.DifferenceEntity;
 import org.f1.domain.FullPointEntity;
 import org.f1.domain.ScoreCard;
 import org.f1.parsing.CSVParsing;
-import org.jooq.meta.derby.sys.Sys;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 
@@ -21,19 +20,19 @@ public class Main {
 
     private static Set<FullPointEntity> DRIVER_SET = CSVParsing.parseFullPointEntities("Drivers_Full.csv", DRIVER);
     private static Set<FullPointEntity> TEAM_SET = CSVParsing.parseFullPointEntities("Teams_Full.csv", TEAM);
-    private static final String RACE_NAME = "Azerbaijan";
+    private static final String RACE_NAME = "Singapore";
     private static final boolean IS_SPRINT = false;
-    private static final int RACES_LEFT = 7;
+    private static final int RACES_LEFT = 6;
 
     public static void main(String[] args) {
         //Drivers no longer driving
         List<String> driversNoLongerExists = List.of("Jack Doohan");
         DRIVER_SET = DRIVER_SET.stream().filter(d -> !driversNoLongerExists.contains(d.getName())).collect(Collectors.toSet());
 
-        RawDataCalculationV2 rawDataCalculation = new RawDataCalculationV2(DRIVER_SET, TEAM_SET, 119.1, 3L, RACE_NAME, IS_SPRINT, new ScoreCalculator(), RACES_LEFT, 1.2);
-        RegressionDataCalculation regressionDataCalculation = new RegressionDataCalculation(DRIVER_SET, TEAM_SET, 119.1, 3L, RACE_NAME);
+        RawDataCalculationV2 rawDataCalculation = new RawDataCalculationV2(DRIVER_SET, TEAM_SET, 120.4, 3L, RACE_NAME, IS_SPRINT, new ScoreCalculator(), RACES_LEFT, 1.2);
+        RegressionDataCalculation regressionDataCalculation = new RegressionDataCalculation(DRIVER_SET, TEAM_SET, 120.4, 3L, RACE_NAME);
 
-        ScoreCard previousScoreCard = rawDataCalculation.createPreviousScoreCard(List.of("Isack Hadjar", "Fernando Alonso", "Gabriel Bortoleto", "Oscar Piastri", "Nico Hulkenberg"), List.of("Mclaren", "Mercedes"), 0.7);
+        ScoreCard previousScoreCard = rawDataCalculation.createPreviousScoreCard(List.of("Isack Hadjar", "Lance Stroll", "Gabriel Bortoleto", "Oscar Piastri", "Oliver Bearman"), List.of("Mclaren", "Mercedes"), 1.2);
         SequencedMap<ScoreCard, DifferenceEntity> outputMap = rawDataCalculation.calculate(previousScoreCard, true);
 
         printTeamMap(outputMap);

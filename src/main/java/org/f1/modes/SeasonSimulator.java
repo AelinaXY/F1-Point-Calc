@@ -37,7 +37,7 @@ public class SeasonSimulator {
         SequencedMap<ScoreCard, DifferenceEntity> outputMap = rawDataCalculation.calculate(previousScoreCard, false);
 
 
-        for (double i = 0.0d; i <= 3.2d; i += 0.4) {
+        for (double i = 0.0d; i <= 3.0d; i += 0.3) {
             int j = 0;
             for (ScoreCard scoreCard : outputMap.keySet()) {
                 agents.add(new CostCapMultAgent(scoreCard,
@@ -46,7 +46,7 @@ public class SeasonSimulator {
                         0d,
                         i));
                 j++;
-                if (j == 9) {
+                if (j == 11) {
                     break;
                 }
             }
@@ -76,7 +76,7 @@ public class SeasonSimulator {
 //            }
 
 
-            RawDataCalculationV2 scoreCalculator = new RawDataCalculationV2(agentsDrivers, agentsTeams, 100, 3L, "blank", false, new ScoreCalculator(), 24, agent.getCostCapMultiplier());
+            RawDataCalculationV2 scoreCalculator = new RawDataCalculationV2(agentsDrivers, agentsTeams, 100, 2L, "blank", false, new ScoreCalculator(), 24, agent.getCostCapMultiplier());
 
             for (int i = 0; i < RACE_NAMES_2024.size(); i++) {
                 String raceName = RACE_NAMES_2024.get(i);
