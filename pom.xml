@@ -52,6 +52,11 @@
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-database-postgresql</artifactId>
         </dependency>
+        <dependency>
+            <groupId>uk.co.autotrader</groupId>
+            <artifactId>traverson4j-hc5</artifactId>
+            <version>4.3.4</version>
+        </dependency>
     </dependencies>
 
     <build>
