@@ -1,12 +1,13 @@
 package org.f1.domain;
 
+import com.alibaba.fastjson2.JSONObject;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.f1.calculations.CostCalculator;
 import org.f1.calculations.ScoreCalculatorInterface;
 
 import java.util.*;
 
 public class ScoreCard {
-
     private List<FullPointEntity> driverList;
     private List<FullPointEntity> teamList;
     private Double cost = 0.0;
@@ -119,6 +120,17 @@ public class ScoreCard {
                 ", drivers=" + driverList +
                 ", teams=" + teamList +
                 '}';
+    }
+
+    public JSONObject toJSON() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("cost", Math.round(cost * 100.0) / 100.0);
+        jsonObject.put("score", Math.round(score * 100.0) / 100.0);
+        jsonObject.put("costChange", Math.round(costChange * 100.0) / 100.0);
+        jsonObject.put("effectiveScoreIncrease", Math.round(effectiveScoreIncrease * 100.0) / 100.0);
+        jsonObject.put("drivers", driverList.stream().map(BasicPointEntity::toString).toList());
+        jsonObject.put("teams", driverList.stream().map(BasicPointEntity::toString).toList());
+        return jsonObject;
     }
 
     @Override

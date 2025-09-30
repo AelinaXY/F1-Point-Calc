@@ -47,10 +47,6 @@ public class Main {
         RawDataCalculationV2 rawDataCalculation = new RawDataCalculationV2(DRIVER_SET, TEAM_SET, 120.4, 3L, RACE_NAME, IS_SPRINT, new ScoreCalculator(), RACES_LEFT, 1.2);
         RegressionDataCalculation regressionDataCalculation = new RegressionDataCalculation(DRIVER_SET, TEAM_SET, 120.4, 3L, RACE_NAME);
 
-//        ScoreCard previousScoreCard = rawDataCalculation.createPreviousScoreCard(List.of("Isack Hadjar", "Lance Stroll", "Gabriel Bortoleto", "Oscar Piastri", "Oliver Bearman"), List.of("Mclaren", "Mercedes"), 1.2);
-//        SequencedMap<ScoreCard, DifferenceEntity> outputMap = rawDataCalculation.calculate(previousScoreCard, true);
-//
-//        printTeamMap(outputMap);
 //        regressionDataCalculation.regressionCalculation();
 
 //        regressionDataCalculation.compareScoreCalculators();
@@ -64,14 +60,7 @@ public class Main {
 //        {
 //            System.out.printf("Expected Change of %s: %s%n", entity.getName(), calc.calculateScore(entity, RACE_NAME, IS_SPRINT));
 //        }
-        sessionsDao.getAllSessions();
-    }
-
-    public static void printTeamMap(SequencedMap<ScoreCard, DifferenceEntity> outputMap) {
-        System.out.println("ScoreCards:");
-        outputMap.sequencedKeySet().forEach(System.out::println);
-        System.out.println("Difference Entities:");
-        outputMap.sequencedValues().forEach(System.out::println);
+//        sessionsDao.getAllSessions();
     }
 
     //V2 Score Calculator should use https://openf1.org/?shell#introduction

@@ -1,5 +1,7 @@
 package org.f1.domain;
 
+import com.alibaba.fastjson2.JSONObject;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -66,6 +68,16 @@ public class DifferenceEntity {
                 ", scoreDifference=" + scoreDifference +
                 ", costChangeDifference=" + costChangeDifference +
                 '}';
+    }
+
+    public JSONObject toJSON() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("out", out.stream().map(BasicPointEntity::toString).toList());
+        jsonObject.put("in", in.stream().map(BasicPointEntity::toString).toList());
+        jsonObject.put("numberOfChanges", numberOfChanges);
+        jsonObject.put("scoreDifference", Math.round(scoreDifference * 100.0) / 100.0);
+        jsonObject.put("costChange", Math.round(costChangeDifference * 100.0) / 100.0);
+        return jsonObject;
     }
 
     public void setCostChangeDifference(Double costChangeDifference) {

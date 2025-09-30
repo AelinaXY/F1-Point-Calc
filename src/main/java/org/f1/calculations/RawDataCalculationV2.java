@@ -30,7 +30,7 @@ public class RawDataCalculationV2 extends AbstractCalculation {
         this.costCapMult = costCapMult;
     }
 
-    public SequencedMap<ScoreCard, DifferenceEntity> calculate(ScoreCard previousScoreCard, boolean consoleLog) {
+    public SequencedMap<ScoreCard, DifferenceEntity> calculate(ScoreCard previousScoreCard, boolean consoleLog, int maxSize) {
         IntStream.range(0, driverList.size())
                 .parallel()
                 .mapToObj(i ->
@@ -46,11 +46,11 @@ public class RawDataCalculationV2 extends AbstractCalculation {
             System.out.println("Number of valid combinations: " + validTeamSet.size());
         }
 
-        return scoreCardOutput(previousScoreCard, Comparator.comparing(m -> m.getScore() + m.getEffectiveScoreIncrease()));
+        return scoreCardOutput(previousScoreCard, Comparator.comparing(m -> m.getScore() + m.getEffectiveScoreIncrease()), maxSize);
     }
 
-    private SequencedMap<ScoreCard, DifferenceEntity> scoreCardOutput(ScoreCard currentScorecard, Comparator<ScoreCard> comparing) {
-        List<ScoreCard> scoreCardList = validTeamSet.stream().sorted(comparing.reversed()).limit(30).toList();
+    private SequencedMap<ScoreCard, DifferenceEntity> scoreCardOutput(ScoreCard currentScorecard, Comparator<ScoreCard> comparing, int maxSize) {
+        List<ScoreCard> scoreCardList = validTeamSet.stream().sorted(comparing.reversed()).limit(maxSize).toList();
 
         return scoreCardList.stream()
                 .map(sc -> new AbstractMap.SimpleEntry<>(sc, currentScorecard.calculateDifference(sc)))
@@ -129,5 +129,13 @@ public class RawDataCalculationV2 extends AbstractCalculation {
 
     public void setRacesLeft(int racesLeft) {
         this.racesLeft = racesLeft;
+    }
+
+    public double getCostCapMult() {
+        return costCapMult;
+    }
+
+    public void setCostCapMult(double costCapMult) {
+        this.costCapMult = costCapMult;
     }
 }
