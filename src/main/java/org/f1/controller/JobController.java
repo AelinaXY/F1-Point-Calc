@@ -39,7 +39,7 @@ public class JobController {
 
         ScoreCalculator scoreCalculator = new ScoreCalculator();
         calculation = new RawDataCalculationV2(DRIVER_SET, TEAM_SET, 0, 0, RACE_NAME, IS_SPRINT, scoreCalculator, 0, 0);
-        regressionData = new RegressionDataCalculation(DRIVER_SET, TEAM_SET, 0, 0, RACE_NAME);
+        regressionData = new RegressionDataCalculation(DRIVER_SET, TEAM_SET);
     }
 
 
@@ -74,7 +74,6 @@ public class JobController {
 
     private void populateRawDataCalculation(OptimalTeamRequest optimalTeamRequest) {
         calculation.setCostCap(optimalTeamRequest.costCap());
-        calculation.setTransferLimit(optimalTeamRequest.transferLimit());
         calculation.setRaceName(optimalTeamRequest.raceName());
         calculation.setSprint(optimalTeamRequest.isSprint());
         calculation.setRacesLeft(optimalTeamRequest.racesLeft());

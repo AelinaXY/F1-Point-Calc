@@ -20,8 +20,8 @@ public class RegressionDataCalculation extends AbstractCalculation {
     private ScoreCalculatorV2 scoreCalculatorV2 = new ScoreCalculatorV2();
 
 
-    public RegressionDataCalculation(Set<FullPointEntity> driverSet, Set<FullPointEntity> teamSet, double costCap, long transferLimit, String raceName) {
-        super(driverSet, teamSet, costCap, transferLimit, raceName, false);
+    public RegressionDataCalculation(Set<FullPointEntity> driverSet, Set<FullPointEntity> teamSet) {
+        super(driverSet, teamSet);
 
     }
 

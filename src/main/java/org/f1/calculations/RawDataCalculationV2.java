@@ -18,13 +18,20 @@ public class RawDataCalculationV2 extends AbstractCalculation {
     private List<FullPointEntity> driverList;
     private List<FullPointEntity> teamList;
 
+    private String raceName;
+    private boolean isSprint;
+    private double costCap;
     private int racesLeft;
     private double costCapMult;
 
     public RawDataCalculationV2(Set<FullPointEntity> driverSet, Set<FullPointEntity> teamSet, double costCap, long transferLimit, String raceName, boolean isSprint, ScoreCalculatorInterface calculator, int racesLeft, double costCapMult) {
-        super(driverSet, teamSet, costCap, transferLimit, raceName, isSprint);
+        super(driverSet, teamSet, costCap, isSprint);
         driverList = new ArrayList<>(driverSet);
         teamList = new ArrayList<>(teamSet);
+        this.costCap = costCap;
+        this.raceName = raceName;
+        this.isSprint = isSprint;
+
         scoreCalculator = calculator;
         this.racesLeft = racesLeft;
         this.costCapMult = costCapMult;
@@ -60,7 +67,7 @@ public class RawDataCalculationV2 extends AbstractCalculation {
     private void driverLoop(
             List<FullPointEntity> previousLevelDriverSet, List<FullPointEntity> loopDriverList) {
         if (previousLevelDriverSet.size() == 5) {
-            if (!(previousLevelDriverSet.stream().map(BasicPointEntity::getCost).reduce(0d, Double::sum) >= getCostCap())) {
+            if (!(previousLevelDriverSet.stream().map(BasicPointEntity::getCost).reduce(0d, Double::sum) >= costCap)) {
                 teamLoop(new ArrayList<>(), previousLevelDriverSet, teamList);
             }
         } else {
@@ -78,8 +85,8 @@ public class RawDataCalculationV2 extends AbstractCalculation {
     private void teamLoop(
             List<FullPointEntity> previousLevelTeamSet, List<FullPointEntity> driverSet, List<FullPointEntity> loopTeamList) {
         if (previousLevelTeamSet.size() == 2) {
-            ScoreCard scoreCard = new ScoreCard(driverSet, previousLevelTeamSet, getRaceName(), getCostCap(), isSprint(), scoreCalculator, racesLeft, costCapMult);
-            if (scoreCard.getCost() <= getCostCap() && scoreCard.getCost() > getCostCap() - 5) {
+            ScoreCard scoreCard = new ScoreCard(driverSet, previousLevelTeamSet, raceName, costCap, isSprint, scoreCalculator, racesLeft, costCapMult);
+            if (scoreCard.getCost() <= costCap && scoreCard.getCost() > costCap - costCap / 10) {
                 validTeamSet.add(scoreCard);
             }
 
@@ -99,7 +106,7 @@ public class RawDataCalculationV2 extends AbstractCalculation {
         ScoreCard scoreCard = new ScoreCard();
         getDriverSet().stream().filter(d -> driverNames.contains(d.getName())).forEach(scoreCard::addDriver);
         getTeamSet().stream().filter(t -> teamNames.contains(t.getName())).forEach(scoreCard::addTeam);
-        scoreCard.intialize(getRaceName(), getCostCap(), isSprint(), scoreCalculator, racesLeft, costCapMult);
+        scoreCard.intialize(raceName, costCap, isSprint, scoreCalculator, racesLeft, costCapMult);
         return scoreCard;
     }
 
@@ -137,5 +144,29 @@ public class RawDataCalculationV2 extends AbstractCalculation {
 
     public void setCostCapMult(double costCapMult) {
         this.costCapMult = costCapMult;
+    }
+
+    public String getRaceName() {
+        return raceName;
+    }
+
+    public void setRaceName(String raceName) {
+        this.raceName = raceName;
+    }
+
+    public boolean isSprint() {
+        return isSprint;
+    }
+
+    public void setSprint(boolean sprint) {
+        isSprint = sprint;
+    }
+
+    public double getCostCap() {
+        return costCap;
+    }
+
+    public void setCostCap(double costCap) {
+        this.costCap = costCap;
     }
 }
