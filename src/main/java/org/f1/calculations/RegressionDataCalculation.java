@@ -54,7 +54,7 @@ public class RegressionDataCalculation extends AbstractCalculation {
         return meanSquaredErrorMap;
     }
 
-    private <T> Map.Entry<T, Double> calculateSMEacrossSet(Set<Set<FullPointEntity>> pointEntitySets, ScoreCalculatorInterface calculator, T w) {
+    private <T> Map.Entry<T, Double> calculateSMEacrossSet(Set<Set<FullPointEntity>> pointEntitySets, ScoreCalculatorInterface calculator, T label) {
         Map<String, SquaredErrorValue> squaredErrorValueMap = calculateMeanSquaredErrorValue(pointEntitySets, calculator);
 
         Double meanSquaredError = 0.0;
@@ -63,16 +63,16 @@ public class RegressionDataCalculation extends AbstractCalculation {
             meanSquaredError += entry.getValue().getValue();
             count += entry.getValue().getCount();
         }
-        return new AbstractMap.SimpleEntry<>(w, meanSquaredError / count);
+        return new AbstractMap.SimpleEntry<>(label, meanSquaredError / count);
     }
 
     public void compareScoreCalculators() {
         Set<FullPointEntity> drivers2024 = CSVParsing.parseFullPointEntities("Drivers_Full_2024.csv", DRIVER);
         Set<FullPointEntity> teams2024 = CSVParsing.parseFullPointEntities("Teams_Full_2024.csv", TEAM);
-        Set<FullPointEntity> drivers2023 = CSVParsing.parseFullPointEntities("Drivers_Full_2023.csv", DRIVER);
+//        Set<FullPointEntity> drivers2023 = CSVParsing.parseFullPointEntities("Drivers_Full_2023.csv", DRIVER);
 
 
-        Set<Set<FullPointEntity>> pointEntitySets = Set.of(getDriverSet(), getTeamSet(), drivers2024, teams2024, drivers2023);
+        Set<Set<FullPointEntity>> pointEntitySets = Set.of(getDriverSet(), getTeamSet(), drivers2024, teams2024);
 
         Map.Entry<String, Double> bestWeightsV1 = calculateSMEacrossSet(pointEntitySets, scoreCalculatorV1, "V1");
         System.out.println(bestWeightsV1);
