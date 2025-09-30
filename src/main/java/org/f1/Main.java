@@ -1,13 +1,17 @@
 package org.f1;
 
 import org.f1.calculations.*;
-import org.f1.domain.BasicPointEntity;
+import org.f1.dao.SessionsDao;
 import org.f1.domain.DifferenceEntity;
 import org.f1.domain.FullPointEntity;
 import org.f1.domain.ScoreCard;
 import org.f1.parsing.CSVParsing;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.event.EventListener;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -24,7 +28,18 @@ public class Main {
     private static final boolean IS_SPRINT = false;
     private static final int RACES_LEFT = 6;
 
+    private SessionsDao sessionsDao;
+
+    public Main(SessionsDao sessionsDao) {
+        this.sessionsDao = sessionsDao;
+    }
+
     public static void main(String[] args) {
+        SpringApplication.run(Main.class, args);
+    }
+
+    @EventListener(value = ApplicationReadyEvent.class)
+    public void mainRunner() {
         //Drivers no longer driving
         List<String> driversNoLongerExists = List.of("Jack Doohan");
         DRIVER_SET = DRIVER_SET.stream().filter(d -> !driversNoLongerExists.contains(d.getName())).collect(Collectors.toSet());
@@ -32,10 +47,10 @@ public class Main {
         RawDataCalculationV2 rawDataCalculation = new RawDataCalculationV2(DRIVER_SET, TEAM_SET, 120.4, 3L, RACE_NAME, IS_SPRINT, new ScoreCalculator(), RACES_LEFT, 1.2);
         RegressionDataCalculation regressionDataCalculation = new RegressionDataCalculation(DRIVER_SET, TEAM_SET, 120.4, 3L, RACE_NAME);
 
-        ScoreCard previousScoreCard = rawDataCalculation.createPreviousScoreCard(List.of("Isack Hadjar", "Lance Stroll", "Gabriel Bortoleto", "Oscar Piastri", "Oliver Bearman"), List.of("Mclaren", "Mercedes"), 1.2);
-        SequencedMap<ScoreCard, DifferenceEntity> outputMap = rawDataCalculation.calculate(previousScoreCard, true);
-
-        printTeamMap(outputMap);
+//        ScoreCard previousScoreCard = rawDataCalculation.createPreviousScoreCard(List.of("Isack Hadjar", "Lance Stroll", "Gabriel Bortoleto", "Oscar Piastri", "Oliver Bearman"), List.of("Mclaren", "Mercedes"), 1.2);
+//        SequencedMap<ScoreCard, DifferenceEntity> outputMap = rawDataCalculation.calculate(previousScoreCard, true);
+//
+//        printTeamMap(outputMap);
 //        regressionDataCalculation.regressionCalculation();
 
 //        regressionDataCalculation.compareScoreCalculators();
@@ -47,8 +62,9 @@ public class Main {
 //        List<FullPointEntity> sortedList = DRIVER_SET.stream().sorted(Comparator.comparing(BasicPointEntity::getName)).toList();
 //        for(FullPointEntity entity: sortedList)
 //        {
-//            System.out.printf("Expected Change of %s: %s%n", entity.getName(), CostCalculator.calculateCostChange(entity, RACE_NAME, calc.calculateScore(entity, RACE_NAME, IS_SPRINT)));
+//            System.out.printf("Expected Change of %s: %s%n", entity.getName(), calc.calculateScore(entity, RACE_NAME, IS_SPRINT));
 //        }
+        sessionsDao.getAllSessions();
     }
 
     public static void printTeamMap(SequencedMap<ScoreCard, DifferenceEntity> outputMap) {
@@ -58,9 +74,8 @@ public class Main {
         outputMap.sequencedValues().forEach(System.out::println);
     }
 
-    //TEAMS FLOW VS DRIVERS FLOW
-
-    //VIRTUAL THREADS AND STREAM GATHERERS!!!
+    //V2 Score Calculator should use https://openf1.org/?shell#introduction
+    //Rather than the CSV data in order to populate FP1,FP2,FP3 data from the weekend of the session
 
 //    Test
 
