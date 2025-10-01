@@ -66,45 +66,34 @@ public class RegressionDataCalculation extends AbstractCalculation {
         return new AbstractMap.SimpleEntry<>(label, meanSquaredError / count);
     }
 
-    public void compareScoreCalculators() {
+    public Map<String, Double> compareScoreCalculators() {
+        HashMap<String, Double> returnMap = new HashMap<>();
+
         Set<FullPointEntity> drivers2024 = CSVParsing.parseFullPointEntities("Drivers_Full_2024.csv", DRIVER);
         Set<FullPointEntity> teams2024 = CSVParsing.parseFullPointEntities("Teams_Full_2024.csv", TEAM);
-//        Set<FullPointEntity> drivers2023 = CSVParsing.parseFullPointEntities("Drivers_Full_2023.csv", DRIVER);
-
 
         Set<Set<FullPointEntity>> pointEntitySets = Set.of(getDriverSet(), getTeamSet(), drivers2024, teams2024);
 
         Map.Entry<String, Double> bestWeightsV1 = calculateSMEacrossSet(pointEntitySets, scoreCalculatorV1, "V1");
-        System.out.println(bestWeightsV1);
+        returnMap.put(bestWeightsV1.getKey(), bestWeightsV1.getValue());
 
         Map.Entry<String, Double> bestWeightsV2 = calculateSMEacrossSet(pointEntitySets, scoreCalculatorV2, "V2");
-        System.out.println(bestWeightsV2);
+        returnMap.put(bestWeightsV2.getKey(), bestWeightsV2.getValue());
 
-
+        return returnMap;
     }
 
-    public void regressionCalculation() {
+    public List<Double> regressionCalculation(int iterations) {
         Set<FullPointEntity> drivers2024 = CSVParsing.parseFullPointEntities("Drivers_Full_2024.csv", DRIVER);
         Set<FullPointEntity> teams2024 = CSVParsing.parseFullPointEntities("Teams_Full_2024.csv", TEAM);
-//        Set<FullPointEntity> drivers2023 = CSVParsing.parseFullPointEntities("Drivers_Full_2023.csv", DRIVER);
 
         Set<Set<FullPointEntity>> pointEntitySets = Set.of(getDriverSet(), getTeamSet(), drivers2024, teams2024);
 
-//        for (double i = 0.0; i <= 1; i += 0.01) {
-//            for (double j = 0.0; j <= 1 - i; j += 0.01) {
-//                weightSet.add(List.of(i, j, 1 - i - j));
-//            }
-//        }
-
-//        for (double i = 0.0; i <= 2; i += 0.01) {
-//            weightSet.add(List.of(i));
-//        }
-
-        List<Double> baseWeights = new ArrayList<>(List.of(0.43d, 0.49d, 0.1d, 0.134d, 1.15d, 1d, 1d, 1d));
+        List<Double> baseWeights = new ArrayList<>(List.of(0.43d, 0.49d, 0.1d, 0.134d, 1.15d));
         int baseIndex = 0;
         RegressionResolution resolution = new RegressionResolution(2d, 0.01d);
 
-        for (int i = 0; i < 700; i++) {
+        for (int i = 0; i < iterations * baseWeights.size(); i++) {
             Set<List<Double>> weightSet = new HashSet<>();
             ConcurrentMap<List<Double>, Double> scoreWeightMap = new ConcurrentHashMap<>();
 
@@ -116,7 +105,6 @@ public class RegressionDataCalculation extends AbstractCalculation {
             }
 
             Map.Entry<List<Double>, Double> bestWeights = calculateRegression(weightSet, pointEntitySets, scoreWeightMap, scoreCalculatorV1);
-            System.out.println(bestWeights);
 
             if (baseIndex == 4) {
                 baseIndex = 0;
@@ -130,6 +118,7 @@ public class RegressionDataCalculation extends AbstractCalculation {
             baseWeights = bestWeights.getKey();
 
         }
+        return baseWeights;
 
 
     }
@@ -142,16 +131,10 @@ public class RegressionDataCalculation extends AbstractCalculation {
             ScoreCalculator.setSimplePredictedPointsWeight(w.get(2));
             ScoreCalculator.setTrackSimilarityWeight(w.get(3));
             ScoreCalculator.setSprintWeight(w.get(4));
-//
-//
-//            scoreCalculatorV2.setTrackSimilarityWeight(w.get(0));
-
-//            CSVParsing.updateTrackDistances(ScoreCalculator.getTrackMap().values().stream().toList(), ScoreCalculator.getTrackMap(), w);
             Map.Entry<List<Double>, Double> entry = calculateSMEacrossSet(pointEntitySets, calculator, w);
             scoreWeightMap.put(entry.getKey(), entry.getValue());
         });
 
-//        scoreWeightMap.entrySet().stream().sorted(Map.Entry.comparingByValue()).limit(25).forEach(System.out::println);
         return scoreWeightMap.entrySet().stream().min(Map.Entry.comparingByValue()).get();
     }
 }

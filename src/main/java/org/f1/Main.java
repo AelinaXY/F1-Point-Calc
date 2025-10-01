@@ -1,66 +1,14 @@
 package org.f1;
 
-import org.f1.calculations.*;
-import org.f1.dao.SessionsDao;
-import org.f1.domain.DifferenceEntity;
-import org.f1.domain.FullPointEntity;
-import org.f1.domain.ScoreCard;
-import org.f1.parsing.CSVParsing;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.context.event.EventListener;
-
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static org.f1.enums.EntityType.*;
 
 @SpringBootApplication()
 @EnableCaching
 public class Main {
-
-    private static Set<FullPointEntity> DRIVER_SET = CSVParsing.parseFullPointEntities("Drivers_Full.csv", DRIVER);
-    private static Set<FullPointEntity> TEAM_SET = CSVParsing.parseFullPointEntities("Teams_Full.csv", TEAM);
-    private static final String RACE_NAME = "Singapore";
-    private static final boolean IS_SPRINT = false;
-    private static final int RACES_LEFT = 6;
-
-    private SessionsDao sessionsDao;
-
-    public Main(SessionsDao sessionsDao) {
-        this.sessionsDao = sessionsDao;
-    }
-
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
-    }
-
-    @EventListener(value = ApplicationReadyEvent.class)
-    public void mainRunner() {
-        //Drivers no longer driving
-        List<String> driversNoLongerExists = List.of("Jack Doohan");
-        DRIVER_SET = DRIVER_SET.stream().filter(d -> !driversNoLongerExists.contains(d.getName())).collect(Collectors.toSet());
-
-        RawDataCalculationV2 rawDataCalculation = new RawDataCalculationV2(DRIVER_SET, TEAM_SET, 120.4, 3L, RACE_NAME, IS_SPRINT, new ScoreCalculator(), RACES_LEFT, 1.2);
-        RegressionDataCalculation regressionDataCalculation = new RegressionDataCalculation(DRIVER_SET, TEAM_SET);
-
-//        regressionDataCalculation.regressionCalculation();
-
-//        regressionDataCalculation.compareScoreCalculators();
-
-
-//        ScoreCalculator calc = new ScoreCalculator();
-//
-//        DRIVER_SET.addAll(TEAM_SET);
-//        List<FullPointEntity> sortedList = DRIVER_SET.stream().sorted(Comparator.comparing(BasicPointEntity::getName)).toList();
-//        for(FullPointEntity entity: sortedList)
-//        {
-//            System.out.printf("Expected Change of %s: %s%n", entity.getName(), calc.calculateScore(entity, RACE_NAME, IS_SPRINT));
-//        }
-//        sessionsDao.getAllSessions();
     }
 
     //V2 Score Calculator should use https://openf1.org/?shell#introduction

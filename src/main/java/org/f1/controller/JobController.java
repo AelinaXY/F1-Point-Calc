@@ -1,8 +1,10 @@
 package org.f1.controller;
 
+import org.f1.calculations.CostCalculator;
 import org.f1.calculations.RawDataCalculationV2;
 import org.f1.calculations.RegressionDataCalculation;
 import org.f1.calculations.ScoreCalculator;
+import org.f1.domain.BasicPointEntity;
 import org.f1.domain.DifferenceEntity;
 import org.f1.domain.FullPointEntity;
 import org.f1.domain.ScoreCard;
@@ -13,9 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.SequencedMap;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.f1.enums.EntityType.DRIVER;
@@ -62,6 +62,33 @@ public class JobController {
 
 
         return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/regressionCalc")
+    public ResponseEntity<?> regressionCalc(@RequestParam int iterations) {
+        return new ResponseEntity<>(regressionData.regressionCalculation(iterations), HttpStatus.OK);
+    }
+
+    @GetMapping("/compareScoreCalcs")
+    public ResponseEntity<?> compareScoreCalcs() {
+        return new ResponseEntity<>(regressionData.compareScoreCalculators(), HttpStatus.OK);
+    }
+
+    @GetMapping("/predictedCostChange")
+    public ResponseEntity<?> predictedCostChange(@RequestParam String raceName,
+                                                 @RequestParam boolean isSprint) {
+        ScoreCalculator calc = new ScoreCalculator();
+
+        DRIVER_SET.addAll(TEAM_SET);
+        List<FullPointEntity> sortedList = DRIVER_SET.stream().sorted(Comparator.comparing(BasicPointEntity::getName)).toList();
+
+        List<String> returnList = new ArrayList<>();
+        for (FullPointEntity entity : sortedList) {
+            returnList.add(entity.getName() + ": " +
+                    Math.round(CostCalculator.calculateCostChange(entity, raceName,
+                            calc.calculateScore(entity, raceName, isSprint)) * 100.0) / 100.0);
+        }
+        return new ResponseEntity<>(returnList, HttpStatus.OK);
     }
 
     private boolean validDriverList(List<String> driverList) {
