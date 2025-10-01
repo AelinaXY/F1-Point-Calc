@@ -129,7 +129,7 @@ public class ScoreCard {
         jsonObject.put("costChange", Math.round(costChange * 100.0) / 100.0);
         jsonObject.put("effectiveScoreIncrease", Math.round(effectiveScoreIncrease * 100.0) / 100.0);
         jsonObject.put("drivers", driverList.stream().map(BasicPointEntity::toString).toList());
-        jsonObject.put("teams", driverList.stream().map(BasicPointEntity::toString).toList());
+        jsonObject.put("teams", teamList.stream().map(BasicPointEntity::toString).toList());
         return jsonObject;
     }
 

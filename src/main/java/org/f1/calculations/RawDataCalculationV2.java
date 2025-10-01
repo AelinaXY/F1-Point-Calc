@@ -25,13 +25,12 @@ public class RawDataCalculationV2 extends AbstractCalculation {
     private double costCapMult;
 
     public RawDataCalculationV2(Set<FullPointEntity> driverSet, Set<FullPointEntity> teamSet, double costCap, long transferLimit, String raceName, boolean isSprint, ScoreCalculatorInterface calculator, int racesLeft, double costCapMult) {
-        super(driverSet, teamSet, costCap, isSprint);
+        super(driverSet, teamSet);
         driverList = new ArrayList<>(driverSet);
         teamList = new ArrayList<>(teamSet);
         this.costCap = costCap;
         this.raceName = raceName;
         this.isSprint = isSprint;
-
         scoreCalculator = calculator;
         this.racesLeft = racesLeft;
         this.costCapMult = costCapMult;

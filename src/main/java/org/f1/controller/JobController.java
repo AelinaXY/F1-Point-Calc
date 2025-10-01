@@ -26,19 +26,21 @@ import static org.f1.enums.EntityType.TEAM;
 public class JobController {
     private static Set<FullPointEntity> DRIVER_SET = CSVParsing.parseFullPointEntities("Drivers_Full.csv", DRIVER);
     private static Set<FullPointEntity> TEAM_SET = CSVParsing.parseFullPointEntities("Teams_Full.csv", TEAM);
-    private static String RACE_NAME = "Singapore";
-    private static boolean IS_SPRINT = false;
-    private static int RACES_LEFT = 6;
+    private static String DEFAULT_RACE_NAME = "Singapore";
+    private static boolean DEFAULT_IS_SPRINT = false;
+    private static int DEFAULT_RACES_LEFT = 6;
+    private static double DEFAULT_COST_CAP_MULT = 1.2;
+
 
     private final RawDataCalculationV2 calculation;
     private final RegressionDataCalculation regressionData;
 
     public JobController() {
-        List<String> driversNoLongerExists = List.of("Jack Doohan");
-        DRIVER_SET = DRIVER_SET.stream().filter(d -> !driversNoLongerExists.contains(d.getName())).collect(Collectors.toSet());
+        List<String> driversNoLongerExistsIn2025 = List.of("Jack Doohan");
+        DRIVER_SET = DRIVER_SET.stream().filter(d -> !driversNoLongerExistsIn2025.contains(d.getName())).collect(Collectors.toSet());
 
         ScoreCalculator scoreCalculator = new ScoreCalculator();
-        calculation = new RawDataCalculationV2(DRIVER_SET, TEAM_SET, 0, 0, RACE_NAME, IS_SPRINT, scoreCalculator, 0, 0);
+        calculation = new RawDataCalculationV2(DRIVER_SET, TEAM_SET, 0, 0, DEFAULT_RACE_NAME, DEFAULT_IS_SPRINT, scoreCalculator, DEFAULT_RACES_LEFT, DEFAULT_COST_CAP_MULT);
         regressionData = new RegressionDataCalculation(DRIVER_SET, TEAM_SET);
     }
 
@@ -52,7 +54,7 @@ public class JobController {
         }
 
         populateRawDataCalculation(optimalTeamRequest);
-
+        calculation.resetValues();
         ScoreCard originalScoreCard = calculation.createPreviousScoreCard(driverList, teamList, optimalTeamRequest.costCapMult());
         SequencedMap<ScoreCard, DifferenceEntity> outputMap = calculation.calculate(originalScoreCard, false, 10);
 
