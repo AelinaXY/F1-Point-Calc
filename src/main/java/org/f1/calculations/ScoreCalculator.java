@@ -12,8 +12,8 @@ import java.util.Map;
 
 public class ScoreCalculator implements ScoreCalculatorInterface {
 
-    private static Double averagePointWeight = 0.45;
-    private static Double threeAveragePointWeight = 0.47;
+    private static Double averagePointWeight = 0.44;
+    private static Double threeAveragePointWeight = 0.48;
     private static Double simplePredictedPointsWeight = -0.01;
     private static Double trackSimilarityWeight = 0.114;
     private static Double sprintWeight = 1.19;
