@@ -41,7 +41,7 @@ public class ScoreCard {
         }
 
 
-        if (cost <= costCap && cost > costCap - 5) {
+        if (cost <= costCap && cost > costCap - costCap/10) {
             List<Double> driverScoreList = new ArrayList<>();
             List<Double> teamScoreList = new ArrayList<>();
 

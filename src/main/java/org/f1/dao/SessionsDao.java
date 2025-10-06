@@ -1,7 +1,6 @@
 package org.f1.dao;
 
 import com.alibaba.fastjson2.JSONArray;
-import com.alibaba.fastjson2.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import uk.co.autotrader.traverson.Traverson;
@@ -19,11 +18,17 @@ public class SessionsDao {
         baseUrl = url;
     }
 
-    public void getAllSessions() {
-        Response<String> reponse = traverson.from(baseUrl + "sessions")
+    public JSONArray getAllSessions() {
+        Response<String> response = traverson.from(baseUrl + "sessions")
                 .get(String.class);
 
-        System.out.println(reponse.getResource());
+
+        if (response.isSuccessful()) {
+            JSONArray responseArray = JSONArray.parse(response.getResource());
+            return responseArray;
+
+        }
+        return null;
     }
 
 }

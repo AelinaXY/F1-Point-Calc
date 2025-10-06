@@ -97,6 +97,44 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.jooq</groupId>
+                <artifactId>jooq-codegen-maven</artifactId>
+                <executions>
+                    <execution>
+                        <id>generate-postgres</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <jdbc>
+                        <driver>org.postgresql.Driver</driver>
+                        <url>jdbc:postgresql://localhost:5432/f1?currentSchema=f1</url>
+                        <user>f1</user>
+                        <password>pass</password>
+                    </jdbc>
+                    <generator>
+                        <database>
+                            <name>org.jooq.meta.postgres.PostgresDatabase</name>
+                            <inputSchema>f1</inputSchema>
+                        </database>
+                        <generate>
+                            <deprecated>false</deprecated>
+                            <relations>true</relations>
+                            <records>true</records>
+                            <immutablePojos>false</immutablePojos>
+                            <fluentSetters>true</fluentSetters>
+                        </generate>
+                        <target>
+                            <packageName>org.f1.generated</packageName>
+                            <directory>target/generated-sources/java</directory>
+                        </target>
+                    </generator>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 

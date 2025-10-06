@@ -26,10 +26,10 @@ import static org.f1.enums.EntityType.TEAM;
 public class JobController {
     private static Set<FullPointEntity> DRIVER_SET = CSVParsing.parseFullPointEntities("Drivers_Full.csv", DRIVER);
     private static Set<FullPointEntity> TEAM_SET = CSVParsing.parseFullPointEntities("Teams_Full.csv", TEAM);
-    private static String DEFAULT_RACE_NAME = "Singapore";
-    private static boolean DEFAULT_IS_SPRINT = false;
-    private static int DEFAULT_RACES_LEFT = 6;
-    private static double DEFAULT_COST_CAP_MULT = 1.2;
+    private static final String DEFAULT_RACE_NAME = "Singapore";
+    private static final boolean DEFAULT_IS_SPRINT = false;
+    private static final int DEFAULT_RACES_LEFT = 6;
+    private static final double DEFAULT_COST_CAP_MULT = 1.2;
 
 
     private final RawDataCalculationV2 calculation;
@@ -58,7 +58,7 @@ public class JobController {
         ScoreCard originalScoreCard = calculation.createPreviousScoreCard(driverList, teamList, optimalTeamRequest.costCapMult());
         SequencedMap<ScoreCard, DifferenceEntity> outputMap = calculation.calculate(originalScoreCard, false, 10);
 
-        OptimalTeamResponse response = new OptimalTeamResponse(outputMap.sequencedKeySet().stream().map(ScoreCard::toJSON).toList(), outputMap.sequencedValues().stream().map(DifferenceEntity::toJSON).toList());
+        OptimalTeamResponse response = new OptimalTeamResponse(originalScoreCard.toJSON(), outputMap.sequencedKeySet().stream().map(ScoreCard::toJSON).toList(), outputMap.sequencedValues().stream().map(DifferenceEntity::toJSON).toList());
 
 
         return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
