@@ -1,9 +1,6 @@
 package org.f1.config;
 
-import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
-import org.jooq.impl.DefaultDSLContext;
-import org.jooq.tools.jdbc.DefaultConnection;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

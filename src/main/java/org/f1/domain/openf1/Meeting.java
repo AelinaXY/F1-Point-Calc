@@ -1,16 +1,15 @@
 package org.f1.domain.openf1;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
-public record Meeting(int id, String code, Date dateStart, String gmtOffset, String location,
+public record Meeting(int id, String code, Date startDate, String gmtOffset, String location,
                       String name,
                       String officialName, int year, Country country, Circuit circuit) {
 
 
     public static final class MeetingBuilder {
         private int id;
-        private Date dateStart;
+        private Date startDate;
         private String gmtOffset;
         private String location;
         private String name;
@@ -37,8 +36,8 @@ public record Meeting(int id, String code, Date dateStart, String gmtOffset, Str
             return this;
         }
 
-        public MeetingBuilder withDateStart(Date dateStart) {
-            this.dateStart = dateStart;
+        public MeetingBuilder withStartDate(Date startDate) {
+            this.startDate = startDate;
             return this;
         }
 
@@ -78,7 +77,7 @@ public record Meeting(int id, String code, Date dateStart, String gmtOffset, Str
         }
 
         public Meeting build() {
-            return new Meeting(id, code, dateStart, gmtOffset, location, name, officialName, year, country, circuit);
+            return new Meeting(id, code, startDate, gmtOffset, location, name, officialName, year, country, circuit);
         }
     }
 
