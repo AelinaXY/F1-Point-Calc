@@ -37,6 +37,7 @@ public class MeetingRepository {
         MeetingRecord meetingRecord = new MeetingRecord();
         meetingRecord.setId(meeting.id());
         meetingRecord.setName(meeting.name());
+        meetingRecord.setLocation(meeting.location());
         meetingRecord.setCircuitId(meeting.circuit().id());
         meetingRecord.setCountryId(meeting.country().id());
         meetingRecord.setDateStart(meeting.startDate().toInstant().atZone(ZoneOffset.UTC).toLocalDateTime());
