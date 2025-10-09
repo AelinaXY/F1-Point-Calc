@@ -40,6 +40,6 @@ public class OpenF1Controller {
 
     @GetMapping("/sessionResults")
     public ResponseEntity<?> populateSessionResults() {
-        return new ResponseEntity<>(sessionResultService.populateSessions(), HttpStatus.OK);
+        return new ResponseEntity<>(sessionResultService.populateSessionResults(), HttpStatus.OK);
     }
 }

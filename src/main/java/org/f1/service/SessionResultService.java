@@ -1,9 +1,7 @@
 package org.f1.service;
 
 import org.f1.dao.OpenF1Dao;
-import org.f1.domain.openf1.Session;
 import org.f1.domain.openf1.SessionResult;
-import org.f1.repository.SessionRepository;
 import org.f1.repository.SessionResultRepository;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +18,7 @@ public class SessionResultService {
         this.sessionResultRepository = sessionResultRepository;
     }
 
-    public List<SessionResult> populateSessions() {
+    public List<SessionResult> populateSessionResults() {
         List<SessionResult> sessionResults = openF1Dao.getAllSessionResults();
 
         sessionResults.forEach(session -> sessionResultRepository.saveSessionResult(session));
