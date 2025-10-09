@@ -8,8 +8,8 @@ import org.f1.domain.BasicPointEntity;
 import org.f1.domain.DifferenceEntity;
 import org.f1.domain.FullPointEntity;
 import org.f1.domain.ScoreCard;
-import org.f1.domain.request.OptimalTeamRequest;
-import org.f1.domain.response.OptimalTeamResponse;
+import org.f1.controller.model.request.OptimalTeamRequest;
+import org.f1.controller.model.response.OptimalTeamResponse;
 import org.f1.parsing.CSVParsing;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.f1.enums.EntityType.DRIVER;
-import static org.f1.enums.EntityType.TEAM;
+import static org.f1.domain.EntityType.DRIVER;
+import static org.f1.domain.EntityType.TEAM;
 
 @RestController
 @RequestMapping("/api/job")
@@ -47,7 +47,7 @@ public class JobController {
 
     @PostMapping("/optimalTeam")
     public ResponseEntity<?> optimalTeam(@RequestBody OptimalTeamRequest optimalTeamRequest,
-                                         @RequestParam() List<String> driverList,
+                                         @RequestParam List<String> driverList,
                                          @RequestParam List<String> teamList) {
         if (driverList.isEmpty() || teamList.isEmpty() || !validDriverList(driverList) || !validTeamList(teamList)) {
             return new ResponseEntity<>("Invalid Driver or Team List. Driver List: %s. Team List: %s.".formatted(driverList, teamList), HttpStatus.BAD_REQUEST);

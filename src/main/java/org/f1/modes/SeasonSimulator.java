@@ -10,8 +10,8 @@ import org.f1.parsing.CSVParsing;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.f1.enums.EntityType.DRIVER;
-import static org.f1.enums.EntityType.TEAM;
+import static org.f1.domain.EntityType.DRIVER;
+import static org.f1.domain.EntityType.TEAM;
 
 public class SeasonSimulator {
 

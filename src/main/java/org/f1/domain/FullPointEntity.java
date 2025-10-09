@@ -1,7 +1,6 @@
 package org.f1.domain;
 
 import org.f1.calculations.ScoreCalculator;
-import org.f1.enums.EntityType;
 
 import java.util.ArrayList;
 import java.util.List;

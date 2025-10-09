@@ -63,8 +63,7 @@ public class RawDataCalculationV2 extends AbstractCalculation {
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (a, _) -> a, LinkedHashMap::new));
     }
 
-    private void driverLoop(
-            List<FullPointEntity> previousLevelDriverSet, List<FullPointEntity> loopDriverList) {
+    private void driverLoop(List<FullPointEntity> previousLevelDriverSet, List<FullPointEntity> loopDriverList) {
         if (previousLevelDriverSet.size() == 5) {
             if (!(previousLevelDriverSet.stream().map(BasicPointEntity::getCost).reduce(0d, Double::sum) >= costCap)) {
                 teamLoop(new ArrayList<>(), previousLevelDriverSet, teamList);
@@ -81,8 +80,7 @@ public class RawDataCalculationV2 extends AbstractCalculation {
         }
     }
 
-    private void teamLoop(
-            List<FullPointEntity> previousLevelTeamSet, List<FullPointEntity> driverSet, List<FullPointEntity> loopTeamList) {
+    private void teamLoop(List<FullPointEntity> previousLevelTeamSet, List<FullPointEntity> driverSet, List<FullPointEntity> loopTeamList) {
         if (previousLevelTeamSet.size() == 2) {
             ScoreCard scoreCard = new ScoreCard(driverSet, previousLevelTeamSet, raceName, costCap, isSprint, scoreCalculator, racesLeft, costCapMult);
             if (scoreCard.getCost() <= costCap && scoreCard.getCost() > costCap - costCap / 10) {

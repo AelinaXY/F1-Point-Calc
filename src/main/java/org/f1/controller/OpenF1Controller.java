@@ -1,6 +1,5 @@
 package org.f1.controller;
 
-import org.f1.dao.OpenF1Dao;
 import org.f1.service.MeetingService;
 import org.f1.service.SessionResultService;
 import org.f1.service.SessionService;
@@ -16,11 +15,9 @@ public class OpenF1Controller {
 
     private final SessionService sessionService;
     private final SessionResultService sessionResultService;
-    OpenF1Dao openF1Dao;
-    MeetingService meetingService;
+    private final MeetingService meetingService;
 
-    public OpenF1Controller(OpenF1Dao openF1Dao, MeetingService meetingService, SessionService sessionService, SessionResultService sessionResultService) {
-        this.openF1Dao = openF1Dao;
+    public OpenF1Controller(MeetingService meetingService, SessionService sessionService, SessionResultService sessionResultService) {
         this.meetingService = meetingService;
         this.sessionService = sessionService;
         this.sessionResultService = sessionResultService;
@@ -28,13 +25,11 @@ public class OpenF1Controller {
 
     @GetMapping("/sessions")
     public ResponseEntity<?> populateSessions() {
-
         return new ResponseEntity<>(sessionService.populateSessions(), HttpStatus.OK);
     }
 
     @GetMapping("/meetings")
     public ResponseEntity<?> populateMeetings() {
-
         return new ResponseEntity<>(meetingService.populateMeetings(), HttpStatus.OK);
     }
 

@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 import java.util.stream.Gatherers;
 
-import static org.f1.enums.EntityType.*;
+import static org.f1.domain.EntityType.*;
 
 public class RegressionDataCalculation extends AbstractCalculation {
 

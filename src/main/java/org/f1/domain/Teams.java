@@ -1,6 +1,4 @@
-package org.f1.enums;
-
-import org.f1.domain.BasicPointEntity;
+package org.f1.domain;
 
 public enum Teams {
 

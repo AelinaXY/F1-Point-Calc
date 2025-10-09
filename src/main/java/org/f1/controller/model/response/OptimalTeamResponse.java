@@ -1,4 +1,4 @@
-package org.f1.domain.response;
+package org.f1.controller.model.response;
 
 import com.alibaba.fastjson2.JSONObject;
 

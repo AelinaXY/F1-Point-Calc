@@ -1,4 +1,4 @@
-package org.f1.domain.request;
+package org.f1.controller.model.request;
 
 public record OptimalTeamRequest(
         double costCap,
