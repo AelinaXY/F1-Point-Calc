@@ -99,9 +99,8 @@ public class CSVParsing {
 
         for (String line : baseList) {
             List<String> values = List.of(line.split(","));
-            Track.TrackBuilder trackBuilder = aTrackBuilder();
 
-            trackBuilder
+            Track track = aTrackBuilder()
                     .withTrackName(values.get(0))
                     .withAvgTemp(Double.valueOf(values.get(1)))
                     .withAvgRain(Double.valueOf(values.get(2)))
@@ -110,9 +109,8 @@ public class CSVParsing {
                     .withFastestLap(Double.valueOf(values.get(5)))
                     .withTopSpeed(Double.valueOf(values.get(6)))
                     .withNumberOfCorners(Double.valueOf(values.get(7)))
-                    .withAvgOvertakes(Double.valueOf(values.get(8)));
-
-            Track track = trackBuilder.build();
+                    .withAvgOvertakes(Double.valueOf(values.get(8)))
+                    .build();
 
             result.put(track.getTrackName(), track);
         }

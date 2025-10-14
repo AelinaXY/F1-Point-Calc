@@ -8,9 +8,6 @@ import java.util.List;
 
 public class ScoreCalculatorV2 implements ScoreCalculatorInterface {
 
-    public ScoreCalculatorV2() {
-    }
-
     @Override
     public Double calculateScore(FullPointEntity fullPointEntity, String raceName, boolean isSprint) {
         List<Race> currentRaces = new ArrayList<>();
