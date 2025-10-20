@@ -36,7 +36,7 @@ public class RawDataCalculationV2 extends AbstractCalculation {
         this.costCapMult = costCapMult;
     }
 
-    public SequencedMap<ScoreCard, DifferenceEntity> calculate(ScoreCard previousScoreCard, boolean consoleLog, int maxSize) {
+    public SequencedMap<ScoreCard, DifferenceEntity> calculate(ScoreCard previousScoreCard, boolean consoleLog, int maxSize, int changeLimit) {
         IntStream.range(0, driverList.size())
                 .parallel()
                 .mapToObj(i ->
@@ -52,14 +52,15 @@ public class RawDataCalculationV2 extends AbstractCalculation {
             System.out.println("Number of valid combinations: " + validTeamSet.size());
         }
 
-        return scoreCardOutput(previousScoreCard, Comparator.comparing(m -> m.getScore() + m.getEffectiveScoreIncrease()), maxSize);
+        return scoreCardOutput(previousScoreCard, Comparator.comparing(m -> m.getScore() + m.getEffectiveScoreIncrease()), maxSize, changeLimit);
     }
 
-    private SequencedMap<ScoreCard, DifferenceEntity> scoreCardOutput(ScoreCard currentScorecard, Comparator<ScoreCard> comparing, int maxSize) {
-        List<ScoreCard> scoreCardList = validTeamSet.stream().sorted(comparing.reversed()).limit(maxSize).toList();
-
-        return scoreCardList.stream()
+    private SequencedMap<ScoreCard, DifferenceEntity> scoreCardOutput(ScoreCard currentScorecard, Comparator<ScoreCard> comparing, int maxSize, int changeLimit) {
+        return validTeamSet.stream()
+                .sorted(comparing.reversed())
                 .map(sc -> new AbstractMap.SimpleEntry<>(sc, currentScorecard.calculateDifference(sc)))
+                .filter(sc -> sc.getValue().getNumberOfChanges() <= changeLimit)
+                .limit(maxSize)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (a, _) -> a, LinkedHashMap::new));
     }
 

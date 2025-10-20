@@ -32,7 +32,7 @@ public class SeasonSimulator {
         RawDataCalculationV2 rawDataCalculation = new RawDataCalculationV2(DRIVER_SET, TEAM_SET, 100, 3L, RACE_NAMES_2024.getFirst(), false, new ScoreCalculator(), RACE_NAMES_2024.size(), 0);
 
         ScoreCard previousScoreCard = rawDataCalculation.createPreviousScoreCard(List.of(), List.of(), 0);
-        SequencedMap<ScoreCard, DifferenceEntity> outputMap = rawDataCalculation.calculate(previousScoreCard, false, 30);
+        SequencedMap<ScoreCard, DifferenceEntity> outputMap = rawDataCalculation.calculate(previousScoreCard, false, 30, 2);
 
 
         for (double i = 0.0d; i <= 3.0d; i += 0.3) {
@@ -86,7 +86,7 @@ public class SeasonSimulator {
                 scoreCalculator.setDriverList(agentsDrivers.stream().filter(d -> d.getRaceNameList().contains(raceName)).collect(Collectors.toList()));
 
                 scoreCalculator.resetValues();
-                SequencedMap<ScoreCard, DifferenceEntity> currentOutput = scoreCalculator.calculate(agent.getCurrentScoreCard(), false, 30);
+                SequencedMap<ScoreCard, DifferenceEntity> currentOutput = scoreCalculator.calculate(agent.getCurrentScoreCard(), false, 30, 2);
                 scoreCalculator.resetValues();
 
                 ScoreCard chosenScoreCard = currentOutput.firstEntry().getKey();

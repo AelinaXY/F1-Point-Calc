@@ -48,7 +48,8 @@ public class JobController {
     @PostMapping("/optimalTeam")
     public ResponseEntity<?> optimalTeam(@RequestBody OptimalTeamRequest optimalTeamRequest,
                                          @RequestParam List<String> driverList,
-                                         @RequestParam List<String> teamList) {
+                                         @RequestParam List<String> teamList,
+                                         @RequestParam(defaultValue = "2") int changeLimit) {
         if (driverList.isEmpty() || teamList.isEmpty() || !validDriverList(driverList) || !validTeamList(teamList)) {
             return new ResponseEntity<>("Invalid Driver or Team List. Driver List: %s. Team List: %s.".formatted(driverList, teamList), HttpStatus.BAD_REQUEST);
         }
@@ -56,7 +57,7 @@ public class JobController {
         populateRawDataCalculation(optimalTeamRequest);
         calculation.resetValues();
         ScoreCard originalScoreCard = calculation.createPreviousScoreCard(driverList, teamList, optimalTeamRequest.costCapMult());
-        SequencedMap<ScoreCard, DifferenceEntity> outputMap = calculation.calculate(originalScoreCard, false, 10);
+        SequencedMap<ScoreCard, DifferenceEntity> outputMap = calculation.calculate(originalScoreCard, false, 10, changeLimit);
 
         OptimalTeamResponse response = new OptimalTeamResponse(originalScoreCard.toJSON(), outputMap.sequencedKeySet().stream().map(ScoreCard::toJSON).toList(), outputMap.sequencedValues().stream().map(DifferenceEntity::toJSON).toList());
 
