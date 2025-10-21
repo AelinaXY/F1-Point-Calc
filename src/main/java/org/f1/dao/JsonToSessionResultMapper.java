@@ -27,7 +27,6 @@ public class JsonToSessionResultMapper {
         for (int i = 0; i < jsonArray.size(); i++) {
             JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-            //FOR QUALI DURATION AND GAP TO LEADER ARE ARRAYS
             try {
                 Double duration = getDoubleFromArray(jsonObject.get("duration"));
                 Double gapToLeader = getDoubleFromArray(jsonObject.get("gap_to_leader"));

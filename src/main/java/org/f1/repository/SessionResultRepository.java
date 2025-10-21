@@ -1,14 +1,10 @@
 package org.f1.repository;
 
-import com.google.crypto.tink.subtle.Random;
-import org.f1.domain.openf1.Session;
 import org.f1.domain.openf1.SessionResult;
-import org.f1.generated.tables.records.SessionRecord;
 import org.f1.generated.tables.records.SessionResultRecord;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
-import java.time.ZoneOffset;
 import java.util.UUID;
 
 import static org.f1.generated.tables.SessionResult.SESSION_RESULT;
@@ -27,9 +23,9 @@ public class SessionResultRepository {
 
         String previousId = dslContext.select(SESSION_RESULT.ID).from(SESSION_RESULT)
                 .where(SESSION_RESULT.SESSION_ID
-                        .eq(sessionResult.sessionId())
-                        .and(SESSION_RESULT.DRIVER_NUMBER
-                                .eq(sessionResult.driverNumber())))
+                        .eq(sessionResult.getSessionId())
+                        .and(SESSION_RESULT.DRIVER_ID
+                                .eq(sessionResult.getDriverId())))
                 .fetchOneInto(String.class);
 
         SessionResultRecord sessionResultRecord = buildSessionResult(sessionResult, previousId);
@@ -50,16 +46,15 @@ public class SessionResultRepository {
         } else {
             sessionResultRecord.setId(UUID.randomUUID().toString());
         }
-        sessionResultRecord.setDriverNumber(sessionResult.driverNumber());
-        sessionResultRecord.setSessionId(sessionResult.sessionId());
-        sessionResultRecord.setDuration(sessionResult.duration());
-        sessionResultRecord.setGapToLeader(sessionResult.gapToLeader());
-        sessionResultRecord.setNumberOfLaps(sessionResult.numberOfLaps());
-        sessionResultRecord.setPosition(sessionResult.position());
-        sessionResultRecord.setDnf(sessionResult.dnf());
-        sessionResultRecord.setDns(sessionResult.dns());
-        sessionResultRecord.setDsq(sessionResult.dsq());
+        sessionResultRecord.setDriverId(sessionResult.getDriverId());
+        sessionResultRecord.setSessionId(sessionResult.getSessionId());
+        sessionResultRecord.setDuration(sessionResult.getDuration());
+        sessionResultRecord.setGapToLeader(sessionResult.getGapToLeader());
+        sessionResultRecord.setNumberOfLaps(sessionResult.getNumberOfLaps());
+        sessionResultRecord.setPosition(sessionResult.getPosition());
+        sessionResultRecord.setDnf(sessionResult.isDnf());
+        sessionResultRecord.setDns(sessionResult.isDns());
+        sessionResultRecord.setDsq(sessionResult.isDsq());
         return sessionResultRecord;
-
     }
 }

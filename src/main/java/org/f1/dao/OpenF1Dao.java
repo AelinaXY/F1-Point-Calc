@@ -1,6 +1,7 @@
 package org.f1.dao;
 
 import com.alibaba.fastjson2.JSONArray;
+import org.f1.domain.openf1.Driver;
 import org.f1.domain.openf1.Meeting;
 import org.f1.domain.openf1.Session;
 import org.f1.domain.openf1.SessionResult;
@@ -15,18 +16,20 @@ import java.util.List;
 public class OpenF1Dao {
 
     private final JsonToSessionResultMapper jsonToSessionResultMapper;
+    private final JsonToDriverMapper jsonToDriverMapper;
     private JsonToSessionMapper jsonToSessionMapper;
     private Traverson traverson;
     private String baseUrl;
     private JsonToMeetingMapper jsonToMeetingMapper;
 
 
-    OpenF1Dao(Traverson traverson, @Value("${openf1.url}") String url, JsonToMeetingMapper jsonToMeetingMapper, JsonToSessionMapper jsonToSessionMapper, JsonToSessionResultMapper jsonToSessionResultMapper) {
+    OpenF1Dao(Traverson traverson, @Value("${openf1.url}") String url, JsonToMeetingMapper jsonToMeetingMapper, JsonToSessionMapper jsonToSessionMapper, JsonToSessionResultMapper jsonToSessionResultMapper, JsonToDriverMapper jsonToDriverMapper) {
         this.traverson = traverson;
         baseUrl = url;
         this.jsonToMeetingMapper = jsonToMeetingMapper;
         this.jsonToSessionMapper = jsonToSessionMapper;
         this.jsonToSessionResultMapper = jsonToSessionResultMapper;
+        this.jsonToDriverMapper = jsonToDriverMapper;
     }
 
     public List<Session> getAllSessions() {
@@ -49,6 +52,17 @@ public class OpenF1Dao {
         if (response.isSuccessful()) {
             JSONArray responseArray = JSONArray.parse(response.getResource());
             return jsonToMeetingMapper.mapMeetings(responseArray);
+        }
+        return null;
+    }
+
+    public List<Driver> getAllDrivers() {
+        Response<String> response = traverson.from(baseUrl + "drivers")
+                .get(String.class);
+
+        if (response.isSuccessful()) {
+            JSONArray responseArray = JSONArray.parse(response.getResource());
+            return jsonToDriverMapper.mapDrivers(responseArray);
         }
         return null;
     }

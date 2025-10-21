@@ -1,23 +1,30 @@
 package org.f1.domain.openf1;
 
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-public record SessionResult(String id,
-                            int sessionId,
-                            int driverNumber,
-                            Double duration,
-                            Double gapToLeader,
-                            int numberOfLaps,
-                            int position,
-                            boolean dnf,
-                            boolean dns,
-                            boolean dsq) {
+@AllArgsConstructor
+@Getter
+@Setter
+public class SessionResult {
+    private String id;
+    private int sessionId;
+    private String driverId;
+    private Double duration;
+    private Double gapToLeader;
+    private int numberOfLaps;
+    private int position;
+    private boolean dnf;
+    private boolean dns;
+    private boolean dsq;
+    private int driverNumber;
 
 
     public static final class SessionResultBuilder {
         private String id;
         private int sessionId;
-        private int driverNumber;
+        private String driverId;
         private Double duration;
         private Double gapToLeader;
         private int numberOfLaps;
@@ -25,6 +32,7 @@ public record SessionResult(String id,
         private boolean dnf;
         private boolean dns;
         private boolean dsq;
+        private int driverNumber;
 
         private SessionResultBuilder() {
         }
@@ -43,8 +51,8 @@ public record SessionResult(String id,
             return this;
         }
 
-        public SessionResultBuilder withDriverNumber(int driverNumber) {
-            this.driverNumber = driverNumber;
+        public SessionResultBuilder withDriverId(String driverId) {
+            this.driverId = driverId;
             return this;
         }
 
@@ -83,8 +91,13 @@ public record SessionResult(String id,
             return this;
         }
 
+        public SessionResultBuilder withDriverNumber(int driverNumber) {
+            this.driverNumber = driverNumber;
+            return this;
+        }
+
         public SessionResult build() {
-            return new SessionResult(id, sessionId, driverNumber, duration, gapToLeader, numberOfLaps, position, dnf, dns, dsq);
+            return new SessionResult(id, sessionId, driverId, duration, gapToLeader, numberOfLaps, position, dnf, dns, dsq, driverNumber);
         }
     }
 
