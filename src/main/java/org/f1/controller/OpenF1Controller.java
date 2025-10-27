@@ -1,9 +1,6 @@
 package org.f1.controller;
 
-import org.f1.service.DriverService;
-import org.f1.service.MeetingService;
-import org.f1.service.SessionResultService;
-import org.f1.service.SessionService;
+import org.f1.service.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,12 +15,14 @@ public class OpenF1Controller {
     private final SessionResultService sessionResultService;
     private final MeetingService meetingService;
     private final DriverService driverService;
+    private final OpenF1Service openF1Service;
 
-    public OpenF1Controller(MeetingService meetingService, SessionService sessionService, SessionResultService sessionResultService, DriverService driverService) {
+    public OpenF1Controller(MeetingService meetingService, SessionService sessionService, SessionResultService sessionResultService, DriverService driverService, OpenF1Service openF1Service) {
         this.meetingService = meetingService;
         this.sessionService = sessionService;
         this.sessionResultService = sessionResultService;
         this.driverService = driverService;
+        this.openF1Service = openF1Service;
     }
 
     @GetMapping("/sessions")
@@ -44,5 +43,11 @@ public class OpenF1Controller {
     @GetMapping("/sessionResults")
     public ResponseEntity<?> populateSessionResults() {
         return new ResponseEntity<>(sessionResultService.populateSessionResults(), HttpStatus.OK);
+    }
+
+    @GetMapping("/populate")
+    public ResponseEntity<?> populateEntireDatabase() throws InterruptedException {
+        openF1Service.populate();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
