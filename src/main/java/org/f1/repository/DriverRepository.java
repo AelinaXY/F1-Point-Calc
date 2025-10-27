@@ -1,20 +1,14 @@
 package org.f1.repository;
 
 import org.f1.domain.openf1.Driver;
-import org.f1.domain.openf1.Meeting;
 import org.f1.generated.tables.records.DriverRecord;
-import org.f1.generated.tables.records.MeetingRecord;
-import org.f1.generated.tables.records.SessionResultRecord;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
-import java.time.ZoneOffset;
 import java.util.UUID;
 
 import static org.f1.generated.Tables.DRIVER;
 import static org.f1.generated.Tables.SESSION;
-import static org.f1.generated.tables.Meeting.MEETING;
-import static org.f1.generated.tables.SessionResult.SESSION_RESULT;
 
 
 @Repository
@@ -35,7 +29,7 @@ public class DriverRepository {
                                 .eq(driver.meetingId())))
                 .fetchOneInto(String.class);
 
-        DriverRecord driverRecord = populateMeetingRecord(driver, previousId);
+        DriverRecord driverRecord = populateDriverRecord(driver, previousId);
 
         return dslContext
                 .insertInto(DRIVER)
@@ -58,7 +52,7 @@ public class DriverRepository {
                 .fetchOneInto(String.class);
     }
 
-    private DriverRecord populateMeetingRecord(Driver meeting, String previousId) {
+    private DriverRecord populateDriverRecord(Driver meeting, String previousId) {
         DriverRecord driverRecord = new DriverRecord();
         if (previousId != null) {
             driverRecord.setId(previousId);
