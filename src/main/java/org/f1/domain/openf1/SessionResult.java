@@ -1,12 +1,5 @@
 package org.f1.domain.openf1;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
-@AllArgsConstructor
-@Getter
-@Setter
 public class SessionResult {
     private String id;
     private int sessionId;
@@ -20,6 +13,67 @@ public class SessionResult {
     private boolean dsq;
     private int driverNumber;
 
+    public SessionResult(String id, int sessionId, String driverId, Double duration, Double gapToLeader, int numberOfLaps, int position, boolean dnf, boolean dns, boolean dsq, int driverNumber) {
+        this.id = id;
+        this.sessionId = sessionId;
+        this.driverId = driverId;
+        this.duration = duration;
+        this.gapToLeader = gapToLeader;
+        this.numberOfLaps = numberOfLaps;
+        this.position = position;
+        this.dnf = dnf;
+        this.dns = dns;
+        this.dsq = dsq;
+        this.driverNumber = driverNumber;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public int getSessionId() {
+        return sessionId;
+    }
+
+    public String getDriverId() {
+        return driverId;
+    }
+
+    public void setDriverId(String driverId) {
+        this.driverId = driverId;
+    }
+
+    public Double getDuration() {
+        return duration;
+    }
+
+    public Double getGapToLeader() {
+        return gapToLeader;
+    }
+
+    public int getNumberOfLaps() {
+        return numberOfLaps;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public boolean isDnf() {
+        return dnf;
+    }
+
+    public boolean isDns() {
+        return dns;
+    }
+
+    public boolean isDsq() {
+        return dsq;
+    }
+
+    public int getDriverNumber() {
+        return driverNumber;
+    }
 
     public static final class SessionResultBuilder {
         private String id;

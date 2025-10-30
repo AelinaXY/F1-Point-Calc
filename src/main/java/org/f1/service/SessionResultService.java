@@ -23,11 +23,11 @@ public class SessionResultService {
     public List<SessionResult> populateSessionResults() {
         List<SessionResult> sessionResults = openF1Dao.getAllSessionResults();
 
-        sessionResults.forEach(session ->
+        sessionResults.forEach(sessionResult ->
         {
-            String driverId = driverService.getDriverId(session.getDriverNumber(), session.getSessionId());
-            session.setDriverId(driverId);
-            sessionResultRepository.saveSessionResult(session);
+            String driverId = driverService.getDriverId(sessionResult.getDriverNumber(), sessionResult.getSessionId());
+            sessionResult.setDriverId(driverId);
+            sessionResultRepository.saveSessionResult(sessionResult);
         });
 
         return sessionResults;
