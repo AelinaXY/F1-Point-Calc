@@ -5,10 +5,10 @@ import org.f1.generated.tables.records.DriverRecord;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.UUID;
 
-import static org.f1.generated.Tables.DRIVER;
-import static org.f1.generated.Tables.SESSION;
+import static org.f1.generated.Tables.*;
 
 
 @Repository
@@ -52,7 +52,7 @@ public class DriverRepository {
                 .fetchOneInto(String.class);
     }
 
-    private DriverRecord populateDriverRecord(Driver meeting, String previousId) {
+    private DriverRecord populateDriverRecord(Driver driver, String previousId) {
         DriverRecord driverRecord = new DriverRecord();
         if (previousId != null) {
             driverRecord.setId(previousId);
@@ -60,17 +60,29 @@ public class DriverRepository {
             driverRecord.setId(UUID.randomUUID().toString());
         }
 
-        driverRecord.setBroadcastName(meeting.broadcastName());
-        driverRecord.setFirstName(meeting.firstName());
-        driverRecord.setLastName(meeting.lastName());
-        driverRecord.setCountryCode(meeting.countryCode());
-        driverRecord.setDriverNumber(meeting.driverNumber());
-        driverRecord.setMeetingId(meeting.meetingId());
-        driverRecord.setHeadshotUrl(meeting.headshotUrl());
-        driverRecord.setNameAcronym(meeting.nameAcronym());
-        driverRecord.setTeamName(meeting.teamName());
-        driverRecord.setFullName(meeting.fullName());
+        driverRecord.setBroadcastName(driver.broadcastName());
+        driverRecord.setFirstName(driver.firstName());
+        driverRecord.setLastName(driver.lastName());
+        driverRecord.setCountryCode(driver.countryCode());
+        driverRecord.setDriverNumber(driver.driverNumber());
+        driverRecord.setMeetingId(driver.meetingId());
+        driverRecord.setHeadshotUrl(driver.headshotUrl());
+        driverRecord.setNameAcronym(driver.nameAcronym());
+        driverRecord.setTeamId(driver.team().getId());
+        driverRecord.setFullName(driver.fullName());
 
         return driverRecord;
+    }
+
+    public String getDriverIdFromYearAndMeetingNames(String fullName, int year, List<String> meetingNames) {
+        return dslContext.select(DRIVER.ID)
+                .from(DRIVER.join(MEETING)
+                        .on(DRIVER.MEETING_ID.eq(MEETING.ID)))
+                .where(MEETING.YEAR.eq(year))
+                .and(DRIVER.FULL_NAME
+                        .equalIgnoreCase(fullName))
+                .and(MEETING.NAME.in(meetingNames))
+                .limit(1)
+                .fetchOneInto(String.class);
     }
 }

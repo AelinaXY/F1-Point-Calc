@@ -11,6 +11,6 @@ create table f1.driver
     headshot_url   varchar(250),
     last_name      varchar(50),
     name_acronym   varchar(4),
-    team_name      varchar(50),
+    team_id       int references f1.team (id),
     meeting_id     int references f1.meeting (id)
 );

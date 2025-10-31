@@ -1,0 +1,34 @@
+package org.f1.repository;
+
+import org.f1.domain.openf1.Team;
+import org.f1.generated.tables.records.TeamRecord;
+import org.jooq.DSLContext;
+import org.springframework.stereotype.Repository;
+
+import static org.f1.generated.Tables.TEAM;
+
+
+@Repository
+public class TeamRepository {
+
+    DSLContext dslContext;
+
+    public TeamRepository(DSLContext dslContext) {
+        this.dslContext = dslContext;
+    }
+
+    public Team saveTeam(String teamName) {
+
+        TeamRecord teamRecord = new TeamRecord();
+        teamRecord.setTeamName(teamName);
+
+        TeamRecord returnedTeamRecord = dslContext.insertInto(TEAM)
+                .set(teamRecord)
+                .onConflict()
+                .doNothing()
+                .returning()
+                .fetchOne();
+
+        return new Team(returnedTeamRecord.getId(), returnedTeamRecord.getTeamName());
+    }
+}

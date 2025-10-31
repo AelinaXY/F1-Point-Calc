@@ -9,7 +9,7 @@ public record Driver(int id,
                      String headshotUrl,
                      String lastName,
                      String nameAcronym,
-                     String teamName,
+                     Team team,
                      int meetingId) {
 
 
@@ -23,7 +23,7 @@ public record Driver(int id,
         private String headshotUrl;
         private String lastName;
         private String nameAcronym;
-        private String teamName;
+        private Team team;
         private int meetingId;
 
         private DriverBuilder() {
@@ -78,8 +78,8 @@ public record Driver(int id,
             return this;
         }
 
-        public DriverBuilder withTeamName(String teamName) {
-            this.teamName = teamName;
+        public DriverBuilder withTeam(Team team) {
+            this.team = team;
             return this;
         }
 
@@ -89,7 +89,7 @@ public record Driver(int id,
         }
 
         public Driver build() {
-            return new Driver(id, broadcastName, countryCode, driverNumber, firstName, fullName, headshotUrl, lastName, nameAcronym, teamName, meetingId);
+            return new Driver(id, broadcastName, countryCode, driverNumber, firstName, fullName, headshotUrl, lastName, nameAcronym, team, meetingId);
         }
     }
 
