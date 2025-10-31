@@ -2,6 +2,7 @@ package org.f1.dao;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
+import org.f1.domain.TeamLookup;
 import org.f1.domain.openf1.*;
 import org.springframework.stereotype.Component;
 
@@ -28,7 +29,7 @@ public class JsonToDriverMapper {
                     .withHeadshotUrl(jsonObject.getString("headshot_url"))
                     .withLastName(jsonObject.getString("last_name"))
                     .withNameAcronym(jsonObject.getString("name_acronym"))
-                    .withTeam(new Team(null, jsonObject.getString("team_name")))
+                    .withTeam(new Team(null, TeamLookup.apiToPreferred(jsonObject.getString("team_name"))))
                     .withMeetingId(jsonObject.getIntValue("meeting_key"))
                     .build()
             );

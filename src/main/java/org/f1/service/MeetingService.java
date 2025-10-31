@@ -35,4 +35,9 @@ public class MeetingService {
 
         return meetings;
     }
+
+    public Integer getMeeting(int year, List<String> fullNames)
+    {
+        return meetingRepository.getMeeting(year, fullNames);
+    }
 }

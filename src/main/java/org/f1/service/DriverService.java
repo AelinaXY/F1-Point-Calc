@@ -1,6 +1,7 @@
 package org.f1.service;
 
 import org.f1.dao.OpenF1Dao;
+import org.f1.domain.DriverMeetingReference;
 import org.f1.domain.openf1.Driver;
 import org.f1.domain.openf1.Team;
 import org.f1.repository.DriverRepository;
@@ -33,7 +34,6 @@ public class DriverService {
         Set<String> teamNameList = drivers.stream().map(d -> d.team().getTeamName()).collect(Collectors.toSet());
 
         Map<String, Integer> teamNameMap = new HashMap<>();
-
         for (String teamName : teamNameList) {
             Team team = teamRepository.saveTeam(teamName);
             teamNameMap.put(team.getTeamName(), team.getId());
@@ -52,7 +52,7 @@ public class DriverService {
         return driverRepository.getDriverIdFromNumberAndSessionId(driverNumber, sessionId);
     }
 
-    public String getDriverIdFromYearAndMeetingName(String fullName, int year, List<String> meetingNames) {
-        return driverRepository.getDriverIdFromYearAndMeetingNames(fullName, year, meetingNames);
+    public DriverMeetingReference getDriverMRFromYearAndMeetingName(String fullName, int year, List<String> meetingNames) {
+        return driverRepository.getDriverMRFromYearAndMeetingNames(fullName, year, meetingNames);
     }
 }

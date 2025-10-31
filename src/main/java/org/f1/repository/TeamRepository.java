@@ -31,4 +31,13 @@ public class TeamRepository {
 
         return new Team(returnedTeamRecord.getId(), returnedTeamRecord.getTeamName());
     }
+
+    public Integer getTeam(String teamName) {
+
+        return dslContext.select(TEAM.ID)
+                .from(TEAM)
+                .where(TEAM.TEAM_NAME.eq(teamName))
+                .limit(1)
+                .fetchOneInto(Integer.class);
+    }
 }

@@ -2,15 +2,13 @@ package org.f1.service;
 
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
-
 @Service
 public class OpenF1Service {
 
-    private DriverService driverService;
-    private MeetingService meetingService;
-    private SessionService sessionService;
-    private SessionResultService sessionResultService;
+    private final DriverService driverService;
+    private final MeetingService meetingService;
+    private final SessionService sessionService;
+    private final SessionResultService sessionResultService;
 
     public OpenF1Service(DriverService driverService, MeetingService meetingService,  SessionService sessionService, SessionResultService sessionResultService) {
         this.driverService = driverService;

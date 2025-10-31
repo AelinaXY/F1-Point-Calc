@@ -6,6 +6,7 @@ import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
 import java.time.ZoneOffset;
+import java.util.List;
 
 import static org.f1.generated.tables.Meeting.MEETING;
 
@@ -44,5 +45,15 @@ public class MeetingRepository {
         meetingRecord.setYear(meeting.year());
         meetingRecord.setOfficialName(meeting.officialName());
         return meetingRecord;
+    }
+
+    public Integer getMeeting(int year, List<String> fullNames) {
+
+        return dslContext.select(MEETING.ID)
+                .from(MEETING)
+                .where(MEETING.YEAR.eq(year))
+                .and(MEETING.NAME.in(fullNames))
+                .limit(1)
+                .fetchOneInto(Integer.class);
     }
 }

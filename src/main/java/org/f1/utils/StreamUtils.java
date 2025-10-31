@@ -8,11 +8,11 @@ import java.util.function.Predicate;
 public class StreamUtils {
 
     public static <T> Predicate<T> distinctByDualKey(Function<? super T, ?> keyExtractor, Function<? super T, ?> secondaryKeyExtractor) {
-        Set<ComparisionObject> seen = ConcurrentHashMap.newKeySet();
-        return t -> seen.add(new ComparisionObject(keyExtractor.apply(t), secondaryKeyExtractor.apply(t)));
+        Set<ComparisonObject> seen = ConcurrentHashMap.newKeySet();
+        return t -> seen.add(new ComparisonObject(keyExtractor.apply(t), secondaryKeyExtractor.apply(t)));
     }
 
-    private record ComparisionObject(Object first, Object second) {
+    private record ComparisonObject(Object first, Object second) {
     }
 
 }
