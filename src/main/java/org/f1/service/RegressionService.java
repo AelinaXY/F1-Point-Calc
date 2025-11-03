@@ -83,20 +83,19 @@ public class RegressionService {
 
         EvaluationResult bestResult = EvaluationResult.parallelGridSearch(dataSet, sparkContext, categoricalFeaturesInfo);
 
-        System.out.println("Best parameters found:");
-        System.out.println("Parameters: " + bestResult.getHyperParameters());
-        System.out.println("MSE: " + bestResult.getMeanSquaredError());
-        System.out.println("MAE: " + bestResult.getMeanAbsoluteError());
-        System.out.println("R2: " + bestResult.getRSquared());
-
         BoostingStrategy bestStrategy = BoostingStrategy.defaultParams("Regression");
         bestStrategy.setNumIterations(bestResult.getHyperParameters().getNumIterations());
         bestStrategy.setLearningRate(bestResult.getHyperParameters().getLearningRate());
         bestStrategy.treeStrategy().setMaxDepth(bestResult.getHyperParameters().getMaxDepth());
         bestStrategy.treeStrategy().setMinInstancesPerNode(bestResult.getHyperParameters().getMinInstancesPerNode());
         bestStrategy.treeStrategy().setSubsamplingRate(bestResult.getHyperParameters().getSubsamplingRate());
-
         GradientBoostedTreesModel bestModel = GradientBoostedTrees.train(dataSet, bestStrategy);
+
+        System.out.println("Best parameters found:");
+        System.out.println("Parameters: " + bestResult.getHyperParameters());
+        System.out.println("MSE: " + bestResult.getMeanSquaredError());
+        System.out.println("MAE: " + bestResult.getMeanAbsoluteError());
+        System.out.println("R2: " + bestResult.getRSquared());
 
         String[] featureNames = {"Average Points", "4-Race Average",
                 "Standard Deviation", "Is Team"};
