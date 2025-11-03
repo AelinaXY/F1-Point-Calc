@@ -13,6 +13,7 @@ import org.f1.calculations.ScoreCalculator;
 import org.f1.domain.*;
 import org.f1.parsing.CSVParsing;
 import org.f1.regression.EvaluationResult;
+import org.f1.regression.HyperParameters;
 import org.f1.repository.MERRepository;
 import org.f1.repository.NSADRepository;
 import org.f1.repository.TeamRepository;
@@ -55,8 +56,7 @@ public class RegressionService {
                 .set("spark.driver.host", "localhost")
                 .set("spark.executor.userClassPathFirst", "true")
                 .set("spark.driver.userClassPathFirst", "true")
-                .set("spark.driver.extraJavaOptions", "--add-opens=java.base/sun.security.action=ALL-UNNAMED --add-opens=java.base/sun.security.util=ALL-UNNAMED")
-                .set("spark.executor.extraJavaOptions", "--add-opens=java.base/sun.security.action=ALL-UNNAMED --add-opens=java.base/sun.security.util=ALL-UNNAMED");
+                .set("spark.serializer", "org.apache.spark.serializer.JavaSerializer");
 
         this.sparkContext = new JavaSparkContext(sparkConf);
     }
@@ -83,7 +83,7 @@ public class RegressionService {
 
         EvaluationResult bestResult = EvaluationResult.parallelGridSearch(dataSet, sparkContext, categoricalFeaturesInfo);
 
-        System.out.println("Best parameteres found:");
+        System.out.println("Best parameters found:");
         System.out.println("Parameters: " + bestResult.getHyperParameters());
         System.out.println("MSE: " + bestResult.getMeanSquaredError());
         System.out.println("MAE: " + bestResult.getMeanAbsoluteError());

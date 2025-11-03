@@ -10,9 +10,8 @@ import org.apache.spark.mllib.tree.configuration.BoostingStrategy;
 import org.apache.spark.mllib.tree.model.GradientBoostedTreesModel;
 import scala.Tuple2;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Data
 public class EvaluationResult {
@@ -26,57 +25,61 @@ public class EvaluationResult {
     public static EvaluationResult parallelGridSearch(JavaRDD<LabeledPoint> dataSet, JavaSparkContext sparkContext, Map<Integer, Integer> categoricalFeaturesInfo) {
         List<HyperParameters> paramGrid = generateParameterGrid();
 
-        JavaRDD<HyperParameters> parameterRDD = sparkContext.parallelize(paramGrid);
+        dataSet.cache();
 
-        JavaRDD<EvaluationResult> results = parameterRDD.mapPartitions(params -> {
-            List<EvaluationResult> partitionResults = new ArrayList<>();
-            while (params.hasNext()) {
-                HyperParameters paramsValue = params.next();
-                EvaluationResult result = evaluateParameters(paramsValue, dataSet, categoricalFeaturesInfo, sparkContext);
-                partitionResults.add(result);
+        Set<EvaluationResult> results = paramGrid.parallelStream().map(params -> {
+            double totalMSE = 0.0;
+            double totalMAE = 0.0;
+            double totalR2 = 0.0;
+
+            for (int fold = 0; fold < numFolds; fold++) {
+                JavaRDD<LabeledPoint>[] splits = dataSet.randomSplit(
+                        new double[]{0.8, 0.2}, fold * 1000L + System.currentTimeMillis()
+
+                );
+                JavaRDD<LabeledPoint> training = splits[0];
+                JavaRDD<LabeledPoint> testing = splits[1];
+
+                try {
+                    BoostingStrategy boostingStrategy = BoostingStrategy.defaultParams("Regression");
+                    boostingStrategy.setNumIterations(params.getNumIterations());
+                    boostingStrategy.setLearningRate(params.getLearningRate());
+                    boostingStrategy.treeStrategy().setMaxDepth(params.getMaxDepth());
+                    boostingStrategy.treeStrategy().setSubsamplingRate(params.getSubsamplingRate());
+                    boostingStrategy.treeStrategy().setCategoricalFeaturesInfo(categoricalFeaturesInfo);
+                    boostingStrategy.treeStrategy().setMinInstancesPerNode(params.getMinInstancesPerNode());
+                    boostingStrategy.treeStrategy().setMinInfoGain(0.01);
+                    boostingStrategy.treeStrategy().setMaxBins(32);
+
+                    GradientBoostedTreesModel model = GradientBoostedTrees.train(training, boostingStrategy);
+
+                    JavaPairRDD<Double, Double> predictionAndLabel = testing.mapToPair(
+                            p -> new Tuple2<>(model.predict(p.features()), p.label())
+                    );
+
+                    totalMSE += getMeanSquaredError(predictionAndLabel);
+                    totalMAE += getMeanAbsoluteError(predictionAndLabel);
+                    totalR2 += getRSquared(predictionAndLabel);
+                } finally {
+                    training.unpersist();
+                    testing.unpersist();
+                }
             }
-            return partitionResults.iterator();
-        });
-
-        return results.reduce((r1, r2) -> r1.getMeanSquaredError() < r2.getMeanSquaredError() ? r1 : r2);
-    }
-
-    private static EvaluationResult evaluateParameters(HyperParameters params, JavaRDD<LabeledPoint> localDataSet, Map<Integer, Integer> categoricalFeaturesInfo, JavaSparkContext sparkContext) {
-        double totalMSE = 0.0;
-        double totalMAE = 0.0;
-        double totalR2 = 0.0;
-
-        for (int fold = 0; fold < numFolds; fold++) {
-            JavaRDD<LabeledPoint>[] splits = localDataSet.randomSplit(
-                    new double[]{0.8, 0.2}, fold * 1000L + System.currentTimeMillis()
-
+            return new EvaluationResult(
+                    params,
+                    totalMSE / numFolds,
+                    totalMAE / numFolds,
+                    totalR2 / numFolds
             );
-            JavaRDD<LabeledPoint> training = splits[0];
-            JavaRDD<LabeledPoint> testing = splits[1];
+        }).collect(Collectors.toSet());
 
-            BoostingStrategy boostingStrategy = BoostingStrategy.defaultParams("Regression");
-            boostingStrategy.setNumIterations(params.getNumIterations());
-            boostingStrategy.setLearningRate(params.getLearningRate());
-            boostingStrategy.treeStrategy().setMaxDepth(params.getMaxDepth());
-            boostingStrategy.treeStrategy().setSubsamplingRate(params.getSubsamplingRate());
-            boostingStrategy.treeStrategy().setCategoricalFeaturesInfo(categoricalFeaturesInfo);
-            boostingStrategy.treeStrategy().setMinInstancesPerNode(params.getMinInstancesPerNode());
-            boostingStrategy.treeStrategy().setMinInfoGain(0.01);
 
-            GradientBoostedTreesModel model = GradientBoostedTrees.train(
-                    training, boostingStrategy
-            );
+        Optional<EvaluationResult> bestResult = results.stream().reduce((r1, r2) ->
+                r1.getMeanSquaredError() < r2.getMeanSquaredError() ? r1 : r2);
 
-            JavaPairRDD<Double, Double> predictionAndLabel = testing.mapToPair(
-                    p -> new Tuple2<>(model.predict(p.features()), p.label())
-            );
-            totalMSE += getMeanSquaredError(predictionAndLabel);
-            totalMAE += getMeanAbsoluteError(predictionAndLabel);
-            totalR2 += getRSquared(predictionAndLabel);
+        dataSet.unpersist();
 
-        }
-
-        return new EvaluationResult(params, totalMSE / numFolds, totalMAE / numFolds, totalR2 / numFolds);
+        return bestResult.orElseThrow(() -> new RuntimeException("No results found"));
     }
 
     private static List<HyperParameters> generateParameterGrid() {
