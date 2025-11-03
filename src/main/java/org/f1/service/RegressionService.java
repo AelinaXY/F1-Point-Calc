@@ -1,7 +1,6 @@
 package org.f1.service;
 
 import org.apache.spark.SparkConf;
-import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.mllib.regression.LabeledPoint;
@@ -10,17 +9,17 @@ import org.apache.spark.mllib.tree.configuration.BoostingStrategy;
 import org.apache.spark.mllib.tree.model.DecisionTreeModel;
 import org.apache.spark.mllib.tree.model.GradientBoostedTreesModel;
 import org.f1.calculations.ScoreCalculator;
+import org.f1.controller.model.response.TrainModelResponse;
 import org.f1.domain.*;
 import org.f1.parsing.CSVParsing;
 import org.f1.regression.EvaluationResult;
-import org.f1.regression.HyperParameters;
 import org.f1.repository.MERRepository;
 import org.f1.repository.NSADRepository;
 import org.f1.repository.TeamRepository;
 import org.f1.utils.MathUtils;
 import org.springframework.stereotype.Service;
-import scala.Tuple2;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -69,7 +68,7 @@ public class RegressionService {
         populateNSADyear(teams2024, 2024);
     }
 
-    public void trainNSADRegressionModel() {
+    public TrainModelResponse trainNSADRegressionModel() throws IOException {
         List<NSAD> nsadSet = nsadRepository.getAll();
 
         JavaRDD<LabeledPoint> dataSet = sparkContext.parallelize(
@@ -100,12 +99,21 @@ public class RegressionService {
         String[] featureNames = {"Average Points", "4-Race Average",
                 "Standard Deviation", "Is Team"};
         System.out.println("\nFeature Importances:");
+
+        Map<String, Double> featureImportanceMap = new HashMap<>();
         for (int i = 0; i < featureNames.length; i++) {
             double importance = calculateFeatureImportance(bestModel, i);
             System.out.printf("%s: %.4f%n", featureNames[i], importance);
+
+            featureImportanceMap.put(featureNames[i], importance);
         }
 
+        String modelPath = "target/tmp/myDecisionTreeRegressionModel";
+        org.apache.hadoop.fs.FileSystem fs = org.apache.hadoop.fs.FileSystem.get(sparkContext.hadoopConfiguration());
+        fs.delete(new org.apache.hadoop.fs.Path(modelPath), true);
+        bestModel.save(sparkContext.sc(), modelPath);
 
+        return new TrainModelResponse(bestResult.getHyperParameters(), bestResult.getMeanSquaredError(), bestResult.getMeanAbsoluteError(), bestResult.getRSquared(), featureImportanceMap);
     }
 
     private double calculateFeatureImportance(GradientBoostedTreesModel model, int featureIndex) {

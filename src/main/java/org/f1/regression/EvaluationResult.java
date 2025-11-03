@@ -86,8 +86,7 @@ public class EvaluationResult {
         List<HyperParameters> paramGrid = new ArrayList<>();
 
         int[] numIterations = {20, 50};
-//        int[] maxDepths = {3, 5, 7, 9};
-        int[] maxDepths = {3, 5};
+        int[] maxDepths = {3, 5, 7, 9};
         double[] learningRates = {0.01, 0.03, 0.1, 0.3};
         int[] minInstancesPerNode = {1};
         int[] subsamplingRates = {1};

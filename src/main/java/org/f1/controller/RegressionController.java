@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/api/regression")
 public class RegressionController {
@@ -24,9 +26,9 @@ public class RegressionController {
     }
 
     @GetMapping("/trainNSAD")
-    public ResponseEntity<?> trainNSADRegressionModel() {
-        regressionService.trainNSADRegressionModel();
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> trainNSADRegressionModel() throws IOException {
+
+        return ResponseEntity.ok().body(regressionService.trainNSADRegressionModel().toJson());
     }
 
 
