@@ -61,7 +61,7 @@ public class RawDataCalculationV2 extends AbstractCalculation {
                 .map(sc -> new AbstractMap.SimpleEntry<>(sc, currentScorecard.calculateDifference(sc)))
                 .filter(sc -> sc.getValue().getNumberOfChanges() <= changeLimit)
                 .limit(maxSize)
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (a, _) -> a, LinkedHashMap::new));
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> a, LinkedHashMap::new));
     }
 
     private void driverLoop(List<FullPointEntity> previousLevelDriverSet, List<FullPointEntity> loopDriverList) {

@@ -5,6 +5,7 @@ import org.f1.generated.tables.records.NonSprintAggregateDataRecord;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Set;
 
 import static org.f1.generated.Tables.*;
@@ -39,5 +40,20 @@ public class NSADRepository {
         record.setStdev(nsadRecord.stdev());
         record.setIsTeam(nsadRecord.isTeam());
         return record;
+    }
+
+    public List<NSAD> getAll() {
+        return dslContext.selectFrom(NON_SPRINT_AGGREGATE_DATA)
+                .fetch().map(this::fromRecord);
+    }
+
+    private NSAD fromRecord(NonSprintAggregateDataRecord record) {
+        return new NSAD(record.getId(),
+                record.getMeetingEntityReference(),
+                record.getActualPoints(),
+                record.getAvgPoints(),
+                record.getAvg_4d1Points(),
+                record.getStdev(),
+                record.getIsTeam());
     }
 }

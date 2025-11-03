@@ -19,9 +19,15 @@ public class RegressionController {
 
     @GetMapping("/nsad")
     public ResponseEntity<?> populateNSADRegressionData() {
-
         regressionService.populateNSADRegressionData();
-
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/trainNSAD")
+    public ResponseEntity<?> trainNSADRegressionModel() {
+        regressionService.trainNSADRegressionModel();
+        return ResponseEntity.ok().build();
+    }
+
+
 }

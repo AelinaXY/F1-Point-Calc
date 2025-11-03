@@ -10,7 +10,6 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
-import java.util.stream.Gatherers;
 
 import static org.f1.domain.EntityType.*;
 
@@ -48,7 +47,7 @@ public class RegressionDataCalculation extends AbstractCalculation {
             raceList.removeFirst();
             for (Race race : raceList) {
                 Double errorValue = calculateErrorValue(entity, race.name(), calculator);
-                meanSquaredErrorMap.compute(race.name(), (_, v) -> v == null ? new SquaredErrorValue(errorValue) : v.increment(errorValue));
+                meanSquaredErrorMap.compute(race.name(), (a, v) -> v == null ? new SquaredErrorValue(errorValue) : v.increment(errorValue));
             }
         }
         return meanSquaredErrorMap;
@@ -124,7 +123,7 @@ public class RegressionDataCalculation extends AbstractCalculation {
     }
 
     private Map.Entry<List<Double>, Double> calculateRegression(Set<List<Double>> weightSet, Set<Set<FullPointEntity>> pointEntitySets, ConcurrentMap<List<Double>, Double> scoreWeightMap, ScoreCalculatorInterface calculator) {
-        weightSet.stream().gather(Gatherers.mapConcurrent(100, p -> p)).forEach(w ->
+        weightSet.stream().forEach(w ->
         {
             ScoreCalculator.setAveragePointWeight(w.get(0));
             ScoreCalculator.setThreeAveragePointWeight(w.get(1));
