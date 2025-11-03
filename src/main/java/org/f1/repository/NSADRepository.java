@@ -37,6 +37,7 @@ public class NSADRepository {
         record.setAvgPoints(nsadRecord.avgPoints());
         record.setAvg_4d1Points(nsadRecord.avg4d1Points());
         record.setStdev(nsadRecord.stdev());
+        record.setIsTeam(nsadRecord.isTeam());
         return record;
     }
 }
