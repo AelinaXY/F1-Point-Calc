@@ -89,6 +89,11 @@
             <artifactId>spark-core_2.13</artifactId>
             <version>4.0.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
     </dependencies>
 

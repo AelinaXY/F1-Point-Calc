@@ -12,6 +12,7 @@ import org.apache.spark.mllib.tree.model.GradientBoostedTreesModel;
 import org.f1.calculations.ScoreCalculator;
 import org.f1.domain.*;
 import org.f1.parsing.CSVParsing;
+import org.f1.regression.EvaluationResult;
 import org.f1.repository.MERRepository;
 import org.f1.repository.NSADRepository;
 import org.f1.repository.TeamRepository;
@@ -51,7 +52,11 @@ public class RegressionService {
                 .setAppName("F1PointCalc")
                 .setMaster("local")
                 .set("spark.ui.enabled", "false")
-                .set("spark.driver.host", "localhost");
+                .set("spark.driver.host", "localhost")
+                .set("spark.executor.userClassPathFirst", "true")
+                .set("spark.driver.userClassPathFirst", "true")
+                .set("spark.driver.extraJavaOptions", "--add-opens=java.base/sun.security.action=ALL-UNNAMED --add-opens=java.base/sun.security.util=ALL-UNNAMED")
+                .set("spark.executor.extraJavaOptions", "--add-opens=java.base/sun.security.action=ALL-UNNAMED --add-opens=java.base/sun.security.util=ALL-UNNAMED");
 
         this.sparkContext = new JavaSparkContext(sparkConf);
     }
@@ -67,112 +72,41 @@ public class RegressionService {
     public void trainNSADRegressionModel() {
         List<NSAD> nsadSet = nsadRepository.getAll();
 
-        JavaRDD<LabeledPoint> dataSet = sparkContext.parallelize(nsadSet.stream().map(NSAD::toLabeledPoint).collect(Collectors.toList()));
+        JavaRDD<LabeledPoint> dataSet = sparkContext.parallelize(
+                nsadSet.stream()
+                        .map(NSAD::toLabeledPoint)
+                        .collect(Collectors.toList())
+        );
 
-        int numFolds = 5;
-        double bestScore = Double.MAX_VALUE;
-        GradientBoostedTreesModel bestModel = null;
-        Map<String, Double> bestParams = new HashMap<>();
         Map<Integer, Integer> categoricalFeaturesInfo = new HashMap<>();
         categoricalFeaturesInfo.put(3, 2);
 
-        //Hyperparamters
-        int[] numIterations = {20, 50};
-        int[] maxDepths = {3, 5, 7, 9};
-        double[] learningRates = {0.01, 0.03, 0.1, 0.3};
+        EvaluationResult bestResult = EvaluationResult.parallelGridSearch(dataSet, sparkContext, categoricalFeaturesInfo);
 
-        int noImprovementCount = 0;
-        final int EARLY_STOPPING_ROUNDS = 5;
-        final double MIN_IMPROVEMENT = 0.001;
+        System.out.println("Best parameteres found:");
+        System.out.println("Parameters: " + bestResult.getHyperParameters());
+        System.out.println("MSE: " + bestResult.getMeanSquaredError());
+        System.out.println("MAE: " + bestResult.getMeanAbsoluteError());
+        System.out.println("R2: " + bestResult.getRSquared());
 
-        for (int iterations : numIterations) {
-            for (int depth : maxDepths) {
-                for (double learningRate : learningRates) {
-                    double totalMSE = 0.0;
-                    double totalMAE = 0.0;
-                    double totalR2 = 0.0;
+        BoostingStrategy bestStrategy = BoostingStrategy.defaultParams("Regression");
+        bestStrategy.setNumIterations(bestResult.getHyperParameters().getNumIterations());
+        bestStrategy.setLearningRate(bestResult.getHyperParameters().getLearningRate());
+        bestStrategy.treeStrategy().setMaxDepth(bestResult.getHyperParameters().getMaxDepth());
+        bestStrategy.treeStrategy().setMinInstancesPerNode(bestResult.getHyperParameters().getMinInstancesPerNode());
+        bestStrategy.treeStrategy().setSubsamplingRate(bestResult.getHyperParameters().getSubsamplingRate());
 
-                    for (int fold = 0; fold < numFolds; fold++) {
-                        JavaRDD<LabeledPoint>[] splits = dataSet.randomSplit(
-                                new double[]{0.8, 0.2}, fold * 1000L + System.currentTimeMillis()
+        GradientBoostedTreesModel bestModel = GradientBoostedTrees.train(dataSet, bestStrategy);
 
-                        );
-                        JavaRDD<LabeledPoint> training = splits[0];
-                        JavaRDD<LabeledPoint> testing = splits[1];
-
-                        BoostingStrategy boostingStrategy = BoostingStrategy.defaultParams("Regression");
-                        boostingStrategy.setNumIterations(iterations);
-                        boostingStrategy.setLearningRate(learningRate);
-                        boostingStrategy.treeStrategy().setMaxDepth(depth);
-                        boostingStrategy.treeStrategy().setCategoricalFeaturesInfo(categoricalFeaturesInfo);
-                        boostingStrategy.treeStrategy().setMinInstancesPerNode(1);
-                        boostingStrategy.treeStrategy().setMinInfoGain(0.01);
-
-                        GradientBoostedTreesModel model = GradientBoostedTrees.train(
-                                training, boostingStrategy
-                        );
-
-                        JavaPairRDD<Double, Double> predictionAndLabel = testing.mapToPair(
-                                p -> new Tuple2<>(model.predict(p.features()), p.label())
-                        );
-                        totalMSE += getMeanSquaredError(predictionAndLabel);
-                        totalMAE += getMeanAbsoluteError(predictionAndLabel);
-                        totalR2 += getRSquared(predictionAndLabel);
-
-                    }
-                    double avgMSE = totalMSE / numFolds;
-                    double avgMAE = totalMAE / numFolds;
-                    double avgR2 = totalR2 / numFolds;
-
-                    System.out.printf(
-                            "Iterations: %d, Depth: %d, LR: %.3f, " +
-                                    "MSE: %.2f, MAE: %.2f, R²: %.3f%n",
-                            iterations, depth, learningRate,
-                            avgMSE, avgMAE, avgR2
-                    );
-
-                    if (avgMSE < bestScore) {
-                        if (bestScore - avgMSE < MIN_IMPROVEMENT) {
-                            noImprovementCount++;
-                        } else {
-                            noImprovementCount = 0;
-                        }
-
-                        bestScore = avgMSE;
-
-                        BoostingStrategy bestStrategy = BoostingStrategy.defaultParams("Regression");
-                        bestStrategy.setNumIterations(iterations);
-                        bestStrategy.setLearningRate(learningRate);
-                        bestStrategy.treeStrategy().setMaxDepth(depth);
-                        bestStrategy.treeStrategy().setCategoricalFeaturesInfo(categoricalFeaturesInfo);
-                        bestStrategy.treeStrategy().setMinInfoGain(0.001);
-
-                        bestModel = GradientBoostedTrees.train(dataSet, bestStrategy);
-
-                        bestParams.put("iterations", (double) iterations);
-                        bestParams.put("depth", (double) depth);
-                        bestParams.put("learningRate", learningRate);
-                    }
-
-                    if (noImprovementCount >= EARLY_STOPPING_ROUNDS) {
-                        System.out.printf("Early stopping triggered - no significant improvement for %s rounds", EARLY_STOPPING_ROUNDS);
-                        break;
-                    }
-                }
-            }
-        }
-
-        System.out.println("Best Mean Squared Error: " + bestScore);
-        System.out.println("Best hyperparameters: " + bestParams);
-        System.out.println("Best model:\n" + bestModel.toDebugString());
-
-        // Feature importance analysis
+        String[] featureNames = {"Average Points", "4-Race Average",
+                "Standard Deviation", "Is Team"};
         System.out.println("\nFeature Importances:");
-        String[] featureNames = {"Average Points", "4-Race Average", "Standard Deviation", "Is Team"};
         for (int i = 0; i < featureNames.length; i++) {
             double importance = calculateFeatureImportance(bestModel, i);
             System.out.printf("%s: %.4f%n", featureNames[i], importance);
         }
+
+
     }
 
     private double calculateFeatureImportance(GradientBoostedTreesModel model, int featureIndex) {
@@ -267,24 +201,5 @@ public class RegressionService {
                 .map(r -> r.qualiPoints() + r.racePoints()).toList();
     }
 
-    private double getMeanSquaredError(JavaPairRDD<Double, Double> predictionAndLabel) {
-        return predictionAndLabel.mapToDouble(pair ->
-                        Math.pow(pair._1 - pair._2, 2))
-                .mean();
-    }
 
-    private double getMeanAbsoluteError(JavaPairRDD<Double, Double> predictionAndLabel) {
-        return predictionAndLabel.mapToDouble(pair ->
-                Math.abs(pair._1() - pair._2())).mean();
-    }
-
-    private double getRSquared(JavaPairRDD<Double, Double> predictionAndLabel) {
-        double mean = predictionAndLabel.mapToDouble(Tuple2::_2).mean();
-        double totalSS = predictionAndLabel.mapToDouble(pl ->
-                        Math.pow(pl._2() - mean, 2))
-                .sum();
-        double residualSS = predictionAndLabel.mapToDouble(pl ->
-                Math.pow(pl._1() - pl._2(), 2)).sum();
-        return 1 - (residualSS / totalSS);
-    }
 }
