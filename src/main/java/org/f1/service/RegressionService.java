@@ -155,22 +155,13 @@ public class RegressionService {
                     List<Double> pointList = getListOfPoints(entity.getRaceList(), shortName);
                     if (!pointList.isEmpty()) {
                         Integer id;
-                        double isTeam;
-
                         if (entity.isDriver()) {
                             id = getDriverMerId(year, meeting, entity);
-                            isTeam = 0d;
                         } else {
                             id = getTeamMerId(year, meeting, entity);
-                            isTeam = 1d;
                         }
 
-                        Integer actualPoints = entity.getRaceList().stream().filter(r -> r.name().equals(shortName)).findFirst().orElseThrow().totalPoints().intValue();
-                        Double avgPoints = ScoreCalculator.calcAveragePoints(pointList);
-                        Double avg4d1Points = ScoreCalculator.calcThreeRaceAverage(new ArrayList<>(pointList));
-                        Double stdev = MathUtils.stdev(pointList);
-
-                        NSAD nsad = new NSAD(null, id, actualPoints, avgPoints, avg4d1Points, stdev, isTeam);
+                        NSAD nsad = NSAD.buildFullNSAD(entity, shortName, id);
                         returnSet.add(nsad);
                     } else {
                         System.out.println("Skipping NSAD entry for entity " + entity.getName() + " with year " + year + " with circuit " + shortName);
