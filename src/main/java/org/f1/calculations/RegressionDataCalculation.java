@@ -5,6 +5,7 @@ import org.f1.domain.Race;
 import org.f1.domain.RegressionResolution;
 import org.f1.domain.SquaredErrorValue;
 import org.f1.parsing.CSVParsing;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -13,15 +14,17 @@ import java.util.stream.Collectors;
 
 import static org.f1.domain.EntityType.*;
 
+@Service
 public class RegressionDataCalculation extends AbstractCalculation {
 
     private ScoreCalculator scoreCalculatorV1 = new ScoreCalculator();
     private ScoreCalculatorV2 scoreCalculatorV2 = new ScoreCalculatorV2();
+    private ScoreCalculatorV3 scoreCalculatorV3;
 
 
-    public RegressionDataCalculation(Set<FullPointEntity> driverSet, Set<FullPointEntity> teamSet) {
+    public RegressionDataCalculation(Set<FullPointEntity> driverSet, Set<FullPointEntity> teamSet, ScoreCalculatorV3 scoreCalculatorV3) {
         super(driverSet, teamSet);
-
+        this.scoreCalculatorV3 = scoreCalculatorV3;
     }
 
 
@@ -78,6 +81,9 @@ public class RegressionDataCalculation extends AbstractCalculation {
 
         Map.Entry<String, Double> bestWeightsV2 = calculateSMEacrossSet(pointEntitySets, scoreCalculatorV2, "V2");
         returnMap.put(bestWeightsV2.getKey(), bestWeightsV2.getValue());
+
+        Map.Entry<String, Double> bestWeightsV3 = calculateSMEacrossSet(pointEntitySets, scoreCalculatorV3, "V3");
+        returnMap.put(bestWeightsV3.getKey(), bestWeightsV3.getValue());
 
         return returnMap;
     }

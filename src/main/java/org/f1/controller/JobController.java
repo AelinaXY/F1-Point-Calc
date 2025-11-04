@@ -1,9 +1,7 @@
 package org.f1.controller;
 
-import org.f1.calculations.CostCalculator;
-import org.f1.calculations.RawDataCalculationV2;
-import org.f1.calculations.RegressionDataCalculation;
-import org.f1.calculations.ScoreCalculator;
+import org.apache.spark.api.java.JavaSparkContext;
+import org.f1.calculations.*;
 import org.f1.domain.BasicPointEntity;
 import org.f1.domain.DifferenceEntity;
 import org.f1.domain.FullPointEntity;
@@ -35,13 +33,13 @@ public class JobController {
     private final RawDataCalculationV2 calculation;
     private final RegressionDataCalculation regressionData;
 
-    public JobController() {
+    public JobController(ScoreCalculatorV3 scoreCalculatorV3) {
         List<String> driversNoLongerExistsIn2025 = List.of("Jack Doohan");
         DRIVER_SET = DRIVER_SET.stream().filter(d -> !driversNoLongerExistsIn2025.contains(d.getName())).collect(Collectors.toSet());
 
         ScoreCalculator scoreCalculator = new ScoreCalculator();
-        calculation = new RawDataCalculationV2(DRIVER_SET, TEAM_SET, 0, 0, DEFAULT_RACE_NAME, DEFAULT_IS_SPRINT, scoreCalculator, DEFAULT_RACES_LEFT, DEFAULT_COST_CAP_MULT);
-        regressionData = new RegressionDataCalculation(DRIVER_SET, TEAM_SET);
+        calculation = new RawDataCalculationV2(DRIVER_SET, TEAM_SET, 0, 0, DEFAULT_RACE_NAME, DEFAULT_IS_SPRINT, scoreCalculatorV3, DEFAULT_RACES_LEFT, DEFAULT_COST_CAP_MULT);
+        regressionData = new RegressionDataCalculation(DRIVER_SET, TEAM_SET, scoreCalculatorV3);
     }
 
 

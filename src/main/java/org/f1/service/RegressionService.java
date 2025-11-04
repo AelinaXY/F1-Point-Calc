@@ -44,22 +44,13 @@ public class RegressionService {
     private final TeamRepository teamRepository;
     private final JavaSparkContext sparkContext;
 
-    public RegressionService(DriverService driverService, NSADRepository nsadRepository, MERRepository merRepository, MeetingService meetingService, TeamRepository teamRepository) {
+    public RegressionService(DriverService driverService, NSADRepository nsadRepository, MERRepository merRepository, MeetingService meetingService, TeamRepository teamRepository, JavaSparkContext sparkContext) {
         this.driverService = driverService;
         this.nsadRepository = nsadRepository;
         this.merRepository = merRepository;
         this.meetingService = meetingService;
         this.teamRepository = teamRepository;
-        SparkConf sparkConf = new SparkConf()
-                .setAppName("F1PointCalc")
-                .setMaster("local")
-                .set("spark.ui.enabled", "false")
-                .set("spark.driver.host", "localhost")
-                .set("spark.executor.userClassPathFirst", "true")
-                .set("spark.driver.userClassPathFirst", "true")
-                .set("spark.serializer", "org.apache.spark.serializer.JavaSerializer");
-
-        this.sparkContext = new JavaSparkContext(sparkConf);
+        this.sparkContext = sparkContext;
     }
 
 
