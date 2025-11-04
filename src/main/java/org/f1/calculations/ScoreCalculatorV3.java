@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class ScoreCalculatorV3 implements ScoreCalculatorInterface {
     private final JavaSparkContext sparkContext;
-
     private final GradientBoostedTreesModel gradientBoostedTreesModel;
 
     public ScoreCalculatorV3(JavaSparkContext javaSparkContext) {

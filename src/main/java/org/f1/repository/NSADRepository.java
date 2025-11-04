@@ -33,12 +33,12 @@ public class NSADRepository {
     private NonSprintAggregateDataRecord toRecord(NSAD nsadRecord) {
         NonSprintAggregateDataRecord record = new NonSprintAggregateDataRecord();
 
-        record.setMeetingEntityReference(nsadRecord.meetingEntityReference());
-        record.setActualPoints(nsadRecord.actualPoints());
-        record.setAvgPoints(nsadRecord.avgPoints());
-        record.setAvg_4d1Points(nsadRecord.avg4d1Points());
-        record.setStdev(nsadRecord.stdev());
-        record.setIsTeam(nsadRecord.isTeam());
+        record.setMeetingEntityReference(nsadRecord.getMeetingEntityReference());
+        record.setActualPoints(nsadRecord.getActualPoints());
+        record.setAvgPoints(nsadRecord.getAvgPoints());
+        record.setAvg_4d1Points(nsadRecord.getAvg4d1Points());
+        record.setStdev(nsadRecord.getStdev());
+        record.setIsTeam(nsadRecord.getIsTeam());
         return record;
     }
 
