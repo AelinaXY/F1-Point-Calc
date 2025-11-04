@@ -1,5 +1,7 @@
 package org.f1.service;
 
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
@@ -108,9 +110,9 @@ public class RegressionService {
             featureImportanceMap.put(featureNames[i], importance);
         }
 
-        String modelPath = "target/tmp/myDecisionTreeRegressionModel";
-        org.apache.hadoop.fs.FileSystem fs = org.apache.hadoop.fs.FileSystem.get(sparkContext.hadoopConfiguration());
-        fs.delete(new org.apache.hadoop.fs.Path(modelPath), true);
+        String modelPath = "src/main/resources/regressionModel";
+        FileSystem fs = FileSystem.get(sparkContext.hadoopConfiguration());
+        fs.delete(new Path(modelPath), true);
         bestModel.save(sparkContext.sc(), modelPath);
 
         return new TrainModelResponse(bestResult.getHyperParameters(), bestResult.getMeanSquaredError(), bestResult.getMeanAbsoluteError(), bestResult.getRSquared(), featureImportanceMap);

@@ -24,7 +24,6 @@ public class EvaluationResult {
 
     public static EvaluationResult parallelGridSearch(JavaRDD<LabeledPoint> dataSet, JavaSparkContext sparkContext, Map<Integer, Integer> categoricalFeaturesInfo) {
         List<HyperParameters> paramGrid = generateParameterGrid();
-
         dataSet.cache();
 
         Set<EvaluationResult> results = paramGrid.parallelStream().map(params -> {
@@ -85,17 +84,17 @@ public class EvaluationResult {
     private static List<HyperParameters> generateParameterGrid() {
         List<HyperParameters> paramGrid = new ArrayList<>();
 
-        int[] numIterations = {20, 50};
+        int[] numIterations = {20, 50, 100};
         int[] maxDepths = {3, 5, 7, 9};
         double[] learningRates = {0.01, 0.03, 0.1, 0.3};
-        int[] minInstancesPerNode = {1};
-        int[] subsamplingRates = {1};
+        int[] minInstancesPerNode = {1, 3, 5};
+        double[] subsamplingRates = {1};
 
         for (int numIterationsValue : numIterations) {
             for (int maxDepthValue : maxDepths) {
                 for (double learningRateValue : learningRates) {
                     for (int minInstancesPerNodeValue : minInstancesPerNode) {
-                        for (int subsamplingRateValue : subsamplingRates) {
+                        for (double subsamplingRateValue : subsamplingRates) {
                             paramGrid.add(new HyperParameters(numIterationsValue,
                                     maxDepthValue,
                                     learningRateValue,

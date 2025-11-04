@@ -17,10 +17,10 @@ public class HyperParameters implements Serializable {
     private int maxDepth;
     private double learningRate;
     private int minInstancesPerNode;
-    private int subsamplingRate;
+    private double subsamplingRate;
 
     public String toString() {
-        return String.format("iter=%d, depth=%d, lr=%f, min=%d, sub=%d",
+        return String.format("iter=%d, depth=%d, lr=%f, min=%d, sub=%f",
                 numIterations, maxDepth, learningRate, minInstancesPerNode, subsamplingRate);
     }
 
