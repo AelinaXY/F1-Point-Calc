@@ -1,0 +1,288 @@
+Nov 05, 2025 10:19:42 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 1 of 144. Params of iter=20, depth=3, lr=0.010000, min=1, sub=1.000000. Total mean error: 273.520970
+Nov 05, 2025 10:19:48 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 2 of 144. Params of iter=20, depth=3, lr=0.010000, min=3, sub=1.000000. Total mean error: 240.538528
+Nov 05, 2025 10:19:54 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 3 of 144. Params of iter=20, depth=3, lr=0.010000, min=5, sub=1.000000. Total mean error: 266.774665
+Nov 05, 2025 10:20:00 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 4 of 144. Params of iter=20, depth=3, lr=0.030000, min=1, sub=1.000000. Total mean error: 282.941462
+Nov 05, 2025 10:20:05 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 5 of 144. Params of iter=20, depth=3, lr=0.030000, min=3, sub=1.000000. Total mean error: 224.163577
+Nov 05, 2025 10:20:11 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 6 of 144. Params of iter=20, depth=3, lr=0.030000, min=5, sub=1.000000. Total mean error: 228.723378
+Nov 05, 2025 10:20:17 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 7 of 144. Params of iter=20, depth=3, lr=0.100000, min=1, sub=1.000000. Total mean error: 278.897355
+Nov 05, 2025 10:20:23 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 8 of 144. Params of iter=20, depth=3, lr=0.100000, min=3, sub=1.000000. Total mean error: 226.518582
+Nov 05, 2025 10:20:29 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 9 of 144. Params of iter=20, depth=3, lr=0.100000, min=5, sub=1.000000. Total mean error: 266.378647
+Nov 05, 2025 10:20:34 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 10 of 144. Params of iter=20, depth=3, lr=0.300000, min=1, sub=1.000000. Total mean error: 278.039680
+Nov 05, 2025 10:20:40 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 11 of 144. Params of iter=20, depth=3, lr=0.300000, min=3, sub=1.000000. Total mean error: 258.483760
+Nov 05, 2025 10:20:46 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 12 of 144. Params of iter=20, depth=3, lr=0.300000, min=5, sub=1.000000. Total mean error: 286.501237
+Nov 05, 2025 10:20:55 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 13 of 144. Params of iter=20, depth=5, lr=0.010000, min=1, sub=1.000000. Total mean error: 278.166353
+Nov 05, 2025 10:21:04 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 14 of 144. Params of iter=20, depth=5, lr=0.010000, min=3, sub=1.000000. Total mean error: 283.326485
+Nov 05, 2025 10:21:12 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 15 of 144. Params of iter=20, depth=5, lr=0.010000, min=5, sub=1.000000. Total mean error: 267.929637
+Nov 05, 2025 10:21:21 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 16 of 144. Params of iter=20, depth=5, lr=0.030000, min=1, sub=1.000000. Total mean error: 277.970569
+Nov 05, 2025 10:21:29 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 17 of 144. Params of iter=20, depth=5, lr=0.030000, min=3, sub=1.000000. Total mean error: 277.362778
+Nov 05, 2025 10:21:37 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 18 of 144. Params of iter=20, depth=5, lr=0.030000, min=5, sub=1.000000. Total mean error: 264.779319
+Nov 05, 2025 10:21:46 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 19 of 144. Params of iter=20, depth=5, lr=0.100000, min=1, sub=1.000000. Total mean error: 323.768274
+Nov 05, 2025 10:21:54 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 20 of 144. Params of iter=20, depth=5, lr=0.100000, min=3, sub=1.000000. Total mean error: 276.552507
+Nov 05, 2025 10:22:03 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 21 of 144. Params of iter=20, depth=5, lr=0.100000, min=5, sub=1.000000. Total mean error: 306.655336
+Nov 05, 2025 10:22:11 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 22 of 144. Params of iter=20, depth=5, lr=0.300000, min=1, sub=1.000000. Total mean error: 337.045727
+Nov 05, 2025 10:22:20 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 23 of 144. Params of iter=20, depth=5, lr=0.300000, min=3, sub=1.000000. Total mean error: 330.272415
+Nov 05, 2025 10:22:28 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 24 of 144. Params of iter=20, depth=5, lr=0.300000, min=5, sub=1.000000. Total mean error: 325.769511
+Nov 05, 2025 10:22:40 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 25 of 144. Params of iter=20, depth=7, lr=0.010000, min=1, sub=1.000000. Total mean error: 327.214491
+Nov 05, 2025 10:22:52 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 26 of 144. Params of iter=20, depth=7, lr=0.010000, min=3, sub=1.000000. Total mean error: 286.246628
+Nov 05, 2025 10:23:04 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 27 of 144. Params of iter=20, depth=7, lr=0.010000, min=5, sub=1.000000. Total mean error: 292.486826
+Nov 05, 2025 10:23:16 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 28 of 144. Params of iter=20, depth=7, lr=0.030000, min=1, sub=1.000000. Total mean error: 296.306862
+Nov 05, 2025 10:23:28 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 29 of 144. Params of iter=20, depth=7, lr=0.030000, min=3, sub=1.000000. Total mean error: 287.706047
+Nov 05, 2025 10:23:40 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 30 of 144. Params of iter=20, depth=7, lr=0.030000, min=5, sub=1.000000. Total mean error: 286.381523
+Nov 05, 2025 10:23:53 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 31 of 144. Params of iter=20, depth=7, lr=0.100000, min=1, sub=1.000000. Total mean error: 363.259287
+Nov 05, 2025 10:24:04 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 32 of 144. Params of iter=20, depth=7, lr=0.100000, min=3, sub=1.000000. Total mean error: 313.327278
+Nov 05, 2025 10:24:16 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 33 of 144. Params of iter=20, depth=7, lr=0.100000, min=5, sub=1.000000. Total mean error: 316.405573
+Nov 05, 2025 10:24:26 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 34 of 144. Params of iter=20, depth=7, lr=0.300000, min=1, sub=1.000000. Total mean error: 408.630069
+Nov 05, 2025 10:24:38 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 35 of 144. Params of iter=20, depth=7, lr=0.300000, min=3, sub=1.000000. Total mean error: 387.116299
+Nov 05, 2025 10:24:50 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 36 of 144. Params of iter=20, depth=7, lr=0.300000, min=5, sub=1.000000. Total mean error: 319.340132
+Nov 05, 2025 10:25:07 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 37 of 144. Params of iter=20, depth=9, lr=0.010000, min=1, sub=1.000000. Total mean error: 368.411070
+Nov 05, 2025 10:25:23 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 38 of 144. Params of iter=20, depth=9, lr=0.010000, min=3, sub=1.000000. Total mean error: 326.511730
+Nov 05, 2025 10:25:38 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 39 of 144. Params of iter=20, depth=9, lr=0.010000, min=5, sub=1.000000. Total mean error: 315.116144
+Nov 05, 2025 10:25:55 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 40 of 144. Params of iter=20, depth=9, lr=0.030000, min=1, sub=1.000000. Total mean error: 408.341787
+Nov 05, 2025 10:26:11 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 41 of 144. Params of iter=20, depth=9, lr=0.030000, min=3, sub=1.000000. Total mean error: 360.196775
+Nov 05, 2025 10:26:26 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 42 of 144. Params of iter=20, depth=9, lr=0.030000, min=5, sub=1.000000. Total mean error: 319.353351
+Nov 05, 2025 10:26:51 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 43 of 144. Params of iter=20, depth=9, lr=0.100000, min=1, sub=1.000000. Total mean error: 430.802188
+Nov 05, 2025 10:27:06 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 44 of 144. Params of iter=20, depth=9, lr=0.100000, min=3, sub=1.000000. Total mean error: 372.564170
+Nov 05, 2025 10:27:20 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 45 of 144. Params of iter=20, depth=9, lr=0.100000, min=5, sub=1.000000. Total mean error: 311.516952
+Nov 05, 2025 10:27:28 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 46 of 144. Params of iter=20, depth=9, lr=0.300000, min=1, sub=1.000000. Total mean error: 373.421528
+Nov 05, 2025 10:27:44 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 47 of 144. Params of iter=20, depth=9, lr=0.300000, min=3, sub=1.000000. Total mean error: 386.791717
+Nov 05, 2025 10:28:00 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 48 of 144. Params of iter=20, depth=9, lr=0.300000, min=5, sub=1.000000. Total mean error: 376.172391
+Nov 05, 2025 10:28:15 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 49 of 144. Params of iter=50, depth=3, lr=0.010000, min=1, sub=1.000000. Total mean error: 269.570765
+Nov 05, 2025 10:28:29 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 50 of 144. Params of iter=50, depth=3, lr=0.010000, min=3, sub=1.000000. Total mean error: 296.594452
+Nov 05, 2025 10:28:44 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 51 of 144. Params of iter=50, depth=3, lr=0.010000, min=5, sub=1.000000. Total mean error: 235.361036
+Nov 05, 2025 10:28:59 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 52 of 144. Params of iter=50, depth=3, lr=0.030000, min=1, sub=1.000000. Total mean error: 257.673351
+Nov 05, 2025 10:29:14 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 53 of 144. Params of iter=50, depth=3, lr=0.030000, min=3, sub=1.000000. Total mean error: 270.164442
+Nov 05, 2025 10:29:29 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 54 of 144. Params of iter=50, depth=3, lr=0.030000, min=5, sub=1.000000. Total mean error: 281.725628
+Nov 05, 2025 10:29:43 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 55 of 144. Params of iter=50, depth=3, lr=0.100000, min=1, sub=1.000000. Total mean error: 284.366569
+Nov 05, 2025 10:29:58 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 56 of 144. Params of iter=50, depth=3, lr=0.100000, min=3, sub=1.000000. Total mean error: 281.731063
+Nov 05, 2025 10:30:12 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 57 of 144. Params of iter=50, depth=3, lr=0.100000, min=5, sub=1.000000. Total mean error: 272.111192
+Nov 05, 2025 10:30:28 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 58 of 144. Params of iter=50, depth=3, lr=0.300000, min=1, sub=1.000000. Total mean error: 286.313012
+Nov 05, 2025 10:30:43 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 59 of 144. Params of iter=50, depth=3, lr=0.300000, min=3, sub=1.000000. Total mean error: 314.663324
+Nov 05, 2025 10:30:58 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 60 of 144. Params of iter=50, depth=3, lr=0.300000, min=5, sub=1.000000. Total mean error: 298.947172
+Nov 05, 2025 10:31:22 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 61 of 144. Params of iter=50, depth=5, lr=0.010000, min=1, sub=1.000000. Total mean error: 280.658950
+Nov 05, 2025 10:31:45 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 62 of 144. Params of iter=50, depth=5, lr=0.010000, min=3, sub=1.000000. Total mean error: 298.270021
+Nov 05, 2025 10:32:07 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 63 of 144. Params of iter=50, depth=5, lr=0.010000, min=5, sub=1.000000. Total mean error: 267.362543
+Nov 05, 2025 10:32:32 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 64 of 144. Params of iter=50, depth=5, lr=0.030000, min=1, sub=1.000000. Total mean error: 277.963127
+Nov 05, 2025 10:32:56 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 65 of 144. Params of iter=50, depth=5, lr=0.030000, min=3, sub=1.000000. Total mean error: 241.736708
+Nov 05, 2025 10:33:20 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 66 of 144. Params of iter=50, depth=5, lr=0.030000, min=5, sub=1.000000. Total mean error: 254.835000
+Nov 05, 2025 10:33:44 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 67 of 144. Params of iter=50, depth=5, lr=0.100000, min=1, sub=1.000000. Total mean error: 310.891407
+Nov 05, 2025 10:34:08 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 68 of 144. Params of iter=50, depth=5, lr=0.100000, min=3, sub=1.000000. Total mean error: 303.231373
+Nov 05, 2025 10:34:31 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 69 of 144. Params of iter=50, depth=5, lr=0.100000, min=5, sub=1.000000. Total mean error: 266.263109
+Nov 05, 2025 10:34:51 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 70 of 144. Params of iter=50, depth=5, lr=0.300000, min=1, sub=1.000000. Total mean error: 343.598935
+Nov 05, 2025 10:35:14 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 71 of 144. Params of iter=50, depth=5, lr=0.300000, min=3, sub=1.000000. Total mean error: 369.287723
+Nov 05, 2025 10:35:37 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 72 of 144. Params of iter=50, depth=5, lr=0.300000, min=5, sub=1.000000. Total mean error: 319.435664
+Nov 05, 2025 10:36:15 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 73 of 144. Params of iter=50, depth=7, lr=0.010000, min=1, sub=1.000000. Total mean error: 349.881521
+Nov 05, 2025 10:36:48 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 74 of 144. Params of iter=50, depth=7, lr=0.010000, min=3, sub=1.000000. Total mean error: 316.893357
+Nov 05, 2025 10:37:21 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 75 of 144. Params of iter=50, depth=7, lr=0.010000, min=5, sub=1.000000. Total mean error: 292.274658
+Nov 05, 2025 10:37:58 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 76 of 144. Params of iter=50, depth=7, lr=0.030000, min=1, sub=1.000000. Total mean error: 353.749759
+Nov 05, 2025 10:38:32 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 77 of 144. Params of iter=50, depth=7, lr=0.030000, min=3, sub=1.000000. Total mean error: 282.127534
+Nov 05, 2025 10:39:05 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 78 of 144. Params of iter=50, depth=7, lr=0.030000, min=5, sub=1.000000. Total mean error: 285.981534
+Nov 05, 2025 10:39:30 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 79 of 144. Params of iter=50, depth=7, lr=0.100000, min=1, sub=1.000000. Total mean error: 423.536093
+Nov 05, 2025 10:40:04 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 80 of 144. Params of iter=50, depth=7, lr=0.100000, min=3, sub=1.000000. Total mean error: 340.206855
+Nov 05, 2025 10:40:37 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 81 of 144. Params of iter=50, depth=7, lr=0.100000, min=5, sub=1.000000. Total mean error: 303.532078
+Nov 05, 2025 10:40:51 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 82 of 144. Params of iter=50, depth=7, lr=0.300000, min=1, sub=1.000000. Total mean error: 408.814675
+Nov 05, 2025 10:41:14 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 83 of 144. Params of iter=50, depth=7, lr=0.300000, min=3, sub=1.000000. Total mean error: 354.368513
+Nov 05, 2025 10:41:46 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 84 of 144. Params of iter=50, depth=7, lr=0.300000, min=5, sub=1.000000. Total mean error: 391.645027
+Nov 05, 2025 10:42:45 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 85 of 144. Params of iter=50, depth=9, lr=0.010000, min=1, sub=1.000000. Total mean error: 393.744094
+Nov 05, 2025 10:43:31 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 86 of 144. Params of iter=50, depth=9, lr=0.010000, min=3, sub=1.000000. Total mean error: 347.698197
+Nov 05, 2025 10:44:14 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 87 of 144. Params of iter=50, depth=9, lr=0.010000, min=5, sub=1.000000. Total mean error: 314.905735
+Nov 05, 2025 10:45:13 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 88 of 144. Params of iter=50, depth=9, lr=0.030000, min=1, sub=1.000000. Total mean error: 369.348049
+Nov 05, 2025 10:45:59 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 89 of 144. Params of iter=50, depth=9, lr=0.030000, min=3, sub=1.000000. Total mean error: 358.830818
+Nov 05, 2025 10:46:43 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 90 of 144. Params of iter=50, depth=9, lr=0.030000, min=5, sub=1.000000. Total mean error: 308.748198
+Nov 05, 2025 10:47:04 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 91 of 144. Params of iter=50, depth=9, lr=0.100000, min=1, sub=1.000000. Total mean error: 379.039949
+Nov 05, 2025 10:47:46 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 92 of 144. Params of iter=50, depth=9, lr=0.100000, min=3, sub=1.000000. Total mean error: 380.824528
+Nov 05, 2025 10:48:32 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 93 of 144. Params of iter=50, depth=9, lr=0.100000, min=5, sub=1.000000. Total mean error: 331.783061
+Nov 05, 2025 10:48:44 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 94 of 144. Params of iter=50, depth=9, lr=0.300000, min=1, sub=1.000000. Total mean error: 411.657844
+Nov 05, 2025 10:49:07 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 95 of 144. Params of iter=50, depth=9, lr=0.300000, min=3, sub=1.000000. Total mean error: 419.786788
+Nov 05, 2025 10:49:43 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 96 of 144. Params of iter=50, depth=9, lr=0.300000, min=5, sub=1.000000. Total mean error: 356.230908
+Nov 05, 2025 10:50:14 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 97 of 144. Params of iter=100, depth=3, lr=0.010000, min=1, sub=1.000000. Total mean error: 240.616197
+Nov 05, 2025 10:50:44 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 98 of 144. Params of iter=100, depth=3, lr=0.010000, min=3, sub=1.000000. Total mean error: 255.812599
+Nov 05, 2025 10:51:15 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 99 of 144. Params of iter=100, depth=3, lr=0.010000, min=5, sub=1.000000. Total mean error: 256.918687
+Nov 05, 2025 10:51:46 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 100 of 144. Params of iter=100, depth=3, lr=0.030000, min=1, sub=1.000000. Total mean error: 248.579883
+Nov 05, 2025 10:52:18 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 101 of 144. Params of iter=100, depth=3, lr=0.030000, min=3, sub=1.000000. Total mean error: 258.310437
+Nov 05, 2025 10:52:54 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 102 of 144. Params of iter=100, depth=3, lr=0.030000, min=5, sub=1.000000. Total mean error: 256.996907
+Nov 05, 2025 10:53:27 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 103 of 144. Params of iter=100, depth=3, lr=0.100000, min=1, sub=1.000000. Total mean error: 268.226946
+Nov 05, 2025 10:54:00 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 104 of 144. Params of iter=100, depth=3, lr=0.100000, min=3, sub=1.000000. Total mean error: 279.780442
+Nov 05, 2025 10:54:35 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 105 of 144. Params of iter=100, depth=3, lr=0.100000, min=5, sub=1.000000. Total mean error: 260.729686
+Nov 05, 2025 10:55:09 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 106 of 144. Params of iter=100, depth=3, lr=0.300000, min=1, sub=1.000000. Total mean error: 313.137722
+Nov 05, 2025 10:55:42 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 107 of 144. Params of iter=100, depth=3, lr=0.300000, min=3, sub=1.000000. Total mean error: 346.443151
+Nov 05, 2025 10:56:15 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 108 of 144. Params of iter=100, depth=3, lr=0.300000, min=5, sub=1.000000. Total mean error: 310.861781
+Nov 05, 2025 10:57:10 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 109 of 144. Params of iter=100, depth=5, lr=0.010000, min=1, sub=1.000000. Total mean error: 261.944116
+Nov 05, 2025 10:58:02 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 110 of 144. Params of iter=100, depth=5, lr=0.010000, min=3, sub=1.000000. Total mean error: 261.827422
+Nov 05, 2025 10:58:56 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 111 of 144. Params of iter=100, depth=5, lr=0.010000, min=5, sub=1.000000. Total mean error: 282.330800
+Nov 05, 2025 10:59:53 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 112 of 144. Params of iter=100, depth=5, lr=0.030000, min=1, sub=1.000000. Total mean error: 322.129550
+Nov 05, 2025 11:00:49 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 113 of 144. Params of iter=100, depth=5, lr=0.030000, min=3, sub=1.000000. Total mean error: 318.119083
+Nov 05, 2025 11:01:43 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 114 of 144. Params of iter=100, depth=5, lr=0.030000, min=5, sub=1.000000. Total mean error: 296.240344
+Nov 05, 2025 11:02:22 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 115 of 144. Params of iter=100, depth=5, lr=0.100000, min=1, sub=1.000000. Total mean error: 324.477961
+Nov 05, 2025 11:03:08 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 116 of 144. Params of iter=100, depth=5, lr=0.100000, min=3, sub=1.000000. Total mean error: 343.218850
+Nov 05, 2025 11:04:01 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 117 of 144. Params of iter=100, depth=5, lr=0.100000, min=5, sub=1.000000. Total mean error: 283.022052
+Nov 05, 2025 11:04:28 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 118 of 144. Params of iter=100, depth=5, lr=0.300000, min=1, sub=1.000000. Total mean error: 379.535271
+Nov 05, 2025 11:05:04 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 119 of 144. Params of iter=100, depth=5, lr=0.300000, min=3, sub=1.000000. Total mean error: 368.331059
+Nov 05, 2025 11:05:44 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 120 of 144. Params of iter=100, depth=5, lr=0.300000, min=5, sub=1.000000. Total mean error: 330.286456
+Nov 05, 2025 11:07:15 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 121 of 144. Params of iter=100, depth=7, lr=0.010000, min=1, sub=1.000000. Total mean error: 342.306801
+Nov 05, 2025 11:08:37 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 122 of 144. Params of iter=100, depth=7, lr=0.010000, min=3, sub=1.000000. Total mean error: 291.612835
+Nov 05, 2025 11:09:54 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 123 of 144. Params of iter=100, depth=7, lr=0.010000, min=5, sub=1.000000. Total mean error: 266.459073
+Nov 05, 2025 11:11:24 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 124 of 144. Params of iter=100, depth=7, lr=0.030000, min=1, sub=1.000000. Total mean error: 417.954822
+Nov 05, 2025 11:12:45 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 125 of 144. Params of iter=100, depth=7, lr=0.030000, min=3, sub=1.000000. Total mean error: 283.353108
+Nov 05, 2025 11:13:59 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 126 of 144. Params of iter=100, depth=7, lr=0.030000, min=5, sub=1.000000. Total mean error: 319.664007
+Nov 05, 2025 11:14:34 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 127 of 144. Params of iter=100, depth=7, lr=0.100000, min=1, sub=1.000000. Total mean error: 389.549787
+Nov 05, 2025 11:15:25 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 128 of 144. Params of iter=100, depth=7, lr=0.100000, min=3, sub=1.000000. Total mean error: 320.719775
+Nov 05, 2025 11:16:23 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 129 of 144. Params of iter=100, depth=7, lr=0.100000, min=5, sub=1.000000. Total mean error: 356.040968
+Nov 05, 2025 11:16:44 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 130 of 144. Params of iter=100, depth=7, lr=0.300000, min=1, sub=1.000000. Total mean error: 359.168008
+Nov 05, 2025 11:17:16 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 131 of 144. Params of iter=100, depth=7, lr=0.300000, min=3, sub=1.000000. Total mean error: 335.873287
+Nov 05, 2025 11:17:55 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 132 of 144. Params of iter=100, depth=7, lr=0.300000, min=5, sub=1.000000. Total mean error: 355.258972
+Nov 05, 2025 11:20:22 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 133 of 144. Params of iter=100, depth=9, lr=0.010000, min=1, sub=1.000000. Total mean error: 376.926836
+Nov 05, 2025 11:22:21 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 134 of 144. Params of iter=100, depth=9, lr=0.010000, min=3, sub=1.000000. Total mean error: 347.585595
+Nov 05, 2025 11:24:07 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 135 of 144. Params of iter=100, depth=9, lr=0.010000, min=5, sub=1.000000. Total mean error: 290.742222
+Nov 05, 2025 11:25:27 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 136 of 144. Params of iter=100, depth=9, lr=0.030000, min=1, sub=1.000000. Total mean error: 383.559547
+Nov 05, 2025 11:27:17 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 137 of 144. Params of iter=100, depth=9, lr=0.030000, min=3, sub=1.000000. Total mean error: 356.624287
+Nov 05, 2025 11:29:00 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 138 of 144. Params of iter=100, depth=9, lr=0.030000, min=5, sub=1.000000. Total mean error: 331.399185
+Nov 05, 2025 11:29:28 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 139 of 144. Params of iter=100, depth=9, lr=0.100000, min=1, sub=1.000000. Total mean error: 381.254627
+Nov 05, 2025 11:30:20 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 140 of 144. Params of iter=100, depth=9, lr=0.100000, min=3, sub=1.000000. Total mean error: 330.827305
+Nov 05, 2025 11:31:33 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 141 of 144. Params of iter=100, depth=9, lr=0.100000, min=5, sub=1.000000. Total mean error: 357.755831
+Nov 05, 2025 11:31:50 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 142 of 144. Params of iter=100, depth=9, lr=0.300000, min=1, sub=1.000000. Total mean error: 414.288265
+Nov 05, 2025 11:32:16 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 143 of 144. Params of iter=100, depth=9, lr=0.300000, min=3, sub=1.000000. Total mean error: 418.446484
+Nov 05, 2025 11:32:56 AM org.f1.regression.EvaluationResult lambda$parallelGridSearch$0
+INFO: Version 144 of 144. Params of iter=100, depth=9, lr=0.300000, min=5, sub=1.000000. Total mean error: 375.423212

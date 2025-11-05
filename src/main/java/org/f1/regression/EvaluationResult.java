@@ -1,6 +1,7 @@
 package org.f1.regression;
 
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
@@ -8,11 +9,20 @@ import org.apache.spark.mllib.regression.LabeledPoint;
 import org.apache.spark.mllib.tree.GradientBoostedTrees;
 import org.apache.spark.mllib.tree.configuration.BoostingStrategy;
 import org.apache.spark.mllib.tree.model.GradientBoostedTreesModel;
+import org.f1.service.RegressionService;
+import org.jetbrains.annotations.NotNull;
 import scala.Tuple2;
 
+import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
+@Slf4j
 @Data
 public class EvaluationResult {
     private final HyperParameters hyperParameters;
@@ -22,11 +32,17 @@ public class EvaluationResult {
     private static final int numFolds = 5;
 
 
-    public static EvaluationResult parallelGridSearch(JavaRDD<LabeledPoint> dataSet, JavaSparkContext sparkContext, Map<Integer, Integer> categoricalFeaturesInfo) {
+    public static EvaluationResult parallelGridSearch(JavaRDD<LabeledPoint> dataSet, JavaSparkContext sparkContext, Map<Integer, Integer> categoricalFeaturesInfo) throws IOException {
+        Logger logger = getEvaluationResultLogger();
+
         List<HyperParameters> paramGrid = generateParameterGrid();
         dataSet.cache();
 
+        AtomicInteger count = new AtomicInteger(0);
+
         Set<EvaluationResult> results = paramGrid.parallelStream().map(params -> {
+            int currentCount = count.incrementAndGet();
+
             double totalMSE = 0.0;
             double totalMAE = 0.0;
             double totalR2 = 0.0;
@@ -64,6 +80,7 @@ public class EvaluationResult {
                     testing.unpersist();
                 }
             }
+            logger.info(String.format("Version %d of %d. Params of %s. Total mean error: %f", currentCount, paramGrid.size(), params, totalMSE / numFolds));
             return new EvaluationResult(
                     params,
                     totalMSE / numFolds,
@@ -127,5 +144,15 @@ public class EvaluationResult {
         double residualSS = predictionAndLabel.mapToDouble(pl ->
                 Math.pow(pl._1() - pl._2(), 2)).sum();
         return 1 - (residualSS / totalSS);
+    }
+
+    private static @NotNull Logger getEvaluationResultLogger() throws IOException {
+        Logger logger = Logger.getLogger(RegressionService.class.getName());
+        FileHandler fh;
+        fh = new FileHandler("/Users/lauren.darlaston/workspace/F1-Point-Calc/machineLearning.log");
+        logger.addHandler(fh);
+        SimpleFormatter formatter = new SimpleFormatter();
+        fh.setFormatter(formatter);
+        return logger;
     }
 }

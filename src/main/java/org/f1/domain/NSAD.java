@@ -2,7 +2,6 @@ package org.f1.domain;
 
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import org.apache.spark.mllib.linalg.DenseVector;
 import org.apache.spark.mllib.linalg.Vector;
@@ -29,12 +28,12 @@ public class NSAD {
         return new LabeledPoint(actualPoints, vector);
     }
 
-    public static NSAD buildFullNSAD(FullPointEntity fullPointEntity, String raceName, int id) {
+    public static NSAD buildFullNSAD(FullPointEntity fullPointEntity, String raceName, int meetingEntityReference) {
         NSAD basicNSAD = buildBaseNSAD(fullPointEntity, raceName);
         Integer actualPoints = fullPointEntity.getRaceList().stream().filter(r -> r.name().equals(raceName)).findFirst().orElseThrow().totalPoints().intValue();
 
         basicNSAD.setActualPoints(actualPoints);
-        basicNSAD.setId(id);
+        basicNSAD.setMeetingEntityReference(meetingEntityReference);
 
         return basicNSAD;
     }

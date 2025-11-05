@@ -2,7 +2,6 @@ package org.f1.service;
 
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.mllib.regression.LabeledPoint;
@@ -10,7 +9,6 @@ import org.apache.spark.mllib.tree.GradientBoostedTrees;
 import org.apache.spark.mllib.tree.configuration.BoostingStrategy;
 import org.apache.spark.mllib.tree.model.DecisionTreeModel;
 import org.apache.spark.mllib.tree.model.GradientBoostedTreesModel;
-import org.f1.calculations.ScoreCalculator;
 import org.f1.controller.model.response.TrainModelResponse;
 import org.f1.domain.*;
 import org.f1.parsing.CSVParsing;
@@ -18,7 +16,6 @@ import org.f1.regression.EvaluationResult;
 import org.f1.repository.MERRepository;
 import org.f1.repository.NSADRepository;
 import org.f1.repository.TeamRepository;
-import org.f1.utils.MathUtils;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -35,6 +32,7 @@ public class RegressionService {
     private static final Set<FullPointEntity> teams2024 = CSVParsing.parseFullPointEntities("Teams_Full_2024.csv", TEAM);
     private static final Set<FullPointEntity> DRIVER_SET = CSVParsing.parseFullPointEntities("Drivers_Full.csv", DRIVER);
     private static final Set<FullPointEntity> TEAM_SET = CSVParsing.parseFullPointEntities("Teams_Full.csv", TEAM);
+    private static final Set<FullPointEntity> drivers2023 = CSVParsing.parseFullPointEntities("Drivers_Full_2023.csv", DRIVER);
 
 
     private final DriverService driverService;
@@ -57,6 +55,7 @@ public class RegressionService {
     public void populateNSADRegressionData() {
         populateNSADyear(DRIVER_SET, 2025);
         populateNSADyear(drivers2024, 2024);
+        populateNSADyear(drivers2023, 2023);
         populateNSADyear(TEAM_SET, 2025);
         populateNSADyear(teams2024, 2024);
     }
@@ -101,7 +100,7 @@ public class RegressionService {
             featureImportanceMap.put(featureNames[i], importance);
         }
 
-        String modelPath = "src/main/resources/regressionModel";
+        String modelPath = "src/main/resources/regressionModel2";
         FileSystem fs = FileSystem.get(sparkContext.hadoopConfiguration());
         fs.delete(new Path(modelPath), true);
         bestModel.save(sparkContext.sc(), modelPath);
@@ -154,14 +153,15 @@ public class RegressionService {
                 if (entity.getRaceNameList().contains(shortName)) {
                     List<Double> pointList = getListOfPoints(entity.getRaceList(), shortName);
                     if (!pointList.isEmpty()) {
-                        Integer id;
+                        Integer mer;
                         if (entity.isDriver()) {
-                            id = getDriverMerId(year, meeting, entity);
+                            mer = getDriverMerId(year, meeting, entity);
                         } else {
-                            id = getTeamMerId(year, meeting, entity);
+                            mer = getTeamMerId(year, meeting, entity);
                         }
 
-                        NSAD nsad = NSAD.buildFullNSAD(entity, shortName, id);
+
+                        NSAD nsad = NSAD.buildFullNSAD(entity, shortName, mer);
                         returnSet.add(nsad);
                     } else {
                         System.out.println("Skipping NSAD entry for entity " + entity.getName() + " with year " + year + " with circuit " + shortName);
