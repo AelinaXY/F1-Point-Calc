@@ -4,14 +4,14 @@ import java.util.List;
 
 public enum TeamLookup {
 
-    RACING_BULLS("Racing Bulls", List.of("VRacing Bulls", "VCARB"), List.of("AlphaTauri", "RB", "Racing Bulls")),
+    RACING_BULLS("Racing Bulls", List.of("VRacing Bulls", "VCARB", "AlphaTauri"), List.of("AlphaTauri", "RB", "Racing Bulls")),
     ASTON_MARTIN("Aston Martin", List.of("Aston Martin"), List.of("Aston Martin")),
     MERCEDES("Mercedes", List.of("Mercedes"), List.of("Mercedes")),
     WILLIAMS("Williams", List.of("Williams"), List.of("Williams")),
     RED_BULL_RACING("Red Bull Racing", List.of("Red Bull Racing"), List.of("Red Bull Racing")),
-    KICK_SAUBER("Kick Sauber", List.of("Kick Sauber"), List.of("Kick Sauber")),
+    KICK_SAUBER("Kick Sauber", List.of("Kick Sauber", "Alfa Romeo"), List.of("Kick Sauber", "Alfa Romeo")),
     ALPINE("Alpine", List.of("Alpine"), List.of("Alpine")),
-    HAAS("Haas", List.of("Haas"), List.of("Haas F1 Team", "Alfa Romeo")),
+    HAAS("Haas", List.of("Haas"), List.of("Haas F1 Team")),
     FERRARI("Ferrari", List.of("Ferrari"), List.of("Ferrari")),
     MCLAREN("Mclaren", List.of("Mclaren"), List.of("McLaren"));
 

@@ -33,7 +33,7 @@ public class RegressionService {
     private static final Set<FullPointEntity> DRIVER_SET = CSVParsing.parseFullPointEntities("Drivers_Full.csv", DRIVER);
     private static final Set<FullPointEntity> TEAM_SET = CSVParsing.parseFullPointEntities("Teams_Full.csv", TEAM);
     private static final Set<FullPointEntity> drivers2023 = CSVParsing.parseFullPointEntities("Drivers_Full_2023.csv", DRIVER);
-
+    private static final Set<FullPointEntity> teams2023 = CSVParsing.parseFullPointEntities("Teams_Full_2023.csv", TEAM);
 
     private final DriverService driverService;
     private final NSADRepository nsadRepository;
@@ -58,6 +58,8 @@ public class RegressionService {
         populateNSADyear(drivers2023, 2023);
         populateNSADyear(TEAM_SET, 2025);
         populateNSADyear(teams2024, 2024);
+        populateNSADyear(teams2023, 2023);
+
     }
 
     public TrainModelResponse trainNSADRegressionModel() throws IOException {
