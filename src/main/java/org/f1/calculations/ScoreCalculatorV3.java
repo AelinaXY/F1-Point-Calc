@@ -16,7 +16,7 @@ public class ScoreCalculatorV3 implements ScoreCalculatorInterface {
         this.sparkContext = javaSparkContext;
 
         this.gradientBoostedTreesModel = GradientBoostedTreesModel
-                .load(sparkContext.sc(), "src/main/resources/regressionModel");
+                .load(sparkContext.sc(), "src/main/resources/regressionModelV2");
     }
 
     @Override

@@ -101,11 +101,11 @@ public class EvaluationResult {
     private static List<HyperParameters> generateParameterGrid() {
         List<HyperParameters> paramGrid = new ArrayList<>();
 
-        int[] numIterations = {20, 50, 100};
-        int[] maxDepths = {3, 5, 7, 9};
-        double[] learningRates = {0.01, 0.03, 0.1, 0.3};
-        int[] minInstancesPerNode = {1, 3, 5};
-        double[] subsamplingRates = {1};
+        int[] numIterations = {25, 50, 75, 100};
+        int[] maxDepths = {3, 4, 5, 6, 7, 8, 9};
+        double[] learningRates = {0.01, 0.03, 0.065, 0.1, 0.2, 0.3};
+        int[] minInstancesPerNode = {1, 2, 3, 4, 5};
+        double[] subsamplingRates = {0.8, 0.9, 1.0};
 
         for (int numIterationsValue : numIterations) {
             for (int maxDepthValue : maxDepths) {
