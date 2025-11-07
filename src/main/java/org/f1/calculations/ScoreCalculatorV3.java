@@ -2,8 +2,10 @@ package org.f1.calculations;
 
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.mllib.tree.model.GradientBoostedTreesModel;
-import org.f1.domain.FullPointEntity;
-import org.f1.domain.NSAD;
+import org.f1.domain.*;
+import org.f1.repository.TeamRepository;
+import org.f1.service.DriverService;
+import org.f1.service.RegressionService;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -11,25 +13,40 @@ import org.springframework.stereotype.Service;
 public class ScoreCalculatorV3 implements ScoreCalculatorInterface {
     private final JavaSparkContext sparkContext;
     private final GradientBoostedTreesModel gradientBoostedTreesModel;
+    private final TeamRepository teamRepository;
+    private final DriverService driverService;
 
-    public ScoreCalculatorV3(JavaSparkContext javaSparkContext) {
+
+    public ScoreCalculatorV3(JavaSparkContext javaSparkContext, TeamRepository teamRepository, DriverService driverService) {
         this.sparkContext = javaSparkContext;
 
         this.gradientBoostedTreesModel = GradientBoostedTreesModel
-                .load(sparkContext.sc(), "src/main/resources/regressionModelV2");
+                .load(sparkContext.sc(), "src/main/resources/regressionModelV3");
+        this.teamRepository = teamRepository;
+        this.driverService = driverService;
     }
 
     @Override
     @Cacheable("scoreV3")
     public Double calculateScore(FullPointEntity fullPointEntity, String raceName, boolean isSprint) {
-        NSAD nsad = NSAD.buildBaseNSAD(fullPointEntity, raceName);
-
-        double output = gradientBoostedTreesModel.predict(nsad.toLabeledPoint().features());
-
-        if (isSprint) {
-            output = output * 1.19;
+        Integer teamId;
+        if (fullPointEntity.isDriver()) {
+            teamId = getDriverMerId(fullPointEntity);
+        } else {
+            teamId = getTeamId(fullPointEntity);
         }
-        return output;
+
+        NSAD nsad = NSAD.buildBaseNSAD(fullPointEntity, raceName, isSprint, teamId);
+
+        return gradientBoostedTreesModel.predict(nsad.toLabeledPoint().features());
+    }
+
+    private Integer getDriverMerId(FullPointEntity driver) {
+        return driverService.getLatestTeam(driver.getName());
+    }
+
+    private Integer getTeamId(FullPointEntity team) {
+        return teamRepository.getTeam(TeamLookup.csvToPreferred(team.getName()));
     }
 
 

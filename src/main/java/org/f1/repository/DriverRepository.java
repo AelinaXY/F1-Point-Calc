@@ -1,6 +1,6 @@
 package org.f1.repository;
 
-import org.f1.domain.DriverMeetingReference;
+import org.f1.domain.MeetingEntityReference;
 import org.f1.domain.openf1.Driver;
 import org.f1.generated.tables.records.DriverRecord;
 import org.jooq.DSLContext;
@@ -75,7 +75,7 @@ public class DriverRepository {
         return driverRecord;
     }
 
-    public DriverMeetingReference getDriverMRFromYearAndMeetingNames(String fullName, int year, List<String> meetingNames) {
+    public MeetingEntityReference getDriverMRFromYearAndMeetingNames(String fullName, int year, List<String> meetingNames) {
         return dslContext.select(DRIVER.ID, DRIVER.TEAM_ID, MEETING.ID)
                 .from(DRIVER.join(MEETING)
                         .on(DRIVER.MEETING_ID.eq(MEETING.ID)))
@@ -84,6 +84,16 @@ public class DriverRepository {
                         .equalIgnoreCase(fullName))
                 .and(MEETING.NAME.in(meetingNames))
                 .limit(1)
-                .fetchOneInto(DriverMeetingReference.class);
+                .fetchOneInto(MeetingEntityReference.class);
+    }
+
+    public Integer getLatestTeam(String fullName) {
+        return dslContext.select(DRIVER.TEAM_ID)
+                .from(DRIVER.join(MEETING)
+                        .on(DRIVER.MEETING_ID.eq(MEETING.ID)))
+                .where(DRIVER.FULL_NAME.equalIgnoreCase(fullName))
+                .orderBy(MEETING.DATE_START.desc())
+                .limit(1)
+                .fetchOneInto(Integer.class);
     }
 }

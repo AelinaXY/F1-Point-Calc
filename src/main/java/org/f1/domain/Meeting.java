@@ -51,6 +51,15 @@ public enum Meeting {
         return Arrays.stream(Meeting.values()).filter(meeting -> meeting.years.contains(year) && !meeting.sprintYears.contains(year)).collect(Collectors.toSet());
     }
 
+    public static List<String> getFullNames(String shortName) {
+        for (Meeting meetings : Meeting.values()) {
+            if (meetings.shortName.equals(shortName)) {
+                return meetings.fullNames;
+            }
+        }
+        return null;
+    }
+
     public String getShortName() {
         return shortName;
     }
@@ -61,5 +70,9 @@ public enum Meeting {
 
     public List<Integer> getYears() {
         return years;
+    }
+
+    public List<Integer> getSprintYears() {
+        return sprintYears;
     }
 }

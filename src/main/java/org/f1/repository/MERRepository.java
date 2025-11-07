@@ -1,6 +1,6 @@
 package org.f1.repository;
 
-import org.f1.domain.DriverMeetingReference;
+import org.f1.domain.MeetingEntityReference;
 import org.f1.generated.tables.records.MeetingEntityReferenceRecord;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
@@ -17,18 +17,26 @@ public class MERRepository {
         this.dslContext = dslContext;
     }
 
-    public Integer saveMeetingReference(DriverMeetingReference driverMeetingReference) {
+    public MeetingEntityReference saveMeetingReference(MeetingEntityReference meetingEntityReference) {
 
         MeetingEntityReferenceRecord meetingEntityReferenceRecord = new MeetingEntityReferenceRecord();
-        meetingEntityReferenceRecord.setDriverId(driverMeetingReference.driverId());
-        meetingEntityReferenceRecord.setMeetingId(driverMeetingReference.meetingId());
-        meetingEntityReferenceRecord.setTeamId(driverMeetingReference.teamId());
+        meetingEntityReferenceRecord.setDriverId(meetingEntityReference.getDriverId());
+        meetingEntityReferenceRecord.setMeetingId(meetingEntityReference.getMeetingId());
+        meetingEntityReferenceRecord.setTeamId(meetingEntityReference.getTeamId());
 
         MeetingEntityReferenceRecord returnedMeetingReferenceRecord = dslContext.insertInto(MEETING_ENTITY_REFERENCE)
                 .set(meetingEntityReferenceRecord)
                 .returning()
                 .fetchOneInto(MeetingEntityReferenceRecord.class);
 
-        return returnedMeetingReferenceRecord.getId();
+        return map(returnedMeetingReferenceRecord);
+    }
+
+    private MeetingEntityReference map(MeetingEntityReferenceRecord meetingEntityReferenceRecord) {
+
+        return new MeetingEntityReference(meetingEntityReferenceRecord.getId(),
+                meetingEntityReferenceRecord.getDriverId(),
+                meetingEntityReferenceRecord.getTeamId(),
+                meetingEntityReferenceRecord.getMeetingId());
     }
 }

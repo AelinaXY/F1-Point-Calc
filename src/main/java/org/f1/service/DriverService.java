@@ -1,7 +1,7 @@
 package org.f1.service;
 
 import org.f1.dao.OpenF1Dao;
-import org.f1.domain.DriverMeetingReference;
+import org.f1.domain.MeetingEntityReference;
 import org.f1.domain.openf1.Driver;
 import org.f1.domain.openf1.Team;
 import org.f1.repository.DriverRepository;
@@ -52,7 +52,12 @@ public class DriverService {
         return driverRepository.getDriverIdFromNumberAndSessionId(driverNumber, sessionId);
     }
 
-    public DriverMeetingReference getDriverMRFromYearAndMeetingName(String fullName, int year, List<String> meetingNames) {
+    public MeetingEntityReference getDriverMRFromYearAndMeetingName(String fullName, int year, List<String> meetingNames) {
         return driverRepository.getDriverMRFromYearAndMeetingNames(fullName, year, meetingNames);
+    }
+
+    public Integer getLatestTeam(String fullName)
+    {
+        return driverRepository.getLatestTeam(fullName);
     }
 }

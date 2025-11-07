@@ -73,6 +73,8 @@ public class RegressionService {
 
         Map<Integer, Integer> categoricalFeaturesInfo = new HashMap<>();
         categoricalFeaturesInfo.put(3, 2);
+        categoricalFeaturesInfo.put(4, 2);
+        categoricalFeaturesInfo.put(5, 12);
 
         EvaluationResult bestResult = EvaluationResult.parallelGridSearch(dataSet, sparkContext, categoricalFeaturesInfo);
 
@@ -91,7 +93,7 @@ public class RegressionService {
         System.out.println("R2: " + bestResult.getRSquared());
 
         String[] featureNames = {"Average Points", "4-Race Average",
-                "Standard Deviation", "Is Team"};
+                "Standard Deviation", "Is Team", "Is Sprint", "Team ID"};
         System.out.println("\nFeature Importances:");
 
         Map<String, Double> featureImportanceMap = new HashMap<>();
@@ -149,21 +151,22 @@ public class RegressionService {
 
     private void populateNSADyear(Set<FullPointEntity> fullPointEntities, int year) {
         Set<NSAD> returnSet = new HashSet<>();
-        for (Meeting meeting : Meeting.getNonSprintMeetings(year)) {
+        for (Meeting meeting : Meeting.getMeetings(year)) {
             String shortName = meeting.getShortName();
             for (FullPointEntity entity : fullPointEntities) {
                 if (entity.getRaceNameList().contains(shortName)) {
                     List<Double> pointList = getListOfPoints(entity.getRaceList(), shortName);
                     if (!pointList.isEmpty()) {
-                        Integer mer;
+                        MeetingEntityReference mer;
                         if (entity.isDriver()) {
                             mer = getDriverMerId(year, meeting, entity);
                         } else {
                             mer = getTeamMerId(year, meeting, entity);
                         }
 
+                        boolean isSprint = meeting.getSprintYears().contains(year);
 
-                        NSAD nsad = NSAD.buildFullNSAD(entity, shortName, mer);
+                        NSAD nsad = NSAD.buildFullNSAD(entity, shortName, mer.getId(), isSprint, mer.getTeamId());
                         returnSet.add(nsad);
                     } else {
                         System.out.println("Skipping NSAD entry for entity " + entity.getName() + " with year " + year + " with circuit " + shortName);
@@ -174,17 +177,17 @@ public class RegressionService {
         nsadRepository.saveNSAD(returnSet);
     }
 
-    private Integer getDriverMerId(int year, Meeting meeting, FullPointEntity driver) {
-        DriverMeetingReference driverMeetingReference = driverService.getDriverMRFromYearAndMeetingName(driver.getName(), year, meeting.getFullNames());
+    private MeetingEntityReference getDriverMerId(int year, Meeting meeting, FullPointEntity driver) {
+        MeetingEntityReference meetingEntityReference = driverService.getDriverMRFromYearAndMeetingName(driver.getName(), year, meeting.getFullNames());
 
-        return merRepository.saveMeetingReference(driverMeetingReference);
+        return merRepository.saveMeetingReference(meetingEntityReference);
     }
 
-    private Integer getTeamMerId(int year, Meeting meeting, FullPointEntity team) {
+    private MeetingEntityReference getTeamMerId(int year, Meeting meeting, FullPointEntity team) {
         Integer meetingId = meetingService.getMeeting(year, meeting.getFullNames());
         Integer teamId = teamRepository.getTeam(TeamLookup.csvToPreferred(team.getName()));
 
-        return merRepository.saveMeetingReference(new DriverMeetingReference(null, teamId, meetingId));
+        return merRepository.saveMeetingReference(new MeetingEntityReference(null, null, teamId, meetingId));
     }
 
     private List<Double> getListOfPoints(List<Race> raceList, String currentRace) {

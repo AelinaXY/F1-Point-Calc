@@ -39,6 +39,8 @@ public class NSADRepository {
         record.setAvg_4d1Points(nsadRecord.getAvg4d1Points());
         record.setStdev(nsadRecord.getStdev());
         record.setIsTeam(nsadRecord.getIsTeam());
+        record.setIsSprint(nsadRecord.getIsSprint());
+        record.setTeamId(nsadRecord.getTeamId());
         return record;
     }
 
@@ -54,6 +56,8 @@ public class NSADRepository {
                 record.getAvgPoints(),
                 record.getAvg_4d1Points(),
                 record.getStdev(),
-                record.getIsTeam());
+                record.getIsTeam(),
+                record.getIsSprint(),
+                record.getTeamId());
     }
 }
