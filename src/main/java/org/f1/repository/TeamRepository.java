@@ -29,7 +29,13 @@ public class TeamRepository {
                 .returning()
                 .fetchOne();
 
+        if (returnedTeamRecord == null) {
+            Integer teamId = getTeam(teamName);
+            return new Team(teamId, teamName);
+        }
+
         return new Team(returnedTeamRecord.getId(), returnedTeamRecord.getTeamName());
+
     }
 
     public Integer getTeam(String teamName) {
