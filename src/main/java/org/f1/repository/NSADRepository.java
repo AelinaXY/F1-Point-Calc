@@ -26,13 +26,15 @@ public class NSADRepository {
             NonSprintAggregateDataRecord record = toRecord(nsad);
             dslContext.insertInto(NON_SPRINT_AGGREGATE_DATA)
                     .set(record)
+                    .onConflict(NON_SPRINT_AGGREGATE_DATA.MEETING_ENTITY_REFERENCE)
+                    .doUpdate()
+                    .set(record)
                     .execute();
         }
     }
 
     private NonSprintAggregateDataRecord toRecord(NSAD nsadRecord) {
         NonSprintAggregateDataRecord record = new NonSprintAggregateDataRecord();
-
         record.setMeetingEntityReference(nsadRecord.getMeetingEntityReference());
         record.setActualPoints(nsadRecord.getActualPoints());
         record.setAvgPoints(nsadRecord.getAvgPoints());
