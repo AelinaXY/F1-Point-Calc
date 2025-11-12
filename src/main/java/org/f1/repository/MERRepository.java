@@ -2,6 +2,7 @@ package org.f1.repository;
 
 import org.f1.domain.MeetingEntityReference;
 import org.f1.generated.tables.records.MeetingEntityReferenceRecord;
+import org.f1.utils.DatabaseUtils;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Objects;
 
 import static org.f1.generated.tables.MeetingEntityReference.MEETING_ENTITY_REFERENCE;
+import static org.f1.utils.DatabaseUtils.equalOrIsNull;
 
 
 @Repository
@@ -43,12 +45,8 @@ public class MERRepository {
     }
 
     private MeetingEntityReference getMeetingEntityReference(MeetingEntityReference meetingEntityReference) {
-        Condition nullMatchDriverId = meetingEntityReference.getDriverId() != null ?
-                MEETING_ENTITY_REFERENCE.DRIVER_ID.eq(meetingEntityReference.getDriverId()) :
-                MEETING_ENTITY_REFERENCE.DRIVER_ID.isNull();
-
         MeetingEntityReferenceRecord meetingEntityReferenceRecord = dslContext.selectFrom(MEETING_ENTITY_REFERENCE)
-                .where(nullMatchDriverId
+                .where(equalOrIsNull(MEETING_ENTITY_REFERENCE.DRIVER_ID,  meetingEntityReference.getDriverId())
                         .and(MEETING_ENTITY_REFERENCE.MEETING_ID.eq(meetingEntityReference.getMeetingId()))
                         .and(MEETING_ENTITY_REFERENCE.TEAM_ID.eq(meetingEntityReference.getTeamId())))
                 .fetchOneInto(MeetingEntityReferenceRecord.class);
