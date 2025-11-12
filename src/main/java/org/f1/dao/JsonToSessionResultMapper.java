@@ -2,20 +2,15 @@ package org.f1.dao;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
-import org.f1.domain.openf1.Circuit;
-import org.f1.domain.openf1.Country;
-import org.f1.domain.openf1.Meeting;
 import org.f1.domain.openf1.SessionResult;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BinaryOperator;
 
-import static org.f1.domain.openf1.Meeting.MeetingBuilder.aMeeting;
 import static org.f1.domain.openf1.SessionResult.SessionResultBuilder.aSessionResult;
 
 @Component

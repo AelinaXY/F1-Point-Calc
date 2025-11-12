@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Set;
 
-import static org.f1.generated.Tables.*;
+import static org.f1.generated.Tables.NON_SPRINT_AGGREGATE_DATA;
 
 
 @Repository

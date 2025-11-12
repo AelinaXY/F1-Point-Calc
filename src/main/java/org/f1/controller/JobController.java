@@ -1,13 +1,12 @@
 package org.f1.controller;
 
-import org.apache.spark.api.java.JavaSparkContext;
 import org.f1.calculations.*;
+import org.f1.controller.model.request.OptimalTeamRequest;
+import org.f1.controller.model.response.OptimalTeamResponse;
 import org.f1.domain.BasicPointEntity;
 import org.f1.domain.DifferenceEntity;
 import org.f1.domain.FullPointEntity;
 import org.f1.domain.ScoreCard;
-import org.f1.controller.model.request.OptimalTeamRequest;
-import org.f1.controller.model.response.OptimalTeamResponse;
 import org.f1.parsing.CSVParsing;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

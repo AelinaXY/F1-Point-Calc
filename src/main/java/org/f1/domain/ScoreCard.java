@@ -1,7 +1,6 @@
 package org.f1.domain;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.f1.calculations.CostCalculator;
 import org.f1.calculations.ScoreCalculatorInterface;
 

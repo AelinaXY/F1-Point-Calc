@@ -2,8 +2,6 @@ package org.f1.repository;
 
 import org.f1.domain.MeetingEntityReference;
 import org.f1.generated.tables.records.MeetingEntityReferenceRecord;
-import org.f1.utils.DatabaseUtils;
-import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 

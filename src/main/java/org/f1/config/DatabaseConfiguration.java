@@ -1,10 +1,10 @@
 package org.f1.config;
 
+import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.jooq.DSLContext;
 
 
 @Configuration

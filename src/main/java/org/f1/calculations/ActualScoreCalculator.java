@@ -3,9 +3,6 @@ package org.f1.calculations;
 import org.f1.domain.FullPointEntity;
 import org.f1.domain.Race;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ActualScoreCalculator implements ScoreCalculatorInterface {
 
     public ActualScoreCalculator() {

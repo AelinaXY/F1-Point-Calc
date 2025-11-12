@@ -1,9 +1,9 @@
 package org.f1.parsing;
 
+import org.f1.domain.EntityType;
 import org.f1.domain.FullPointEntity;
 import org.f1.domain.Race;
 import org.f1.domain.Track;
-import org.f1.domain.EntityType;
 
 import java.io.*;
 import java.util.*;

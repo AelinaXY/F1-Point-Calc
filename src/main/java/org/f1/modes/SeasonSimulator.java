@@ -1,7 +1,10 @@
 package org.f1.modes;
 
 import org.f1.agents.CostCapMultAgent;
-import org.f1.calculations.*;
+import org.f1.calculations.ActualScoreCalculator;
+import org.f1.calculations.CostCalculator;
+import org.f1.calculations.RawDataCalculationV2;
+import org.f1.calculations.ScoreCalculator;
 import org.f1.domain.DifferenceEntity;
 import org.f1.domain.FullPointEntity;
 import org.f1.domain.ScoreCard;

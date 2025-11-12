@@ -2,10 +2,11 @@ package org.f1.calculations;
 
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.mllib.tree.model.GradientBoostedTreesModel;
-import org.f1.domain.*;
+import org.f1.domain.FullPointEntity;
+import org.f1.domain.NSAD;
+import org.f1.domain.TeamLookup;
 import org.f1.repository.TeamRepository;
 import org.f1.service.DriverService;
-import org.f1.service.RegressionService;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 

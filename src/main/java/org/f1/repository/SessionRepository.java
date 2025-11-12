@@ -1,8 +1,6 @@
 package org.f1.repository;
 
-import org.f1.domain.openf1.Circuit;
 import org.f1.domain.openf1.Session;
-import org.f1.generated.tables.records.CircuitRecord;
 import org.f1.generated.tables.records.SessionRecord;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;

@@ -3,7 +3,8 @@ package org.f1.dao;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import org.f1.domain.TeamLookup;
-import org.f1.domain.openf1.*;
+import org.f1.domain.openf1.Driver;
+import org.f1.domain.openf1.Team;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

@@ -12,7 +12,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 
-import static org.f1.domain.EntityType.*;
+import static org.f1.domain.EntityType.DRIVER;
+import static org.f1.domain.EntityType.TEAM;
 
 @Service
 public class RegressionDataCalculation extends AbstractCalculation {

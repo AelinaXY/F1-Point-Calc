@@ -2,7 +2,7 @@ package org.f1.repository;
 
 import org.f1.domain.openf1.Circuit;
 import org.f1.generated.tables.records.CircuitRecord;
-import org.jooq.*;
+import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
 import static org.f1.generated.tables.Circuit.CIRCUIT;
