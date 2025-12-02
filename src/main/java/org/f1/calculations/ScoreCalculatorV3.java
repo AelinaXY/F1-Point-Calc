@@ -37,7 +37,7 @@ public class ScoreCalculatorV3 implements ScoreCalculatorInterface {
             teamId = getTeamId(fullPointEntity);
         }
 
-        NSAD nsad = NSAD.buildBaseNSAD(fullPointEntity, raceName, isSprint, teamId);
+        NSAD nsad = NSAD.buildUnlabelledNSAD(fullPointEntity, raceName, isSprint, teamId);
 
         return gradientBoostedTreesModel.predict(nsad.toLabeledPoint().features());
     }

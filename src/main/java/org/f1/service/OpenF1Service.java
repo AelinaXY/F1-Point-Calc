@@ -9,12 +9,14 @@ public class OpenF1Service {
     private final MeetingService meetingService;
     private final SessionService sessionService;
     private final SessionResultService sessionResultService;
+    private final RegressionService regressionService;
 
-    public OpenF1Service(DriverService driverService, MeetingService meetingService,  SessionService sessionService, SessionResultService sessionResultService) {
+    public OpenF1Service(DriverService driverService, MeetingService meetingService, SessionService sessionService, SessionResultService sessionResultService, RegressionService regressionService) {
         this.driverService = driverService;
         this.meetingService = meetingService;
         this.sessionService = sessionService;
         this.sessionResultService = sessionResultService;
+        this.regressionService = regressionService;
     }
 
 
@@ -27,6 +29,8 @@ public class OpenF1Service {
         driverService.populateDrivers();
         Thread.sleep(500);
         sessionResultService.populateSessionResults();
+
+        regressionService.populateNSADRegressionData();
 
     }
 }

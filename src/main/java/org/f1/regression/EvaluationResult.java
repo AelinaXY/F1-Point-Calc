@@ -10,7 +10,6 @@ import org.apache.spark.mllib.tree.GradientBoostedTrees;
 import org.apache.spark.mllib.tree.configuration.BoostingStrategy;
 import org.apache.spark.mllib.tree.model.GradientBoostedTreesModel;
 import org.f1.service.RegressionService;
-import org.jetbrains.annotations.NotNull;
 import scala.Tuple2;
 
 import java.io.IOException;
@@ -145,7 +144,7 @@ public class EvaluationResult {
         return 1 - (residualSS / totalSS);
     }
 
-    private static @NotNull Logger getEvaluationResultLogger() throws IOException {
+    private static Logger getEvaluationResultLogger() throws IOException {
         Logger logger = Logger.getLogger(RegressionService.class.getName());
         FileHandler fh;
         fh = new FileHandler("/Users/lauren.darlaston/workspace/F1-Point-Calc/machineLearning.log");

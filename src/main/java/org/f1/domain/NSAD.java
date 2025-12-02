@@ -31,7 +31,7 @@ public class NSAD {
     }
 
     public static NSAD buildFullNSAD(FullPointEntity fullPointEntity, String raceName, int meetingEntityReference, boolean isSprint, double teamId) {
-        NSAD basicNSAD = buildBaseNSAD(fullPointEntity, raceName, isSprint, teamId);
+        NSAD basicNSAD = buildUnlabelledNSAD(fullPointEntity, raceName, isSprint, teamId);
         Integer actualPoints = fullPointEntity.getRaceList().stream().filter(r -> r.name().equals(raceName)).findFirst().orElseThrow().totalPoints().intValue();
 
         basicNSAD.setActualPoints(actualPoints);
@@ -41,7 +41,7 @@ public class NSAD {
     }
 
 
-    public static NSAD buildBaseNSAD(FullPointEntity fullPointEntity, String raceName, boolean isSprint, double teamId) {
+    public static NSAD buildUnlabelledNSAD(FullPointEntity fullPointEntity, String raceName, boolean isSprint, double teamId) {
         List<Double> pointList = getListOfPoints(fullPointEntity.getRaceList(), raceName);
         Double avgPoints = ScoreCalculator.calcAveragePoints(pointList);
         Double avg4d1Points = ScoreCalculator.calcThreeRaceAverage(new ArrayList<>(pointList));

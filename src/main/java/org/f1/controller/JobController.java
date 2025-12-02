@@ -36,7 +36,6 @@ public class JobController {
         List<String> driversNoLongerExistsIn2025 = List.of("Jack Doohan");
         DRIVER_SET = DRIVER_SET.stream().filter(d -> !driversNoLongerExistsIn2025.contains(d.getName())).collect(Collectors.toSet());
 
-        ScoreCalculator scoreCalculator = new ScoreCalculator();
         calculation = new RawDataCalculationV2(DRIVER_SET, TEAM_SET, 0, 0, DEFAULT_RACE_NAME, DEFAULT_IS_SPRINT, scoreCalculatorV3, DEFAULT_RACES_LEFT, DEFAULT_COST_CAP_MULT);
         regressionData = new RegressionDataCalculation(DRIVER_SET, TEAM_SET, scoreCalculatorV3);
     }
