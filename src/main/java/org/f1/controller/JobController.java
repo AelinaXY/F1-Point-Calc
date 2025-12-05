@@ -3,7 +3,7 @@ package org.f1.controller;
 import org.f1.calculations.*;
 import org.f1.controller.model.request.OptimalTeamRequest;
 import org.f1.controller.model.response.OptimalTeamResponse;
-import org.f1.domain.BasicPointEntity;
+import org.f1.controller.model.response.PredictResponse;
 import org.f1.domain.DifferenceEntity;
 import org.f1.domain.FullPointEntity;
 import org.f1.domain.ScoreCard;
@@ -32,7 +32,10 @@ public class JobController {
     private final RawDataCalculationV2 calculation;
     private final RegressionDataCalculation regressionData;
 
+    private final ScoreCalculatorV3 scoreCalculator;
+
     public JobController(ScoreCalculatorV3 scoreCalculatorV3) {
+        this.scoreCalculator = scoreCalculatorV3;
         List<String> driversNoLongerExistsIn2025 = List.of("Jack Doohan");
         DRIVER_SET = DRIVER_SET.stream().filter(d -> !driversNoLongerExistsIn2025.contains(d.getName())).collect(Collectors.toSet());
 
@@ -71,21 +74,32 @@ public class JobController {
         return new ResponseEntity<>(regressionData.compareScoreCalculators(), HttpStatus.OK);
     }
 
-    @GetMapping("/predictedCostChange")
+    @GetMapping("/predict")
     public ResponseEntity<?> predictedCostChange(@RequestParam String raceName,
                                                  @RequestParam boolean isSprint) {
-        ScoreCalculator calc = new ScoreCalculator();
+        Set<FullPointEntity> workingSet = new HashSet<>();
+        workingSet.addAll(DRIVER_SET);
+        workingSet.addAll(TEAM_SET);
 
-        DRIVER_SET.addAll(TEAM_SET);
-        List<FullPointEntity> sortedList = DRIVER_SET.stream().sorted(Comparator.comparing(BasicPointEntity::getName)).toList();
+        Map<String, PredictResponse> returnMap = workingSet.stream()
+                .map(entity -> new AbstractMap.SimpleEntry<>(
+                        entity.getName(),
+                        new PredictResponse(Math.round(scoreCalculator.calculateScore(entity, raceName, isSprint) * 100.0) / 100.0,
+                                Math.round(CostCalculator.calculateCostChange(entity,
+                                        raceName,
+                                        scoreCalculator.calculateScore(entity, raceName, isSprint)) * 100.0) / 100.0,
+                                TEAM_SET.contains(entity))))
+                .sorted((v1, v2) ->
+                        Double.compare(v2.getValue().predictedPoints(), v1.getValue().predictedPoints()))
+                .collect(Collectors.toMap(
+                        AbstractMap.SimpleEntry::getKey,
+                        AbstractMap.SimpleEntry::getValue,
+                        (v1, v2) -> {
+                            throw new IllegalStateException();
+                        },
+                        LinkedHashMap::new));
 
-        List<String> returnList = new ArrayList<>();
-        for (FullPointEntity entity : sortedList) {
-            returnList.add(entity.getName() + ": " +
-                    Math.round(CostCalculator.calculateCostChange(entity, raceName,
-                            calc.calculateScore(entity, raceName, isSprint)) * 100.0) / 100.0);
-        }
-        return new ResponseEntity<>(returnList, HttpStatus.OK);
+        return new ResponseEntity<>(returnMap, HttpStatus.OK);
     }
 
     private boolean validDriverList(List<String> driverList) {

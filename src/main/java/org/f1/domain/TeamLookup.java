@@ -15,9 +15,9 @@ public enum TeamLookup {
     FERRARI("Ferrari", List.of("Ferrari"), List.of("Ferrari")),
     MCLAREN("Mclaren", List.of("Mclaren"), List.of("McLaren"));
 
-    private String teamName;
-    private List<String> csvNames;
-    private List<String> apiNames;
+    private final String teamName;
+    private final List<String> csvNames;
+    private final List<String> apiNames;
 
     TeamLookup(String teamName, List<String> csvNames, List<String> apiNames) {
         this.teamName = teamName;
