@@ -46,7 +46,7 @@ public class OpenF1Controller {
     }
 
     @GetMapping("/populate")
-    public ResponseEntity<?> populateEntireDatabase() throws InterruptedException {
+    public ResponseEntity<?> populateEntireDatabase() {
         openF1Service.populate();
         return new ResponseEntity<>(HttpStatus.OK);
     }

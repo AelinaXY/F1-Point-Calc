@@ -20,16 +20,11 @@ public class OpenF1Service {
     }
 
 
-    public void populate() throws InterruptedException {
-        //Thread.sleep to not overload the api
+    public void populate() {
         meetingService.populateMeetings();
-        Thread.sleep(500);
         sessionService.populateSessions();
-        Thread.sleep(500);
         driverService.populateDrivers();
-        Thread.sleep(500);
         sessionResultService.populateSessionResults();
-
         regressionService.populateNSADRegressionData();
 
     }

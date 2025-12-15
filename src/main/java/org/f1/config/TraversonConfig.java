@@ -1,5 +1,8 @@
 package org.f1.config;
 
+import io.github.resilience4j.ratelimiter.RateLimiter;
+import io.github.resilience4j.ratelimiter.RateLimiterConfig;
+import io.github.resilience4j.ratelimiter.RateLimiterRegistry;
 import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
@@ -13,6 +16,7 @@ import org.springframework.context.annotation.Scope;
 import uk.co.autotrader.traverson.Traverson;
 import uk.co.autotrader.traverson.http.ApacheHttpTraversonClientAdapter;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -23,6 +27,20 @@ public class TraversonConfig {
     @Bean
     public Traverson getTraverson(HttpClientBuilder httpClientBuilder) {
         return new Traverson(new ApacheHttpTraversonClientAdapter(httpClientBuilder.build()));
+    }
+
+    @Bean
+    public HttpRequestInterceptor openF1RateLimiter() {
+        RateLimiterConfig config = RateLimiterConfig.custom()
+                .limitRefreshPeriod(Duration.ofSeconds(1))
+                .limitForPeriod(2)
+                .timeoutDuration(Duration.ofSeconds(5))
+                .build();
+
+        RateLimiterRegistry registry = RateLimiterRegistry.of(config);
+        RateLimiter rateLimiter = registry.rateLimiter("openF1-limiter");
+
+        return (request, entity, context) -> RateLimiter.waitForPermission(rateLimiter);
     }
 
     @Bean
