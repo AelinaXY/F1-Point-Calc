@@ -1,7 +1,6 @@
 package org.f1.regression;
 
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
@@ -18,10 +17,10 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
+import java.util.logging.Formatter;
+import java.util.logging.LogRecord;
 import java.util.stream.Collectors;
 
-@Slf4j
 @Data
 public class EvaluationResult {
     private final HyperParameters hyperParameters;
@@ -48,7 +47,7 @@ public class EvaluationResult {
 
         AtomicInteger count = new AtomicInteger(0);
 
-        Set<EvaluationResult> results = paramGrid.parallelStream().flatMap(params -> {
+        Set<EvaluationResult> results = paramGrid.stream().flatMap(params -> {
             int currentCount = count.incrementAndGet();
 
             Map<Integer, double[]> metricsMap = new HashMap<>();
@@ -94,10 +93,8 @@ public class EvaluationResult {
                         new HyperParameters(iter, params.getMaxDepth(), params.getLearningRate(),
                                 params.getMinInstancesPerNode(), params.getSubsamplingRate());
 
-                if (iter == 100) {
-                    logger.info(String.format("Version %d of %d. Params of %s. Total mean error: %f",
-                            currentCount, paramGrid.size(), currentParams, m[0] / numFolds));
-                }
+                logger.info(String.format("Version %d of %d [%d] | Total mean error: %f | Params of %s.",
+                        currentCount, paramGrid.size(), iter, m[0] / numFolds, currentParams));
 
                 return new EvaluationResult(
                         currentParams,
@@ -173,11 +170,17 @@ public class EvaluationResult {
 
     private static Logger getEvaluationResultLogger() throws IOException {
         Logger logger = Logger.getLogger(RegressionService.class.getName());
-        FileHandler fh;
-        fh = new FileHandler("/Users/lauren.darlaston/workspace/F1-Point-Calc/machineLearning.log");
+        FileHandler fh = new FileHandler("/Users/lauren.darlaston/workspace/F1-Point-Calc/machineLearning.log");
+
+        fh.setFormatter(new Formatter() {
+            @Override
+            public String format(LogRecord record) {
+                return record.getMessage() + System.lineSeparator();
+            }
+        });
         logger.addHandler(fh);
-        SimpleFormatter formatter = new SimpleFormatter();
-        fh.setFormatter(formatter);
+        logger.setUseParentHandlers(false);
+
         return logger;
     }
 }

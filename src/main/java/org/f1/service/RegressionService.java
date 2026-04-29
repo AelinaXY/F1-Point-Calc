@@ -34,6 +34,9 @@ public class RegressionService {
     private static final Set<FullPointEntity> TEAM_SET = CSVParsing.parseFullPointEntities("Teams_Full.csv", TEAM);
     private static final Set<FullPointEntity> drivers2023 = CSVParsing.parseFullPointEntities("Drivers_Full_2023.csv", DRIVER);
     private static final Set<FullPointEntity> teams2023 = CSVParsing.parseFullPointEntities("Teams_Full_2023.csv", TEAM);
+    private static final Set<FullPointEntity> drivers2025 = CSVParsing.parseFullPointEntities("Drivers_Full_2025.csv", DRIVER);
+    private static final Set<FullPointEntity> teams2025 = CSVParsing.parseFullPointEntities("Teams_Full_2025.csv", TEAM);
+
 
     private final DriverService driverService;
     private final NSADRepository nsadRepository;
@@ -53,10 +56,12 @@ public class RegressionService {
 
 
     public void populateNSADRegressionData() {
-        populateNSADyear(DRIVER_SET, 2025);
+        populateNSADyear(DRIVER_SET, 2026);
+        populateNSADyear(drivers2025, 2025);
         populateNSADyear(drivers2024, 2024);
         populateNSADyear(drivers2023, 2023);
-        populateNSADyear(TEAM_SET, 2025);
+        populateNSADyear(TEAM_SET, 2026);
+        populateNSADyear(teams2025, 2025);
         populateNSADyear(teams2024, 2024);
         populateNSADyear(teams2023, 2023);
 
@@ -74,7 +79,7 @@ public class RegressionService {
         Map<Integer, Integer> categoricalFeaturesInfo = new HashMap<>();
         categoricalFeaturesInfo.put(3, 2);
         categoricalFeaturesInfo.put(4, 2);
-        categoricalFeaturesInfo.put(5, 12);
+        categoricalFeaturesInfo.put(5, 14);
 
         EvaluationResult bestResult = EvaluationResult.parallelGridSearch(dataSet, sparkContext, categoricalFeaturesInfo);
 

@@ -22,7 +22,7 @@ public class ScoreCalculatorV3 implements ScoreCalculatorInterface {
         this.sparkContext = javaSparkContext;
 
         this.gradientBoostedTreesModel = GradientBoostedTreesModel
-                .load(sparkContext.sc(), "src/main/resources/regressionModelV3");
+                .load(sparkContext.sc(), "src/main/resources/regressionModel2V1");
         this.teamRepository = teamRepository;
         this.driverService = driverService;
     }

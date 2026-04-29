@@ -4,16 +4,19 @@ import java.util.List;
 
 public enum TeamLookup {
 
-    RACING_BULLS("Racing Bulls", List.of("VRacing Bulls", "VCARB", "AlphaTauri"), List.of("AlphaTauri", "RB", "Racing Bulls")),
+    RACING_BULLS("Racing Bulls", List.of("VRacing Bulls", "VCARB", "AlphaTauri", "Racing Bulls"), List.of("AlphaTauri", "RB", "Racing Bulls")),
     ASTON_MARTIN("Aston Martin", List.of("Aston Martin"), List.of("Aston Martin")),
     MERCEDES("Mercedes", List.of("Mercedes"), List.of("Mercedes")),
     WILLIAMS("Williams", List.of("Williams"), List.of("Williams")),
     RED_BULL_RACING("Red Bull Racing", List.of("Red Bull Racing"), List.of("Red Bull Racing")),
     KICK_SAUBER("Kick Sauber", List.of("Kick Sauber", "Alfa Romeo"), List.of("Kick Sauber", "Alfa Romeo")),
+    AUDI("Audi", List.of("Audi"), List.of("Audi")),
+    CADILLAC("Cadillac", List.of("Cadillac"), List.of("Cadillac")),
     ALPINE("Alpine", List.of("Alpine"), List.of("Alpine")),
     HAAS("Haas", List.of("Haas"), List.of("Haas F1 Team")),
     FERRARI("Ferrari", List.of("Ferrari"), List.of("Ferrari")),
-    MCLAREN("Mclaren", List.of("Mclaren"), List.of("McLaren"));
+    MCLAREN("Mclaren", List.of("Mclaren"), List.of("McLaren")),
+    NONEXISTENT("Nonexistent", List.of("Nonexistent"), List.of("Nonexistent"));
 
     private final String teamName;
     private final List<String> csvNames;
@@ -27,7 +30,7 @@ public enum TeamLookup {
 
     public static String apiToPreferred(String teamName) {
         if (teamName == null) {
-            return null;
+            return NONEXISTENT.teamName;
         }
         for (TeamLookup teamLookup : TeamLookup.values()) {
             if (teamLookup.apiNames.contains(teamName)) {

@@ -3,6 +3,7 @@ package org.f1.dao;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import org.f1.domain.openf1.SessionResult;
+import org.f1.exception.OpenF1IngestException;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -39,7 +40,10 @@ public class JsonToSessionResultMapper {
                         .build()
                 );
             } catch (Exception e) {
-                System.out.println(jsonObject);
+                throw new OpenF1IngestException("OpenF1 session_result row could not be mapped at index " + i
+                        + " for session_key " + jsonObject.getIntValue("session_key")
+                        + " and driver_number " + jsonObject.getIntValue("driver_number")
+                        + ". Row: " + jsonObject, e);
             }
         }
 

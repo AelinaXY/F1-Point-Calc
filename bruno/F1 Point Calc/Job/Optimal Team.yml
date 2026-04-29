@@ -1,0 +1,33 @@
+info:
+  name: Optimal Team
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: http://localhost:8080/api/job/optimalTeam?driverList=George Russell,Oliver Bearman,Esteban Ocon,Liam Lawson,Arvid Lindblad&teamList=Mercedes,Haas
+  params:
+    - name: driverList
+      value: George Russell,Oliver Bearman,Esteban Ocon,Liam Lawson,Arvid Lindblad
+      type: query
+    - name: teamList
+      value: Mercedes,Haas
+      type: query
+  body:
+    type: json
+    data: |-
+      {
+        "costCap": 105.4,
+        "transferLimit": 2,
+        "raceName": "Miami",
+        "isSprint": true,
+        "racesLeft": 19,
+        "costCapMult": 1.2
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

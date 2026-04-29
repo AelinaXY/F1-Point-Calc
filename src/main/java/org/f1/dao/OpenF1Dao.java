@@ -1,26 +1,33 @@
 package org.f1.dao;
 
+import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import org.f1.domain.openf1.Driver;
 import org.f1.domain.openf1.Meeting;
 import org.f1.domain.openf1.Session;
 import org.f1.domain.openf1.SessionResult;
+import org.f1.exception.OpenF1IngestException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import uk.co.autotrader.traverson.Traverson;
 import uk.co.autotrader.traverson.http.Response;
 
 import java.util.List;
+import java.util.function.Function;
 
 @Repository
 public class OpenF1Dao {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(OpenF1Dao.class);
+
     private final JsonToSessionResultMapper jsonToSessionResultMapper;
     private final JsonToDriverMapper jsonToDriverMapper;
-    private JsonToSessionMapper jsonToSessionMapper;
-    private Traverson traverson;
-    private String baseUrl;
-    private JsonToMeetingMapper jsonToMeetingMapper;
+    private final JsonToSessionMapper jsonToSessionMapper;
+    private final Traverson traverson;
+    private final String baseUrl;
+    private final JsonToMeetingMapper jsonToMeetingMapper;
 
 
     OpenF1Dao(Traverson traverson, @Value("${openf1.url}") String url, JsonToMeetingMapper jsonToMeetingMapper, JsonToSessionMapper jsonToSessionMapper, JsonToSessionResultMapper jsonToSessionResultMapper, JsonToDriverMapper jsonToDriverMapper) {
@@ -33,49 +40,38 @@ public class OpenF1Dao {
     }
 
     public List<Session> getAllSessions() {
-        Response<String> response = traverson.from(baseUrl + "sessions")
-                .get(String.class);
-
-
-        if (response.isSuccessful()) {
-            JSONArray responseArray = JSONArray.parse(response.getResource());
-            return jsonToSessionMapper.mapSessions(responseArray);
-
-        }
-        return null;
+        return getOpenF1List("sessions", jsonToSessionMapper::mapSessions);
     }
 
     public List<Meeting> getAllMeetings() {
-        Response<String> response = traverson.from(baseUrl + "meetings")
-                .get(String.class);
-
-        if (response.isSuccessful()) {
-            JSONArray responseArray = JSONArray.parse(response.getResource());
-            return jsonToMeetingMapper.mapMeetings(responseArray);
-        }
-        return null;
+        return getOpenF1List("meetings", jsonToMeetingMapper::mapMeetings);
     }
 
     public List<Driver> getAllDrivers() {
-        Response<String> response = traverson.from(baseUrl + "drivers")
-                .get(String.class);
-
-        if (response.isSuccessful()) {
-            JSONArray responseArray = JSONArray.parse(response.getResource());
-            return jsonToDriverMapper.mapDrivers(responseArray);
-        }
-        return null;
+        return getOpenF1List("drivers", jsonToDriverMapper::mapDrivers);
     }
 
     public List<SessionResult> getAllSessionResults() {
-        Response<String> response = traverson.from(baseUrl + "session_result")
-                .get(String.class);
-
-        if (response.isSuccessful()) {
-            JSONArray responseArray = JSONArray.parse(response.getResource());
-            return jsonToSessionResultMapper.mapSessionResults(responseArray);
-        }
-        return null;
+        return getOpenF1List("session_result", jsonToSessionResultMapper::mapSessionResults);
     }
 
+    private <T> List<T> getOpenF1List(String endpoint, Function<JSONArray, List<T>> mapper) {
+        String url = baseUrl + endpoint;
+        Response<String> response;
+
+        response = traverson.from(url).get(String.class);
+
+        if (response.isFailure()) {
+            String message = "OpenF1 request failed for " + endpoint
+                    + " with status " + response.getStatusCode()
+                    + " and response body: " + response.getResource();
+            LOGGER.error(message);
+            throw new OpenF1IngestException(message);
+        }
+
+        JSONArray responseArray = JSON.parseArray(response.getResource());
+        List<T> mappedResults = mapper.apply(responseArray);
+        LOGGER.info("Ingested {} records from OpenF1 endpoint {}", mappedResults.size(), endpoint);
+        return mappedResults;
+    }
 }

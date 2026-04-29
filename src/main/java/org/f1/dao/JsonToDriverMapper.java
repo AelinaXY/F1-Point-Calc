@@ -5,6 +5,7 @@ import com.alibaba.fastjson2.JSONObject;
 import org.f1.domain.TeamLookup;
 import org.f1.domain.openf1.Driver;
 import org.f1.domain.openf1.Team;
+import org.f1.exception.OpenF1IngestException;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -18,8 +19,18 @@ public class JsonToDriverMapper {
 
     public List<Driver> mapDrivers(JSONArray jsonArray) {
         List<Driver> drivers = new ArrayList<>();
+        List<String> unmappedDrivers = new ArrayList<>();
         for (int i = 0; i < jsonArray.size(); i++) {
             JSONObject jsonObject = jsonArray.getJSONObject(i);
+            String teamName = jsonObject.getString("team_name");
+            String preferredTeamName = TeamLookup.apiToPreferred(teamName);
+
+            if (preferredTeamName == null) {
+                unmappedDrivers.add("OpenF1 driver row has unmapped team_name '" + teamName
+                                + "' for driver_number " + jsonObject.getIntValue("driver_number")
+                                + " and meeting_key " + jsonObject.getIntValue("meeting_key")
+                                + " and driver_name " + jsonObject.getString("full_name"));
+            }
 
             drivers.add(aDriver()
                     .withBroadcastName(jsonObject.getString("broadcast_name"))
@@ -30,10 +41,14 @@ public class JsonToDriverMapper {
                     .withHeadshotUrl(jsonObject.getString("headshot_url"))
                     .withLastName(jsonObject.getString("last_name"))
                     .withNameAcronym(jsonObject.getString("name_acronym"))
-                    .withTeam(new Team(null, TeamLookup.apiToPreferred(jsonObject.getString("team_name"))))
+                    .withTeam(new Team(null, preferredTeamName))
                     .withMeetingId(jsonObject.getIntValue("meeting_key"))
                     .build()
             );
+        }
+
+        if(!unmappedDrivers.isEmpty()) {
+            throw new OpenF1IngestException("Unmapped drivers: " + unmappedDrivers);
         }
 
         return drivers;
