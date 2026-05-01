@@ -16,15 +16,12 @@ import java.util.logging.Logger;
 import java.util.logging.Formatter;
 import java.util.logging.LogRecord;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Data
 public class EvaluationResult {
     private final HyperParameters hyperParameters;
     private final double meanSquaredError;
-    private final double meanAbsoluteError;
-    private final double rSquared;
-    private static final int numFolds = 3;
+    private static final int numFolds = 5;
     private static final long SEED_BASE = 42L;
 
 
@@ -34,10 +31,42 @@ public class EvaluationResult {
         List<HyperParameters> paramGrid = generateParameterGrid();
 
         //Old best
-        paramGrid.addFirst(new HyperParameters(100, 3, 0.03, 1, 0.8));
+        paramGrid.addFirst(new HyperParameters(200, 2, 0.05, 3, 0.85));
         dataSet.cache();
         dataSet.count();
 
+        List<Dataset<Row>[]> folds = getFolds(dataSet);
+
+        logger.info("Starting two-stage hyperparameter tuning");
+        logger.info("STAGE 1: Shallow pass on all " + paramGrid.size() + " parameter combinations");
+
+        // Stage 1: Shallow pass with single fold evaluation
+        Set<EvaluationResult> shallowResults = evaluateHyperparameters(paramGrid, folds.subList(0,1) , logger);
+
+        logger.info("STAGE 1 Complete. Identifying top 5 candidates");
+
+        // Get top 5 parameter combinations by MSE
+        List<HyperParameters> top5Params = shallowResults.stream()
+                .sorted(Comparator.comparingDouble(EvaluationResult::getMeanSquaredError))
+                .limit(5)
+                .map(EvaluationResult::getHyperParameters)
+                .collect(Collectors.toList());
+
+        logger.info("Top 5 candidates selected. Starting STAGE 2: Full cross-validation.");
+
+        // Stage 2: Full evaluation with 3-fold cross-validation on top 5
+        Set<EvaluationResult> deepResults = evaluateHyperparameters(top5Params, folds, logger);
+
+        dataSet.unpersist();
+
+        Optional<EvaluationResult> bestResult = deepResults.stream().reduce((r1, r2) ->
+                r1.getMeanSquaredError() < r2.getMeanSquaredError() ? r1 : r2);
+
+        logger.info("Hyperparameter tuning complete.");
+        return bestResult.orElseThrow(() -> new RuntimeException("No results found"));
+    }
+
+    private static List<Dataset<Row>[]> getFolds(Dataset<Row> dataSet) {
         List<Dataset<Row>[]> folds = new ArrayList<>();
         for (int i = 0; i < numFolds; i++) {
             Dataset<Row>[] splits = dataSet.randomSplit(
@@ -49,16 +78,20 @@ public class EvaluationResult {
             splits[1].count();
             folds.add(splits);
         }
+        return folds;
+    }
+
+    private static Set<EvaluationResult> evaluateHyperparameters(List<HyperParameters> inputParams, List<Dataset<Row>[]> folds, Logger logger) {
+        RegressionEvaluator mseEvaluator = getEvaluator("mse");
 
         AtomicInteger count = new AtomicInteger(0);
-        RegressionEvaluator mseEvaluator = getEvaluator("mse");
-        RegressionEvaluator maeEvaluator = getEvaluator("mae");
-        RegressionEvaluator r2Evaluator = getEvaluator("r2");
 
-        Set<EvaluationResult> results = paramGrid.stream().flatMap(params -> {
+        return inputParams.stream().map(params -> {
             int currentCount = count.incrementAndGet();
 
-            double[] metrics = new double[3];
+            double mse = 0.0;
+
+            int numFolds = folds.size();
 
             for (Dataset<Row>[] fold : folds) {
                 Dataset<Row> training = fold[0];
@@ -67,31 +100,18 @@ public class EvaluationResult {
                 GBTRegressionModel model = buildRegressor(params).fit(training);
                 Dataset<Row> predictions = model.transform(testing).cache();
 
-                metrics[0] += mseEvaluator.evaluate(predictions);
-                metrics[1] += maeEvaluator.evaluate(predictions);
-                metrics[2] += r2Evaluator.evaluate(predictions);
+                mse += mseEvaluator.evaluate(predictions);
                 predictions.unpersist();
-
             }
 
-            logger.info(String.format("Version %d of %d | Total mean error: %f | Params of %s.",
-                    currentCount, paramGrid.size(), metrics[0] / numFolds, params));
+            logger.info(String.format("Pass: %d/%d | Avg MSE: %f | Params: %s",
+                    currentCount, inputParams.size(), mse / numFolds, params));
 
-            return Stream.of(new EvaluationResult(
+            return new EvaluationResult(
                     params,
-                    metrics[0] / numFolds,
-                    metrics[1] / numFolds,
-                    metrics[2] / numFolds
-            ));
+                    mse / numFolds
+            );
         }).collect(Collectors.toSet());
-
-
-        Optional<EvaluationResult> bestResult = results.stream().reduce((r1, r2) ->
-                r1.getMeanSquaredError() < r2.getMeanSquaredError() ? r1 : r2);
-
-        dataSet.unpersist();
-
-        return bestResult.orElseThrow(() -> new RuntimeException("No results found"));
     }
 
     public static GBTRegressor buildRegressor(HyperParameters params) {
@@ -118,11 +138,11 @@ public class EvaluationResult {
     private static List<HyperParameters> generateParameterGrid() {
         List<HyperParameters> paramGrid = new ArrayList<>();
 
-        int[] numIterations = {100, 125, 150, 200, 250};
-        int[] maxDepths = {2, 3};
-        double[] learningRates = {0.035, 0.05, 0.065};
-        int[] minInstancesPerNode = {3, 5, 8, 10};
-        double[] subsamplingRates = {0.8, 0.85, 0.9};
+        int[] numIterations = {175, 190, 210, 225};
+        int[] maxDepths = {2};
+        double[] learningRates = {0.0525, 0.055, 0.060};
+        int[] minInstancesPerNode = {2, 3, 4, 6};
+        double[] subsamplingRates = {0.87, 0.90, 0.925};
 
         for (int numIterationsValue : numIterations) {
             for (int maxDepthValue : maxDepths) {

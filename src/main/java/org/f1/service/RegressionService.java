@@ -79,8 +79,6 @@ public class RegressionService {
         System.out.println("Best parameters found:");
         System.out.println("Parameters: " + bestResult.getHyperParameters());
         System.out.println("MSE: " + bestResult.getMeanSquaredError());
-        System.out.println("MAE: " + bestResult.getMeanAbsoluteError());
-        System.out.println("R2: " + bestResult.getRSquared());
 
         String[] featureNames = {"Average Points", "4-Race Average",
                 "Standard Deviation", "Is Team", "Is Sprint", "Team ID"};
@@ -98,7 +96,7 @@ public class RegressionService {
         String modelPath = "src/main/resources/regressionModel2";
         bestModel.write().overwrite().save(modelPath);
 
-        return new TrainModelResponse(bestResult.getHyperParameters(), bestResult.getMeanSquaredError(), bestResult.getMeanAbsoluteError(), bestResult.getRSquared(), featureImportanceMap);
+        return new TrainModelResponse(bestResult.getHyperParameters(), bestResult.getMeanSquaredError(), featureImportanceMap);
     }
 
 

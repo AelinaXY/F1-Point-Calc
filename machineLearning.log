@@ -1,361 +1,155 @@
-Version 1 of 361 | Total mean error: 304.659252 | Params of iter=100, depth=3, lr=0.030000, min=1, sub=0.800000.
-Version 2 of 361 | Total mean error: 307.624761 | Params of iter=100, depth=2, lr=0.035000, min=3, sub=0.800000.
-Version 3 of 361 | Total mean error: 306.310395 | Params of iter=100, depth=2, lr=0.035000, min=3, sub=0.850000.
-Version 4 of 361 | Total mean error: 305.933465 | Params of iter=100, depth=2, lr=0.035000, min=3, sub=0.900000.
-Version 5 of 361 | Total mean error: 307.405215 | Params of iter=100, depth=2, lr=0.035000, min=5, sub=0.800000.
-Version 6 of 361 | Total mean error: 306.735741 | Params of iter=100, depth=2, lr=0.035000, min=5, sub=0.850000.
-Version 7 of 361 | Total mean error: 306.587509 | Params of iter=100, depth=2, lr=0.035000, min=5, sub=0.900000.
-Version 8 of 361 | Total mean error: 306.625106 | Params of iter=100, depth=2, lr=0.035000, min=8, sub=0.800000.
-Version 9 of 361 | Total mean error: 306.726260 | Params of iter=100, depth=2, lr=0.035000, min=8, sub=0.850000.
-Version 10 of 361 | Total mean error: 305.978299 | Params of iter=100, depth=2, lr=0.035000, min=8, sub=0.900000.
-Version 11 of 361 | Total mean error: 307.094186 | Params of iter=100, depth=2, lr=0.035000, min=10, sub=0.800000.
-Version 12 of 361 | Total mean error: 306.526171 | Params of iter=100, depth=2, lr=0.035000, min=10, sub=0.850000.
-Version 13 of 361 | Total mean error: 306.411924 | Params of iter=100, depth=2, lr=0.035000, min=10, sub=0.900000.
-Version 14 of 361 | Total mean error: 304.022894 | Params of iter=100, depth=2, lr=0.050000, min=3, sub=0.800000.
-Version 15 of 361 | Total mean error: 303.294069 | Params of iter=100, depth=2, lr=0.050000, min=3, sub=0.850000.
-Version 16 of 361 | Total mean error: 304.187968 | Params of iter=100, depth=2, lr=0.050000, min=3, sub=0.900000.
-Version 17 of 361 | Total mean error: 304.964991 | Params of iter=100, depth=2, lr=0.050000, min=5, sub=0.800000.
-Version 18 of 361 | Total mean error: 304.170016 | Params of iter=100, depth=2, lr=0.050000, min=5, sub=0.850000.
-Version 19 of 361 | Total mean error: 304.501131 | Params of iter=100, depth=2, lr=0.050000, min=5, sub=0.900000.
-Version 20 of 361 | Total mean error: 304.825397 | Params of iter=100, depth=2, lr=0.050000, min=8, sub=0.800000.
-Version 21 of 361 | Total mean error: 305.024122 | Params of iter=100, depth=2, lr=0.050000, min=8, sub=0.850000.
-Version 22 of 361 | Total mean error: 302.769337 | Params of iter=100, depth=2, lr=0.050000, min=8, sub=0.900000.
-Version 23 of 361 | Total mean error: 305.526203 | Params of iter=100, depth=2, lr=0.050000, min=10, sub=0.800000.
-Version 24 of 361 | Total mean error: 304.288324 | Params of iter=100, depth=2, lr=0.050000, min=10, sub=0.850000.
-Version 25 of 361 | Total mean error: 303.022198 | Params of iter=100, depth=2, lr=0.050000, min=10, sub=0.900000.
-Version 26 of 361 | Total mean error: 302.498842 | Params of iter=100, depth=2, lr=0.065000, min=3, sub=0.800000.
-Version 27 of 361 | Total mean error: 300.435708 | Params of iter=100, depth=2, lr=0.065000, min=3, sub=0.850000.
-Version 28 of 361 | Total mean error: 303.232332 | Params of iter=100, depth=2, lr=0.065000, min=3, sub=0.900000.
-Version 29 of 361 | Total mean error: 302.471820 | Params of iter=100, depth=2, lr=0.065000, min=5, sub=0.800000.
-Version 30 of 361 | Total mean error: 303.194788 | Params of iter=100, depth=2, lr=0.065000, min=5, sub=0.850000.
-Version 31 of 361 | Total mean error: 302.759710 | Params of iter=100, depth=2, lr=0.065000, min=5, sub=0.900000.
-Version 32 of 361 | Total mean error: 302.861024 | Params of iter=100, depth=2, lr=0.065000, min=8, sub=0.800000.
-Version 33 of 361 | Total mean error: 302.797500 | Params of iter=100, depth=2, lr=0.065000, min=8, sub=0.850000.
-Version 34 of 361 | Total mean error: 302.896361 | Params of iter=100, depth=2, lr=0.065000, min=8, sub=0.900000.
-Version 35 of 361 | Total mean error: 302.406500 | Params of iter=100, depth=2, lr=0.065000, min=10, sub=0.800000.
-Version 36 of 361 | Total mean error: 302.093492 | Params of iter=100, depth=2, lr=0.065000, min=10, sub=0.850000.
-Version 37 of 361 | Total mean error: 301.825506 | Params of iter=100, depth=2, lr=0.065000, min=10, sub=0.900000.
-Version 38 of 361 | Total mean error: 304.672242 | Params of iter=100, depth=3, lr=0.035000, min=3, sub=0.800000.
-Version 39 of 361 | Total mean error: 309.766996 | Params of iter=100, depth=3, lr=0.035000, min=3, sub=0.850000.
-Version 40 of 361 | Total mean error: 306.096910 | Params of iter=100, depth=3, lr=0.035000, min=3, sub=0.900000.
-Version 41 of 361 | Total mean error: 305.235188 | Params of iter=100, depth=3, lr=0.035000, min=5, sub=0.800000.
-Version 42 of 361 | Total mean error: 309.069575 | Params of iter=100, depth=3, lr=0.035000, min=5, sub=0.850000.
-Version 43 of 361 | Total mean error: 305.912033 | Params of iter=100, depth=3, lr=0.035000, min=5, sub=0.900000.
-Version 44 of 361 | Total mean error: 306.310583 | Params of iter=100, depth=3, lr=0.035000, min=8, sub=0.800000.
-Version 45 of 361 | Total mean error: 310.265245 | Params of iter=100, depth=3, lr=0.035000, min=8, sub=0.850000.
-Version 46 of 361 | Total mean error: 306.788214 | Params of iter=100, depth=3, lr=0.035000, min=8, sub=0.900000.
-Version 47 of 361 | Total mean error: 307.323743 | Params of iter=100, depth=3, lr=0.035000, min=10, sub=0.800000.
-Version 48 of 361 | Total mean error: 309.904767 | Params of iter=100, depth=3, lr=0.035000, min=10, sub=0.850000.
-Version 49 of 361 | Total mean error: 306.565192 | Params of iter=100, depth=3, lr=0.035000, min=10, sub=0.900000.
-Version 50 of 361 | Total mean error: 308.729876 | Params of iter=100, depth=3, lr=0.050000, min=3, sub=0.800000.
-Version 51 of 361 | Total mean error: 308.745186 | Params of iter=100, depth=3, lr=0.050000, min=3, sub=0.850000.
-Version 52 of 361 | Total mean error: 306.250972 | Params of iter=100, depth=3, lr=0.050000, min=3, sub=0.900000.
-Version 53 of 361 | Total mean error: 307.513664 | Params of iter=100, depth=3, lr=0.050000, min=5, sub=0.800000.
-Version 54 of 361 | Total mean error: 309.973730 | Params of iter=100, depth=3, lr=0.050000, min=5, sub=0.850000.
-Version 55 of 361 | Total mean error: 306.865889 | Params of iter=100, depth=3, lr=0.050000, min=5, sub=0.900000.
-Version 56 of 361 | Total mean error: 306.411181 | Params of iter=100, depth=3, lr=0.050000, min=8, sub=0.800000.
-Version 57 of 361 | Total mean error: 311.361912 | Params of iter=100, depth=3, lr=0.050000, min=8, sub=0.850000.
-Version 58 of 361 | Total mean error: 309.214398 | Params of iter=100, depth=3, lr=0.050000, min=8, sub=0.900000.
-Version 59 of 361 | Total mean error: 307.224125 | Params of iter=100, depth=3, lr=0.050000, min=10, sub=0.800000.
-Version 60 of 361 | Total mean error: 310.626129 | Params of iter=100, depth=3, lr=0.050000, min=10, sub=0.850000.
-Version 61 of 361 | Total mean error: 309.303009 | Params of iter=100, depth=3, lr=0.050000, min=10, sub=0.900000.
-Version 62 of 361 | Total mean error: 307.497590 | Params of iter=100, depth=3, lr=0.065000, min=3, sub=0.800000.
-Version 63 of 361 | Total mean error: 309.376594 | Params of iter=100, depth=3, lr=0.065000, min=3, sub=0.850000.
-Version 64 of 361 | Total mean error: 308.873288 | Params of iter=100, depth=3, lr=0.065000, min=3, sub=0.900000.
-Version 65 of 361 | Total mean error: 307.991472 | Params of iter=100, depth=3, lr=0.065000, min=5, sub=0.800000.
-Version 66 of 361 | Total mean error: 313.769045 | Params of iter=100, depth=3, lr=0.065000, min=5, sub=0.850000.
-Version 67 of 361 | Total mean error: 307.053669 | Params of iter=100, depth=3, lr=0.065000, min=5, sub=0.900000.
-Version 68 of 361 | Total mean error: 306.230828 | Params of iter=100, depth=3, lr=0.065000, min=8, sub=0.800000.
-Version 69 of 361 | Total mean error: 313.883118 | Params of iter=100, depth=3, lr=0.065000, min=8, sub=0.850000.
-Version 70 of 361 | Total mean error: 308.557478 | Params of iter=100, depth=3, lr=0.065000, min=8, sub=0.900000.
-Version 71 of 361 | Total mean error: 308.323605 | Params of iter=100, depth=3, lr=0.065000, min=10, sub=0.800000.
-Version 72 of 361 | Total mean error: 310.893140 | Params of iter=100, depth=3, lr=0.065000, min=10, sub=0.850000.
-Version 73 of 361 | Total mean error: 308.252548 | Params of iter=100, depth=3, lr=0.065000, min=10, sub=0.900000.
-Version 74 of 361 | Total mean error: 305.132968 | Params of iter=125, depth=2, lr=0.035000, min=3, sub=0.800000.
-Version 75 of 361 | Total mean error: 303.085903 | Params of iter=125, depth=2, lr=0.035000, min=3, sub=0.850000.
-Version 76 of 361 | Total mean error: 303.437784 | Params of iter=125, depth=2, lr=0.035000, min=3, sub=0.900000.
-Version 77 of 361 | Total mean error: 305.287766 | Params of iter=125, depth=2, lr=0.035000, min=5, sub=0.800000.
-Version 78 of 361 | Total mean error: 303.759154 | Params of iter=125, depth=2, lr=0.035000, min=5, sub=0.850000.
-Version 79 of 361 | Total mean error: 303.137869 | Params of iter=125, depth=2, lr=0.035000, min=5, sub=0.900000.
-Version 80 of 361 | Total mean error: 304.187018 | Params of iter=125, depth=2, lr=0.035000, min=8, sub=0.800000.
-Version 81 of 361 | Total mean error: 303.796494 | Params of iter=125, depth=2, lr=0.035000, min=8, sub=0.850000.
-Version 82 of 361 | Total mean error: 303.537571 | Params of iter=125, depth=2, lr=0.035000, min=8, sub=0.900000.
-Version 83 of 361 | Total mean error: 304.742882 | Params of iter=125, depth=2, lr=0.035000, min=10, sub=0.800000.
-Version 84 of 361 | Total mean error: 304.036091 | Params of iter=125, depth=2, lr=0.035000, min=10, sub=0.850000.
-Version 85 of 361 | Total mean error: 303.071028 | Params of iter=125, depth=2, lr=0.035000, min=10, sub=0.900000.
-Version 86 of 361 | Total mean error: 301.979359 | Params of iter=125, depth=2, lr=0.050000, min=3, sub=0.800000.
-Version 87 of 361 | Total mean error: 300.158119 | Params of iter=125, depth=2, lr=0.050000, min=3, sub=0.850000.
-Version 88 of 361 | Total mean error: 302.283556 | Params of iter=125, depth=2, lr=0.050000, min=3, sub=0.900000.
-Version 89 of 361 | Total mean error: 303.026902 | Params of iter=125, depth=2, lr=0.050000, min=5, sub=0.800000.
-Version 90 of 361 | Total mean error: 301.443810 | Params of iter=125, depth=2, lr=0.050000, min=5, sub=0.850000.
-Version 91 of 361 | Total mean error: 302.113905 | Params of iter=125, depth=2, lr=0.050000, min=5, sub=0.900000.
-Version 92 of 361 | Total mean error: 303.065673 | Params of iter=125, depth=2, lr=0.050000, min=8, sub=0.800000.
-Version 93 of 361 | Total mean error: 303.329047 | Params of iter=125, depth=2, lr=0.050000, min=8, sub=0.850000.
-Version 94 of 361 | Total mean error: 301.097895 | Params of iter=125, depth=2, lr=0.050000, min=8, sub=0.900000.
-Version 95 of 361 | Total mean error: 303.261061 | Params of iter=125, depth=2, lr=0.050000, min=10, sub=0.800000.
-Version 96 of 361 | Total mean error: 301.382335 | Params of iter=125, depth=2, lr=0.050000, min=10, sub=0.850000.
-Version 97 of 361 | Total mean error: 300.543604 | Params of iter=125, depth=2, lr=0.050000, min=10, sub=0.900000.
-Version 98 of 361 | Total mean error: 300.553008 | Params of iter=125, depth=2, lr=0.065000, min=3, sub=0.800000.
-Version 99 of 361 | Total mean error: 299.573859 | Params of iter=125, depth=2, lr=0.065000, min=3, sub=0.850000.
-Version 100 of 361 | Total mean error: 301.949575 | Params of iter=125, depth=2, lr=0.065000, min=3, sub=0.900000.
-Version 101 of 361 | Total mean error: 300.953695 | Params of iter=125, depth=2, lr=0.065000, min=5, sub=0.800000.
-Version 102 of 361 | Total mean error: 301.465930 | Params of iter=125, depth=2, lr=0.065000, min=5, sub=0.850000.
-Version 103 of 361 | Total mean error: 300.480957 | Params of iter=125, depth=2, lr=0.065000, min=5, sub=0.900000.
-Version 104 of 361 | Total mean error: 301.005217 | Params of iter=125, depth=2, lr=0.065000, min=8, sub=0.800000.
-Version 105 of 361 | Total mean error: 301.722035 | Params of iter=125, depth=2, lr=0.065000, min=8, sub=0.850000.
-Version 106 of 361 | Total mean error: 301.768130 | Params of iter=125, depth=2, lr=0.065000, min=8, sub=0.900000.
-Version 107 of 361 | Total mean error: 301.051771 | Params of iter=125, depth=2, lr=0.065000, min=10, sub=0.800000.
-Version 108 of 361 | Total mean error: 300.688458 | Params of iter=125, depth=2, lr=0.065000, min=10, sub=0.850000.
-Version 109 of 361 | Total mean error: 299.336613 | Params of iter=125, depth=2, lr=0.065000, min=10, sub=0.900000.
-Version 110 of 361 | Total mean error: 304.417893 | Params of iter=125, depth=3, lr=0.035000, min=3, sub=0.800000.
-Version 111 of 361 | Total mean error: 308.719301 | Params of iter=125, depth=3, lr=0.035000, min=3, sub=0.850000.
-Version 112 of 361 | Total mean error: 306.087016 | Params of iter=125, depth=3, lr=0.035000, min=3, sub=0.900000.
-Version 113 of 361 | Total mean error: 305.415196 | Params of iter=125, depth=3, lr=0.035000, min=5, sub=0.800000.
-Version 114 of 361 | Total mean error: 307.717395 | Params of iter=125, depth=3, lr=0.035000, min=5, sub=0.850000.
-Version 115 of 361 | Total mean error: 304.521996 | Params of iter=125, depth=3, lr=0.035000, min=5, sub=0.900000.
-Version 116 of 361 | Total mean error: 304.794336 | Params of iter=125, depth=3, lr=0.035000, min=8, sub=0.800000.
-Version 117 of 361 | Total mean error: 309.258414 | Params of iter=125, depth=3, lr=0.035000, min=8, sub=0.850000.
-Version 118 of 361 | Total mean error: 306.101934 | Params of iter=125, depth=3, lr=0.035000, min=8, sub=0.900000.
-Version 119 of 361 | Total mean error: 306.116264 | Params of iter=125, depth=3, lr=0.035000, min=10, sub=0.800000.
-Version 120 of 361 | Total mean error: 308.391873 | Params of iter=125, depth=3, lr=0.035000, min=10, sub=0.850000.
-Version 121 of 361 | Total mean error: 305.171223 | Params of iter=125, depth=3, lr=0.035000, min=10, sub=0.900000.
-Version 122 of 361 | Total mean error: 307.851062 | Params of iter=125, depth=3, lr=0.050000, min=3, sub=0.800000.
-Version 123 of 361 | Total mean error: 309.431057 | Params of iter=125, depth=3, lr=0.050000, min=3, sub=0.850000.
-Version 124 of 361 | Total mean error: 307.228019 | Params of iter=125, depth=3, lr=0.050000, min=3, sub=0.900000.
-Version 125 of 361 | Total mean error: 306.958130 | Params of iter=125, depth=3, lr=0.050000, min=5, sub=0.800000.
-Version 126 of 361 | Total mean error: 310.146516 | Params of iter=125, depth=3, lr=0.050000, min=5, sub=0.850000.
-Version 127 of 361 | Total mean error: 306.644147 | Params of iter=125, depth=3, lr=0.050000, min=5, sub=0.900000.
-Version 128 of 361 | Total mean error: 305.814483 | Params of iter=125, depth=3, lr=0.050000, min=8, sub=0.800000.
-Version 129 of 361 | Total mean error: 311.106599 | Params of iter=125, depth=3, lr=0.050000, min=8, sub=0.850000.
-Version 130 of 361 | Total mean error: 309.475230 | Params of iter=125, depth=3, lr=0.050000, min=8, sub=0.900000.
-Version 131 of 361 | Total mean error: 306.686602 | Params of iter=125, depth=3, lr=0.050000, min=10, sub=0.800000.
-Version 132 of 361 | Total mean error: 309.859558 | Params of iter=125, depth=3, lr=0.050000, min=10, sub=0.850000.
-Version 133 of 361 | Total mean error: 308.693105 | Params of iter=125, depth=3, lr=0.050000, min=10, sub=0.900000.
-Version 134 of 361 | Total mean error: 308.974491 | Params of iter=125, depth=3, lr=0.065000, min=3, sub=0.800000.
-Version 135 of 361 | Total mean error: 310.817659 | Params of iter=125, depth=3, lr=0.065000, min=3, sub=0.850000.
-Version 136 of 361 | Total mean error: 308.660792 | Params of iter=125, depth=3, lr=0.065000, min=3, sub=0.900000.
-Version 137 of 361 | Total mean error: 308.806679 | Params of iter=125, depth=3, lr=0.065000, min=5, sub=0.800000.
-Version 138 of 361 | Total mean error: 313.658797 | Params of iter=125, depth=3, lr=0.065000, min=5, sub=0.850000.
-Version 139 of 361 | Total mean error: 306.896165 | Params of iter=125, depth=3, lr=0.065000, min=5, sub=0.900000.
-Version 140 of 361 | Total mean error: 306.345394 | Params of iter=125, depth=3, lr=0.065000, min=8, sub=0.800000.
-Version 141 of 361 | Total mean error: 313.587190 | Params of iter=125, depth=3, lr=0.065000, min=8, sub=0.850000.
-Version 142 of 361 | Total mean error: 309.647300 | Params of iter=125, depth=3, lr=0.065000, min=8, sub=0.900000.
-Version 143 of 361 | Total mean error: 307.978722 | Params of iter=125, depth=3, lr=0.065000, min=10, sub=0.800000.
-Version 144 of 361 | Total mean error: 309.943339 | Params of iter=125, depth=3, lr=0.065000, min=10, sub=0.850000.
-Version 145 of 361 | Total mean error: 307.674539 | Params of iter=125, depth=3, lr=0.065000, min=10, sub=0.900000.
-Version 146 of 361 | Total mean error: 304.237547 | Params of iter=150, depth=2, lr=0.035000, min=3, sub=0.800000.
-Version 147 of 361 | Total mean error: 301.991622 | Params of iter=150, depth=2, lr=0.035000, min=3, sub=0.850000.
-Version 148 of 361 | Total mean error: 303.197793 | Params of iter=150, depth=2, lr=0.035000, min=3, sub=0.900000.
-Version 149 of 361 | Total mean error: 304.510752 | Params of iter=150, depth=2, lr=0.035000, min=5, sub=0.800000.
-Version 150 of 361 | Total mean error: 303.104207 | Params of iter=150, depth=2, lr=0.035000, min=5, sub=0.850000.
-Version 151 of 361 | Total mean error: 302.296086 | Params of iter=150, depth=2, lr=0.035000, min=5, sub=0.900000.
-Version 152 of 361 | Total mean error: 303.321771 | Params of iter=150, depth=2, lr=0.035000, min=8, sub=0.800000.
-Version 153 of 361 | Total mean error: 303.258930 | Params of iter=150, depth=2, lr=0.035000, min=8, sub=0.850000.
-Version 154 of 361 | Total mean error: 302.722895 | Params of iter=150, depth=2, lr=0.035000, min=8, sub=0.900000.
-Version 155 of 361 | Total mean error: 303.471502 | Params of iter=150, depth=2, lr=0.035000, min=10, sub=0.800000.
-Version 156 of 361 | Total mean error: 303.471276 | Params of iter=150, depth=2, lr=0.035000, min=10, sub=0.850000.
-Version 157 of 361 | Total mean error: 302.058531 | Params of iter=150, depth=2, lr=0.035000, min=10, sub=0.900000.
-Version 158 of 361 | Total mean error: 302.577339 | Params of iter=150, depth=2, lr=0.050000, min=3, sub=0.800000.
-Version 159 of 361 | Total mean error: 299.893557 | Params of iter=150, depth=2, lr=0.050000, min=3, sub=0.850000.
-Version 160 of 361 | Total mean error: 302.020150 | Params of iter=150, depth=2, lr=0.050000, min=3, sub=0.900000.
-Version 161 of 361 | Total mean error: 303.519158 | Params of iter=150, depth=2, lr=0.050000, min=5, sub=0.800000.
-Version 162 of 361 | Total mean error: 301.601004 | Params of iter=150, depth=2, lr=0.050000, min=5, sub=0.850000.
-Version 163 of 361 | Total mean error: 301.722715 | Params of iter=150, depth=2, lr=0.050000, min=5, sub=0.900000.
-Version 164 of 361 | Total mean error: 303.738953 | Params of iter=150, depth=2, lr=0.050000, min=8, sub=0.800000.
-Version 165 of 361 | Total mean error: 302.715915 | Params of iter=150, depth=2, lr=0.050000, min=8, sub=0.850000.
-Version 166 of 361 | Total mean error: 301.164876 | Params of iter=150, depth=2, lr=0.050000, min=8, sub=0.900000.
-Version 167 of 361 | Total mean error: 303.169184 | Params of iter=150, depth=2, lr=0.050000, min=10, sub=0.800000.
-Version 168 of 361 | Total mean error: 301.503098 | Params of iter=150, depth=2, lr=0.050000, min=10, sub=0.850000.
-Version 169 of 361 | Total mean error: 300.838251 | Params of iter=150, depth=2, lr=0.050000, min=10, sub=0.900000.
-Version 170 of 361 | Total mean error: 301.242119 | Params of iter=150, depth=2, lr=0.065000, min=3, sub=0.800000.
-Version 171 of 361 | Total mean error: 300.037952 | Params of iter=150, depth=2, lr=0.065000, min=3, sub=0.850000.
-Version 172 of 361 | Total mean error: 303.368313 | Params of iter=150, depth=2, lr=0.065000, min=3, sub=0.900000.
-Version 173 of 361 | Total mean error: 303.141096 | Params of iter=150, depth=2, lr=0.065000, min=5, sub=0.800000.
-Version 174 of 361 | Total mean error: 301.558317 | Params of iter=150, depth=2, lr=0.065000, min=5, sub=0.850000.
-Version 175 of 361 | Total mean error: 301.150636 | Params of iter=150, depth=2, lr=0.065000, min=5, sub=0.900000.
-Version 176 of 361 | Total mean error: 301.854842 | Params of iter=150, depth=2, lr=0.065000, min=8, sub=0.800000.
-Version 177 of 361 | Total mean error: 302.920049 | Params of iter=150, depth=2, lr=0.065000, min=8, sub=0.850000.
-Version 178 of 361 | Total mean error: 302.138722 | Params of iter=150, depth=2, lr=0.065000, min=8, sub=0.900000.
-Version 179 of 361 | Total mean error: 303.375600 | Params of iter=150, depth=2, lr=0.065000, min=10, sub=0.800000.
-Version 180 of 361 | Total mean error: 301.175231 | Params of iter=150, depth=2, lr=0.065000, min=10, sub=0.850000.
-Version 181 of 361 | Total mean error: 300.647895 | Params of iter=150, depth=2, lr=0.065000, min=10, sub=0.900000.
-Version 182 of 361 | Total mean error: 305.356920 | Params of iter=150, depth=3, lr=0.035000, min=3, sub=0.800000.
-Version 183 of 361 | Total mean error: 308.901365 | Params of iter=150, depth=3, lr=0.035000, min=3, sub=0.850000.
-Version 184 of 361 | Total mean error: 306.829840 | Params of iter=150, depth=3, lr=0.035000, min=3, sub=0.900000.
-Version 185 of 361 | Total mean error: 306.392734 | Params of iter=150, depth=3, lr=0.035000, min=5, sub=0.800000.
-Version 186 of 361 | Total mean error: 307.942745 | Params of iter=150, depth=3, lr=0.035000, min=5, sub=0.850000.
-Version 187 of 361 | Total mean error: 305.074592 | Params of iter=150, depth=3, lr=0.035000, min=5, sub=0.900000.
-Version 188 of 361 | Total mean error: 305.515296 | Params of iter=150, depth=3, lr=0.035000, min=8, sub=0.800000.
-Version 189 of 361 | Total mean error: 308.855391 | Params of iter=150, depth=3, lr=0.035000, min=8, sub=0.850000.
-Version 190 of 361 | Total mean error: 306.240129 | Params of iter=150, depth=3, lr=0.035000, min=8, sub=0.900000.
-Version 191 of 361 | Total mean error: 305.718474 | Params of iter=150, depth=3, lr=0.035000, min=10, sub=0.800000.
-Version 192 of 361 | Total mean error: 308.080695 | Params of iter=150, depth=3, lr=0.035000, min=10, sub=0.850000.
-Version 193 of 361 | Total mean error: 305.591787 | Params of iter=150, depth=3, lr=0.035000, min=10, sub=0.900000.
-Version 194 of 361 | Total mean error: 311.018044 | Params of iter=150, depth=3, lr=0.050000, min=3, sub=0.800000.
-Version 195 of 361 | Total mean error: 311.881005 | Params of iter=150, depth=3, lr=0.050000, min=3, sub=0.850000.
-Version 196 of 361 | Total mean error: 308.762031 | Params of iter=150, depth=3, lr=0.050000, min=3, sub=0.900000.
-Version 197 of 361 | Total mean error: 309.472231 | Params of iter=150, depth=3, lr=0.050000, min=5, sub=0.800000.
-Version 198 of 361 | Total mean error: 310.800530 | Params of iter=150, depth=3, lr=0.050000, min=5, sub=0.850000.
-Version 199 of 361 | Total mean error: 308.118617 | Params of iter=150, depth=3, lr=0.050000, min=5, sub=0.900000.
-Version 200 of 361 | Total mean error: 307.847663 | Params of iter=150, depth=3, lr=0.050000, min=8, sub=0.800000.
-Version 201 of 361 | Total mean error: 311.601204 | Params of iter=150, depth=3, lr=0.050000, min=8, sub=0.850000.
-Version 202 of 361 | Total mean error: 311.002929 | Params of iter=150, depth=3, lr=0.050000, min=8, sub=0.900000.
-Version 203 of 361 | Total mean error: 306.871370 | Params of iter=150, depth=3, lr=0.050000, min=10, sub=0.800000.
-Version 204 of 361 | Total mean error: 310.033188 | Params of iter=150, depth=3, lr=0.050000, min=10, sub=0.850000.
-Version 205 of 361 | Total mean error: 309.416183 | Params of iter=150, depth=3, lr=0.050000, min=10, sub=0.900000.
-Version 206 of 361 | Total mean error: 313.852823 | Params of iter=150, depth=3, lr=0.065000, min=3, sub=0.800000.
-Version 207 of 361 | Total mean error: 315.034968 | Params of iter=150, depth=3, lr=0.065000, min=3, sub=0.850000.
-Version 208 of 361 | Total mean error: 310.833411 | Params of iter=150, depth=3, lr=0.065000, min=3, sub=0.900000.
-Version 209 of 361 | Total mean error: 311.580404 | Params of iter=150, depth=3, lr=0.065000, min=5, sub=0.800000.
-Version 210 of 361 | Total mean error: 316.499740 | Params of iter=150, depth=3, lr=0.065000, min=5, sub=0.850000.
-Version 211 of 361 | Total mean error: 310.906648 | Params of iter=150, depth=3, lr=0.065000, min=5, sub=0.900000.
-Version 212 of 361 | Total mean error: 309.290834 | Params of iter=150, depth=3, lr=0.065000, min=8, sub=0.800000.
-Version 213 of 361 | Total mean error: 315.694536 | Params of iter=150, depth=3, lr=0.065000, min=8, sub=0.850000.
-Version 214 of 361 | Total mean error: 312.158249 | Params of iter=150, depth=3, lr=0.065000, min=8, sub=0.900000.
-Version 215 of 361 | Total mean error: 308.883468 | Params of iter=150, depth=3, lr=0.065000, min=10, sub=0.800000.
-Version 216 of 361 | Total mean error: 310.566784 | Params of iter=150, depth=3, lr=0.065000, min=10, sub=0.850000.
-Version 217 of 361 | Total mean error: 309.901136 | Params of iter=150, depth=3, lr=0.065000, min=10, sub=0.900000.
-Version 218 of 361 | Total mean error: 302.345985 | Params of iter=200, depth=2, lr=0.035000, min=3, sub=0.800000.
-Version 219 of 361 | Total mean error: 299.618020 | Params of iter=200, depth=2, lr=0.035000, min=3, sub=0.850000.
-Version 220 of 361 | Total mean error: 301.208145 | Params of iter=200, depth=2, lr=0.035000, min=3, sub=0.900000.
-Version 221 of 361 | Total mean error: 302.749873 | Params of iter=200, depth=2, lr=0.035000, min=5, sub=0.800000.
-Version 222 of 361 | Total mean error: 301.280132 | Params of iter=200, depth=2, lr=0.035000, min=5, sub=0.850000.
-Version 223 of 361 | Total mean error: 300.435890 | Params of iter=200, depth=2, lr=0.035000, min=5, sub=0.900000.
-Version 224 of 361 | Total mean error: 302.098461 | Params of iter=200, depth=2, lr=0.035000, min=8, sub=0.800000.
-Version 225 of 361 | Total mean error: 301.348304 | Params of iter=200, depth=2, lr=0.035000, min=8, sub=0.850000.
-Version 226 of 361 | Total mean error: 300.416323 | Params of iter=200, depth=2, lr=0.035000, min=8, sub=0.900000.
-Version 227 of 361 | Total mean error: 301.438889 | Params of iter=200, depth=2, lr=0.035000, min=10, sub=0.800000.
-Version 228 of 361 | Total mean error: 301.099216 | Params of iter=200, depth=2, lr=0.035000, min=10, sub=0.850000.
-Version 229 of 361 | Total mean error: 300.357162 | Params of iter=200, depth=2, lr=0.035000, min=10, sub=0.900000.
-Version 230 of 361 | Total mean error: 302.002133 | Params of iter=200, depth=2, lr=0.050000, min=3, sub=0.800000.
-Version 231 of 361 | Total mean error: 298.401831 | Params of iter=200, depth=2, lr=0.050000, min=3, sub=0.850000.
-Version 232 of 361 | Total mean error: 301.414089 | Params of iter=200, depth=2, lr=0.050000, min=3, sub=0.900000.
-Version 233 of 361 | Total mean error: 303.125628 | Params of iter=200, depth=2, lr=0.050000, min=5, sub=0.800000.
-Version 234 of 361 | Total mean error: 301.086216 | Params of iter=200, depth=2, lr=0.050000, min=5, sub=0.850000.
-Version 235 of 361 | Total mean error: 300.422009 | Params of iter=200, depth=2, lr=0.050000, min=5, sub=0.900000.
-Version 236 of 361 | Total mean error: 303.152738 | Params of iter=200, depth=2, lr=0.050000, min=8, sub=0.800000.
-Version 237 of 361 | Total mean error: 301.754578 | Params of iter=200, depth=2, lr=0.050000, min=8, sub=0.850000.
-Version 238 of 361 | Total mean error: 300.626954 | Params of iter=200, depth=2, lr=0.050000, min=8, sub=0.900000.
-Version 239 of 361 | Total mean error: 302.299117 | Params of iter=200, depth=2, lr=0.050000, min=10, sub=0.800000.
-Version 240 of 361 | Total mean error: 300.436398 | Params of iter=200, depth=2, lr=0.050000, min=10, sub=0.850000.
-Version 241 of 361 | Total mean error: 300.845789 | Params of iter=200, depth=2, lr=0.050000, min=10, sub=0.900000.
-Version 242 of 361 | Total mean error: 301.994313 | Params of iter=200, depth=2, lr=0.065000, min=3, sub=0.800000.
-Version 243 of 361 | Total mean error: 299.837615 | Params of iter=200, depth=2, lr=0.065000, min=3, sub=0.850000.
-Version 244 of 361 | Total mean error: 303.048267 | Params of iter=200, depth=2, lr=0.065000, min=3, sub=0.900000.
-Version 245 of 361 | Total mean error: 303.328067 | Params of iter=200, depth=2, lr=0.065000, min=5, sub=0.800000.
-Version 246 of 361 | Total mean error: 300.824972 | Params of iter=200, depth=2, lr=0.065000, min=5, sub=0.850000.
-Version 247 of 361 | Total mean error: 301.889730 | Params of iter=200, depth=2, lr=0.065000, min=5, sub=0.900000.
-Version 248 of 361 | Total mean error: 302.680406 | Params of iter=200, depth=2, lr=0.065000, min=8, sub=0.800000.
-Version 249 of 361 | Total mean error: 302.396327 | Params of iter=200, depth=2, lr=0.065000, min=8, sub=0.850000.
-Version 250 of 361 | Total mean error: 302.310481 | Params of iter=200, depth=2, lr=0.065000, min=8, sub=0.900000.
-Version 251 of 361 | Total mean error: 302.996112 | Params of iter=200, depth=2, lr=0.065000, min=10, sub=0.800000.
-Version 252 of 361 | Total mean error: 301.118594 | Params of iter=200, depth=2, lr=0.065000, min=10, sub=0.850000.
-Version 253 of 361 | Total mean error: 302.348848 | Params of iter=200, depth=2, lr=0.065000, min=10, sub=0.900000.
-Version 254 of 361 | Total mean error: 307.068270 | Params of iter=200, depth=3, lr=0.035000, min=3, sub=0.800000.
-Version 255 of 361 | Total mean error: 310.076476 | Params of iter=200, depth=3, lr=0.035000, min=3, sub=0.850000.
-Version 256 of 361 | Total mean error: 307.744567 | Params of iter=200, depth=3, lr=0.035000, min=3, sub=0.900000.
-Version 257 of 361 | Total mean error: 307.172879 | Params of iter=200, depth=3, lr=0.035000, min=5, sub=0.800000.
-Version 258 of 361 | Total mean error: 308.333975 | Params of iter=200, depth=3, lr=0.035000, min=5, sub=0.850000.
-Version 259 of 361 | Total mean error: 306.751321 | Params of iter=200, depth=3, lr=0.035000, min=5, sub=0.900000.
-Version 260 of 361 | Total mean error: 306.931989 | Params of iter=200, depth=3, lr=0.035000, min=8, sub=0.800000.
-Version 261 of 361 | Total mean error: 308.526267 | Params of iter=200, depth=3, lr=0.035000, min=8, sub=0.850000.
-Version 262 of 361 | Total mean error: 306.488969 | Params of iter=200, depth=3, lr=0.035000, min=8, sub=0.900000.
-Version 263 of 361 | Total mean error: 307.253341 | Params of iter=200, depth=3, lr=0.035000, min=10, sub=0.800000.
-Version 264 of 361 | Total mean error: 308.218793 | Params of iter=200, depth=3, lr=0.035000, min=10, sub=0.850000.
-Version 265 of 361 | Total mean error: 306.204652 | Params of iter=200, depth=3, lr=0.035000, min=10, sub=0.900000.
-Version 266 of 361 | Total mean error: 314.666730 | Params of iter=200, depth=3, lr=0.050000, min=3, sub=0.800000.
-Version 267 of 361 | Total mean error: 316.302903 | Params of iter=200, depth=3, lr=0.050000, min=3, sub=0.850000.
-Version 268 of 361 | Total mean error: 310.909967 | Params of iter=200, depth=3, lr=0.050000, min=3, sub=0.900000.
-Version 269 of 361 | Total mean error: 311.065881 | Params of iter=200, depth=3, lr=0.050000, min=5, sub=0.800000.
-Version 270 of 361 | Total mean error: 313.435865 | Params of iter=200, depth=3, lr=0.050000, min=5, sub=0.850000.
-Version 271 of 361 | Total mean error: 310.919625 | Params of iter=200, depth=3, lr=0.050000, min=5, sub=0.900000.
-Version 272 of 361 | Total mean error: 309.944026 | Params of iter=200, depth=3, lr=0.050000, min=8, sub=0.800000.
-Version 273 of 361 | Total mean error: 313.928570 | Params of iter=200, depth=3, lr=0.050000, min=8, sub=0.850000.
-Version 274 of 361 | Total mean error: 311.799817 | Params of iter=200, depth=3, lr=0.050000, min=8, sub=0.900000.
-Version 275 of 361 | Total mean error: 309.207048 | Params of iter=200, depth=3, lr=0.050000, min=10, sub=0.800000.
-Version 276 of 361 | Total mean error: 310.930277 | Params of iter=200, depth=3, lr=0.050000, min=10, sub=0.850000.
-Version 277 of 361 | Total mean error: 309.652419 | Params of iter=200, depth=3, lr=0.050000, min=10, sub=0.900000.
-Version 278 of 361 | Total mean error: 316.698241 | Params of iter=200, depth=3, lr=0.065000, min=3, sub=0.800000.
-Version 279 of 361 | Total mean error: 318.866509 | Params of iter=200, depth=3, lr=0.065000, min=3, sub=0.850000.
-Version 280 of 361 | Total mean error: 314.932981 | Params of iter=200, depth=3, lr=0.065000, min=3, sub=0.900000.
-Version 281 of 361 | Total mean error: 313.581782 | Params of iter=200, depth=3, lr=0.065000, min=5, sub=0.800000.
-Version 282 of 361 | Total mean error: 319.637202 | Params of iter=200, depth=3, lr=0.065000, min=5, sub=0.850000.
-Version 283 of 361 | Total mean error: 314.671438 | Params of iter=200, depth=3, lr=0.065000, min=5, sub=0.900000.
-Version 284 of 361 | Total mean error: 312.761860 | Params of iter=200, depth=3, lr=0.065000, min=8, sub=0.800000.
-Version 285 of 361 | Total mean error: 318.474717 | Params of iter=200, depth=3, lr=0.065000, min=8, sub=0.850000.
-Version 286 of 361 | Total mean error: 313.403848 | Params of iter=200, depth=3, lr=0.065000, min=8, sub=0.900000.
-Version 287 of 361 | Total mean error: 311.677790 | Params of iter=200, depth=3, lr=0.065000, min=10, sub=0.800000.
-Version 288 of 361 | Total mean error: 311.321522 | Params of iter=200, depth=3, lr=0.065000, min=10, sub=0.850000.
-Version 289 of 361 | Total mean error: 313.257757 | Params of iter=200, depth=3, lr=0.065000, min=10, sub=0.900000.
-Version 290 of 361 | Total mean error: 302.282323 | Params of iter=250, depth=2, lr=0.035000, min=3, sub=0.800000.
-Version 291 of 361 | Total mean error: 300.082748 | Params of iter=250, depth=2, lr=0.035000, min=3, sub=0.850000.
-Version 292 of 361 | Total mean error: 300.138001 | Params of iter=250, depth=2, lr=0.035000, min=3, sub=0.900000.
-Version 293 of 361 | Total mean error: 302.806949 | Params of iter=250, depth=2, lr=0.035000, min=5, sub=0.800000.
-Version 294 of 361 | Total mean error: 301.524890 | Params of iter=250, depth=2, lr=0.035000, min=5, sub=0.850000.
-Version 295 of 361 | Total mean error: 299.855354 | Params of iter=250, depth=2, lr=0.035000, min=5, sub=0.900000.
-Version 296 of 361 | Total mean error: 302.850322 | Params of iter=250, depth=2, lr=0.035000, min=8, sub=0.800000.
-Version 297 of 361 | Total mean error: 301.991796 | Params of iter=250, depth=2, lr=0.035000, min=8, sub=0.850000.
-Version 298 of 361 | Total mean error: 300.041103 | Params of iter=250, depth=2, lr=0.035000, min=8, sub=0.900000.
-Version 299 of 361 | Total mean error: 302.292834 | Params of iter=250, depth=2, lr=0.035000, min=10, sub=0.800000.
-Version 300 of 361 | Total mean error: 301.905261 | Params of iter=250, depth=2, lr=0.035000, min=10, sub=0.850000.
-Version 301 of 361 | Total mean error: 299.882829 | Params of iter=250, depth=2, lr=0.035000, min=10, sub=0.900000.
-Version 302 of 361 | Total mean error: 303.234278 | Params of iter=250, depth=2, lr=0.050000, min=3, sub=0.800000.
-Version 303 of 361 | Total mean error: 299.125638 | Params of iter=250, depth=2, lr=0.050000, min=3, sub=0.850000.
-Version 304 of 361 | Total mean error: 301.580731 | Params of iter=250, depth=2, lr=0.050000, min=3, sub=0.900000.
-Version 305 of 361 | Total mean error: 303.773889 | Params of iter=250, depth=2, lr=0.050000, min=5, sub=0.800000.
-Version 306 of 361 | Total mean error: 300.935231 | Params of iter=250, depth=2, lr=0.050000, min=5, sub=0.850000.
-Version 307 of 361 | Total mean error: 300.413855 | Params of iter=250, depth=2, lr=0.050000, min=5, sub=0.900000.
-Version 308 of 361 | Total mean error: 303.522767 | Params of iter=250, depth=2, lr=0.050000, min=8, sub=0.800000.
-Version 309 of 361 | Total mean error: 300.624309 | Params of iter=250, depth=2, lr=0.050000, min=8, sub=0.850000.
-Version 310 of 361 | Total mean error: 301.496935 | Params of iter=250, depth=2, lr=0.050000, min=8, sub=0.900000.
-Version 311 of 361 | Total mean error: 303.331763 | Params of iter=250, depth=2, lr=0.050000, min=10, sub=0.800000.
-Version 312 of 361 | Total mean error: 300.787371 | Params of iter=250, depth=2, lr=0.050000, min=10, sub=0.850000.
-Version 313 of 361 | Total mean error: 301.207326 | Params of iter=250, depth=2, lr=0.050000, min=10, sub=0.900000.
-Version 314 of 361 | Total mean error: 302.531835 | Params of iter=250, depth=2, lr=0.065000, min=3, sub=0.800000.
-Version 315 of 361 | Total mean error: 300.221090 | Params of iter=250, depth=2, lr=0.065000, min=3, sub=0.850000.
-Version 316 of 361 | Total mean error: 303.710854 | Params of iter=250, depth=2, lr=0.065000, min=3, sub=0.900000.
-Version 317 of 361 | Total mean error: 304.078163 | Params of iter=250, depth=2, lr=0.065000, min=5, sub=0.800000.
-Version 318 of 361 | Total mean error: 301.538378 | Params of iter=250, depth=2, lr=0.065000, min=5, sub=0.850000.
-Version 319 of 361 | Total mean error: 301.978042 | Params of iter=250, depth=2, lr=0.065000, min=5, sub=0.900000.
-Version 320 of 361 | Total mean error: 304.245314 | Params of iter=250, depth=2, lr=0.065000, min=8, sub=0.800000.
-Version 321 of 361 | Total mean error: 301.988424 | Params of iter=250, depth=2, lr=0.065000, min=8, sub=0.850000.
-Version 322 of 361 | Total mean error: 304.320898 | Params of iter=250, depth=2, lr=0.065000, min=8, sub=0.900000.
-Version 323 of 361 | Total mean error: 304.157023 | Params of iter=250, depth=2, lr=0.065000, min=10, sub=0.800000.
-Version 324 of 361 | Total mean error: 301.139077 | Params of iter=250, depth=2, lr=0.065000, min=10, sub=0.850000.
-Version 325 of 361 | Total mean error: 302.489012 | Params of iter=250, depth=2, lr=0.065000, min=10, sub=0.900000.
-Version 326 of 361 | Total mean error: 309.341024 | Params of iter=250, depth=3, lr=0.035000, min=3, sub=0.800000.
-Version 327 of 361 | Total mean error: 312.706268 | Params of iter=250, depth=3, lr=0.035000, min=3, sub=0.850000.
-Version 328 of 361 | Total mean error: 309.988397 | Params of iter=250, depth=3, lr=0.035000, min=3, sub=0.900000.
-Version 329 of 361 | Total mean error: 309.724616 | Params of iter=250, depth=3, lr=0.035000, min=5, sub=0.800000.
-Version 330 of 361 | Total mean error: 309.382141 | Params of iter=250, depth=3, lr=0.035000, min=5, sub=0.850000.
-Version 331 of 361 | Total mean error: 308.434916 | Params of iter=250, depth=3, lr=0.035000, min=5, sub=0.900000.
-Version 332 of 361 | Total mean error: 307.372354 | Params of iter=250, depth=3, lr=0.035000, min=8, sub=0.800000.
-Version 333 of 361 | Total mean error: 309.269531 | Params of iter=250, depth=3, lr=0.035000, min=8, sub=0.850000.
-Version 334 of 361 | Total mean error: 307.250321 | Params of iter=250, depth=3, lr=0.035000, min=8, sub=0.900000.
-Version 335 of 361 | Total mean error: 307.921545 | Params of iter=250, depth=3, lr=0.035000, min=10, sub=0.800000.
-Version 336 of 361 | Total mean error: 309.034028 | Params of iter=250, depth=3, lr=0.035000, min=10, sub=0.850000.
-Version 337 of 361 | Total mean error: 307.237649 | Params of iter=250, depth=3, lr=0.035000, min=10, sub=0.900000.
-Version 338 of 361 | Total mean error: 318.597682 | Params of iter=250, depth=3, lr=0.050000, min=3, sub=0.800000.
-Version 339 of 361 | Total mean error: 319.255672 | Params of iter=250, depth=3, lr=0.050000, min=3, sub=0.850000.
-Version 340 of 361 | Total mean error: 313.134007 | Params of iter=250, depth=3, lr=0.050000, min=3, sub=0.900000.
-Version 341 of 361 | Total mean error: 314.477878 | Params of iter=250, depth=3, lr=0.050000, min=5, sub=0.800000.
-Version 342 of 361 | Total mean error: 316.003119 | Params of iter=250, depth=3, lr=0.050000, min=5, sub=0.850000.
-Version 343 of 361 | Total mean error: 312.879139 | Params of iter=250, depth=3, lr=0.050000, min=5, sub=0.900000.
-Version 344 of 361 | Total mean error: 311.573330 | Params of iter=250, depth=3, lr=0.050000, min=8, sub=0.800000.
-Version 345 of 361 | Total mean error: 315.299861 | Params of iter=250, depth=3, lr=0.050000, min=8, sub=0.850000.
-Version 346 of 361 | Total mean error: 313.386692 | Params of iter=250, depth=3, lr=0.050000, min=8, sub=0.900000.
-Version 347 of 361 | Total mean error: 310.637570 | Params of iter=250, depth=3, lr=0.050000, min=10, sub=0.800000.
-Version 348 of 361 | Total mean error: 312.942466 | Params of iter=250, depth=3, lr=0.050000, min=10, sub=0.850000.
-Version 349 of 361 | Total mean error: 311.730141 | Params of iter=250, depth=3, lr=0.050000, min=10, sub=0.900000.
-Version 350 of 361 | Total mean error: 322.403624 | Params of iter=250, depth=3, lr=0.065000, min=3, sub=0.800000.
-Version 351 of 361 | Total mean error: 323.641895 | Params of iter=250, depth=3, lr=0.065000, min=3, sub=0.850000.
-Version 352 of 361 | Total mean error: 318.878138 | Params of iter=250, depth=3, lr=0.065000, min=3, sub=0.900000.
-Version 353 of 361 | Total mean error: 318.963733 | Params of iter=250, depth=3, lr=0.065000, min=5, sub=0.800000.
-Version 354 of 361 | Total mean error: 321.938152 | Params of iter=250, depth=3, lr=0.065000, min=5, sub=0.850000.
-Version 355 of 361 | Total mean error: 319.820748 | Params of iter=250, depth=3, lr=0.065000, min=5, sub=0.900000.
-Version 356 of 361 | Total mean error: 316.563625 | Params of iter=250, depth=3, lr=0.065000, min=8, sub=0.800000.
-Version 357 of 361 | Total mean error: 321.581127 | Params of iter=250, depth=3, lr=0.065000, min=8, sub=0.850000.
-Version 358 of 361 | Total mean error: 316.045095 | Params of iter=250, depth=3, lr=0.065000, min=8, sub=0.900000.
-Version 359 of 361 | Total mean error: 313.319408 | Params of iter=250, depth=3, lr=0.065000, min=10, sub=0.800000.
-Version 360 of 361 | Total mean error: 314.308477 | Params of iter=250, depth=3, lr=0.065000, min=10, sub=0.850000.
-Version 361 of 361 | Total mean error: 315.092216 | Params of iter=250, depth=3, lr=0.065000, min=10, sub=0.900000.
+Starting two-stage hyperparameter tuning
+STAGE 1: Shallow pass on all 145 parameter combinations
+Pass: 1/1 | Avg MSE: 271.484529 | Params: iter=200, depth=2, lr=0.050000, min=3, sub=0.850000
+Pass: 2/1 | Avg MSE: 277.358804 | Params: iter=175, depth=2, lr=0.052500, min=2, sub=0.870000
+Pass: 3/1 | Avg MSE: 278.542227 | Params: iter=175, depth=2, lr=0.052500, min=2, sub=0.900000
+Pass: 4/1 | Avg MSE: 274.253504 | Params: iter=175, depth=2, lr=0.052500, min=2, sub=0.925000
+Pass: 5/1 | Avg MSE: 275.991581 | Params: iter=175, depth=2, lr=0.052500, min=3, sub=0.870000
+Pass: 6/1 | Avg MSE: 276.101543 | Params: iter=175, depth=2, lr=0.052500, min=3, sub=0.900000
+Pass: 7/1 | Avg MSE: 273.793324 | Params: iter=175, depth=2, lr=0.052500, min=3, sub=0.925000
+Pass: 8/1 | Avg MSE: 275.615924 | Params: iter=175, depth=2, lr=0.052500, min=4, sub=0.870000
+Pass: 9/1 | Avg MSE: 275.082348 | Params: iter=175, depth=2, lr=0.052500, min=4, sub=0.900000
+Pass: 10/1 | Avg MSE: 276.492978 | Params: iter=175, depth=2, lr=0.052500, min=4, sub=0.925000
+Pass: 11/1 | Avg MSE: 276.621120 | Params: iter=175, depth=2, lr=0.052500, min=6, sub=0.870000
+Pass: 12/1 | Avg MSE: 277.776131 | Params: iter=175, depth=2, lr=0.052500, min=6, sub=0.900000
+Pass: 13/1 | Avg MSE: 274.616703 | Params: iter=175, depth=2, lr=0.052500, min=6, sub=0.925000
+Pass: 14/1 | Avg MSE: 276.273968 | Params: iter=175, depth=2, lr=0.055000, min=2, sub=0.870000
+Pass: 15/1 | Avg MSE: 277.434293 | Params: iter=175, depth=2, lr=0.055000, min=2, sub=0.900000
+Pass: 16/1 | Avg MSE: 274.427925 | Params: iter=175, depth=2, lr=0.055000, min=2, sub=0.925000
+Pass: 17/1 | Avg MSE: 275.630201 | Params: iter=175, depth=2, lr=0.055000, min=3, sub=0.870000
+Pass: 18/1 | Avg MSE: 276.751705 | Params: iter=175, depth=2, lr=0.055000, min=3, sub=0.900000
+Pass: 19/1 | Avg MSE: 274.767117 | Params: iter=175, depth=2, lr=0.055000, min=3, sub=0.925000
+Pass: 20/1 | Avg MSE: 273.739939 | Params: iter=175, depth=2, lr=0.055000, min=4, sub=0.870000
+Pass: 21/1 | Avg MSE: 274.475720 | Params: iter=175, depth=2, lr=0.055000, min=4, sub=0.900000
+Pass: 22/1 | Avg MSE: 274.374851 | Params: iter=175, depth=2, lr=0.055000, min=4, sub=0.925000
+Pass: 23/1 | Avg MSE: 276.905011 | Params: iter=175, depth=2, lr=0.055000, min=6, sub=0.870000
+Pass: 24/1 | Avg MSE: 275.825468 | Params: iter=175, depth=2, lr=0.055000, min=6, sub=0.900000
+Pass: 25/1 | Avg MSE: 275.868211 | Params: iter=175, depth=2, lr=0.055000, min=6, sub=0.925000
+Pass: 26/1 | Avg MSE: 276.598962 | Params: iter=175, depth=2, lr=0.060000, min=2, sub=0.870000
+Pass: 27/1 | Avg MSE: 278.135029 | Params: iter=175, depth=2, lr=0.060000, min=2, sub=0.900000
+Pass: 28/1 | Avg MSE: 274.771135 | Params: iter=175, depth=2, lr=0.060000, min=2, sub=0.925000
+Pass: 29/1 | Avg MSE: 276.105505 | Params: iter=175, depth=2, lr=0.060000, min=3, sub=0.870000
+Pass: 30/1 | Avg MSE: 277.433814 | Params: iter=175, depth=2, lr=0.060000, min=3, sub=0.900000
+Pass: 31/1 | Avg MSE: 272.477329 | Params: iter=175, depth=2, lr=0.060000, min=3, sub=0.925000
+Pass: 32/1 | Avg MSE: 274.035789 | Params: iter=175, depth=2, lr=0.060000, min=4, sub=0.870000
+Pass: 33/1 | Avg MSE: 276.379864 | Params: iter=175, depth=2, lr=0.060000, min=4, sub=0.900000
+Pass: 34/1 | Avg MSE: 272.621969 | Params: iter=175, depth=2, lr=0.060000, min=4, sub=0.925000
+Pass: 35/1 | Avg MSE: 276.442066 | Params: iter=175, depth=2, lr=0.060000, min=6, sub=0.870000
+Pass: 36/1 | Avg MSE: 276.632324 | Params: iter=175, depth=2, lr=0.060000, min=6, sub=0.900000
+Pass: 37/1 | Avg MSE: 275.605888 | Params: iter=175, depth=2, lr=0.060000, min=6, sub=0.925000
+Pass: 38/1 | Avg MSE: 275.355113 | Params: iter=190, depth=2, lr=0.052500, min=2, sub=0.870000
+Pass: 39/1 | Avg MSE: 277.211739 | Params: iter=190, depth=2, lr=0.052500, min=2, sub=0.900000
+Pass: 40/1 | Avg MSE: 273.565671 | Params: iter=190, depth=2, lr=0.052500, min=2, sub=0.925000
+Pass: 41/1 | Avg MSE: 274.254704 | Params: iter=190, depth=2, lr=0.052500, min=3, sub=0.870000
+Pass: 42/1 | Avg MSE: 274.500073 | Params: iter=190, depth=2, lr=0.052500, min=3, sub=0.900000
+Pass: 43/1 | Avg MSE: 272.418301 | Params: iter=190, depth=2, lr=0.052500, min=3, sub=0.925000
+Pass: 44/1 | Avg MSE: 273.780629 | Params: iter=190, depth=2, lr=0.052500, min=4, sub=0.870000
+Pass: 45/1 | Avg MSE: 274.165245 | Params: iter=190, depth=2, lr=0.052500, min=4, sub=0.900000
+Pass: 46/1 | Avg MSE: 273.817737 | Params: iter=190, depth=2, lr=0.052500, min=4, sub=0.925000
+Pass: 47/1 | Avg MSE: 274.285528 | Params: iter=190, depth=2, lr=0.052500, min=6, sub=0.870000
+Pass: 48/1 | Avg MSE: 276.174042 | Params: iter=190, depth=2, lr=0.052500, min=6, sub=0.900000
+Pass: 49/1 | Avg MSE: 273.024685 | Params: iter=190, depth=2, lr=0.052500, min=6, sub=0.925000
+Pass: 50/1 | Avg MSE: 274.029375 | Params: iter=190, depth=2, lr=0.055000, min=2, sub=0.870000
+Pass: 51/1 | Avg MSE: 275.801010 | Params: iter=190, depth=2, lr=0.055000, min=2, sub=0.900000
+Pass: 52/1 | Avg MSE: 272.890408 | Params: iter=190, depth=2, lr=0.055000, min=2, sub=0.925000
+Pass: 53/1 | Avg MSE: 273.656137 | Params: iter=190, depth=2, lr=0.055000, min=3, sub=0.870000
+Pass: 54/1 | Avg MSE: 275.456739 | Params: iter=190, depth=2, lr=0.055000, min=3, sub=0.900000
+Pass: 55/1 | Avg MSE: 272.630425 | Params: iter=190, depth=2, lr=0.055000, min=3, sub=0.925000
+Pass: 56/1 | Avg MSE: 271.522090 | Params: iter=190, depth=2, lr=0.055000, min=4, sub=0.870000
+Pass: 57/1 | Avg MSE: 272.827190 | Params: iter=190, depth=2, lr=0.055000, min=4, sub=0.900000
+Pass: 58/1 | Avg MSE: 272.114399 | Params: iter=190, depth=2, lr=0.055000, min=4, sub=0.925000
+Pass: 59/1 | Avg MSE: 275.148718 | Params: iter=190, depth=2, lr=0.055000, min=6, sub=0.870000
+Pass: 60/1 | Avg MSE: 274.567221 | Params: iter=190, depth=2, lr=0.055000, min=6, sub=0.900000
+Pass: 61/1 | Avg MSE: 274.756209 | Params: iter=190, depth=2, lr=0.055000, min=6, sub=0.925000
+Pass: 62/1 | Avg MSE: 273.923789 | Params: iter=190, depth=2, lr=0.060000, min=2, sub=0.870000
+Pass: 63/1 | Avg MSE: 276.596069 | Params: iter=190, depth=2, lr=0.060000, min=2, sub=0.900000
+Pass: 64/1 | Avg MSE: 273.617856 | Params: iter=190, depth=2, lr=0.060000, min=2, sub=0.925000
+Pass: 65/1 | Avg MSE: 273.776136 | Params: iter=190, depth=2, lr=0.060000, min=3, sub=0.870000
+Pass: 66/1 | Avg MSE: 275.837170 | Params: iter=190, depth=2, lr=0.060000, min=3, sub=0.900000
+Pass: 67/1 | Avg MSE: 271.328929 | Params: iter=190, depth=2, lr=0.060000, min=3, sub=0.925000
+Pass: 68/1 | Avg MSE: 271.349304 | Params: iter=190, depth=2, lr=0.060000, min=4, sub=0.870000
+Pass: 69/1 | Avg MSE: 275.216207 | Params: iter=190, depth=2, lr=0.060000, min=4, sub=0.900000
+Pass: 70/1 | Avg MSE: 271.812857 | Params: iter=190, depth=2, lr=0.060000, min=4, sub=0.925000
+Pass: 71/1 | Avg MSE: 274.108629 | Params: iter=190, depth=2, lr=0.060000, min=6, sub=0.870000
+Pass: 72/1 | Avg MSE: 275.372707 | Params: iter=190, depth=2, lr=0.060000, min=6, sub=0.900000
+Pass: 73/1 | Avg MSE: 274.565597 | Params: iter=190, depth=2, lr=0.060000, min=6, sub=0.925000
+Pass: 74/1 | Avg MSE: 274.772042 | Params: iter=210, depth=2, lr=0.052500, min=2, sub=0.870000
+Pass: 75/1 | Avg MSE: 277.078874 | Params: iter=210, depth=2, lr=0.052500, min=2, sub=0.900000
+Pass: 76/1 | Avg MSE: 273.215244 | Params: iter=210, depth=2, lr=0.052500, min=2, sub=0.925000
+Pass: 77/1 | Avg MSE: 274.403589 | Params: iter=210, depth=2, lr=0.052500, min=3, sub=0.870000
+Pass: 78/1 | Avg MSE: 273.998369 | Params: iter=210, depth=2, lr=0.052500, min=3, sub=0.900000
+Pass: 79/1 | Avg MSE: 272.036228 | Params: iter=210, depth=2, lr=0.052500, min=3, sub=0.925000
+Pass: 80/1 | Avg MSE: 273.196393 | Params: iter=210, depth=2, lr=0.052500, min=4, sub=0.870000
+Pass: 81/1 | Avg MSE: 273.681344 | Params: iter=210, depth=2, lr=0.052500, min=4, sub=0.900000
+Pass: 82/1 | Avg MSE: 273.118499 | Params: iter=210, depth=2, lr=0.052500, min=4, sub=0.925000
+Pass: 83/1 | Avg MSE: 273.531816 | Params: iter=210, depth=2, lr=0.052500, min=6, sub=0.870000
+Pass: 84/1 | Avg MSE: 274.249205 | Params: iter=210, depth=2, lr=0.052500, min=6, sub=0.900000
+Pass: 85/1 | Avg MSE: 270.910347 | Params: iter=210, depth=2, lr=0.052500, min=6, sub=0.925000
+Pass: 86/1 | Avg MSE: 274.446072 | Params: iter=210, depth=2, lr=0.055000, min=2, sub=0.870000
+Pass: 87/1 | Avg MSE: 275.668488 | Params: iter=210, depth=2, lr=0.055000, min=2, sub=0.900000
+Pass: 88/1 | Avg MSE: 272.554373 | Params: iter=210, depth=2, lr=0.055000, min=2, sub=0.925000
+Pass: 89/1 | Avg MSE: 273.232203 | Params: iter=210, depth=2, lr=0.055000, min=3, sub=0.870000
+Pass: 90/1 | Avg MSE: 275.287171 | Params: iter=210, depth=2, lr=0.055000, min=3, sub=0.900000
+Pass: 91/1 | Avg MSE: 272.460590 | Params: iter=210, depth=2, lr=0.055000, min=3, sub=0.925000
+Pass: 92/1 | Avg MSE: 271.212206 | Params: iter=210, depth=2, lr=0.055000, min=4, sub=0.870000
+Pass: 93/1 | Avg MSE: 272.053848 | Params: iter=210, depth=2, lr=0.055000, min=4, sub=0.900000
+Pass: 94/1 | Avg MSE: 271.983806 | Params: iter=210, depth=2, lr=0.055000, min=4, sub=0.925000
+Pass: 95/1 | Avg MSE: 274.002660 | Params: iter=210, depth=2, lr=0.055000, min=6, sub=0.870000
+Pass: 96/1 | Avg MSE: 273.154438 | Params: iter=210, depth=2, lr=0.055000, min=6, sub=0.900000
+Pass: 97/1 | Avg MSE: 274.113997 | Params: iter=210, depth=2, lr=0.055000, min=6, sub=0.925000
+Pass: 98/1 | Avg MSE: 272.825266 | Params: iter=210, depth=2, lr=0.060000, min=2, sub=0.870000
+Pass: 99/1 | Avg MSE: 277.203119 | Params: iter=210, depth=2, lr=0.060000, min=2, sub=0.900000
+Pass: 100/1 | Avg MSE: 272.878618 | Params: iter=210, depth=2, lr=0.060000, min=2, sub=0.925000
+Pass: 101/1 | Avg MSE: 273.624102 | Params: iter=210, depth=2, lr=0.060000, min=3, sub=0.870000
+Pass: 102/1 | Avg MSE: 275.438381 | Params: iter=210, depth=2, lr=0.060000, min=3, sub=0.900000
+Pass: 103/1 | Avg MSE: 271.043812 | Params: iter=210, depth=2, lr=0.060000, min=3, sub=0.925000
+Pass: 104/1 | Avg MSE: 271.460417 | Params: iter=210, depth=2, lr=0.060000, min=4, sub=0.870000
+Pass: 105/1 | Avg MSE: 274.716455 | Params: iter=210, depth=2, lr=0.060000, min=4, sub=0.900000
+Pass: 106/1 | Avg MSE: 271.437666 | Params: iter=210, depth=2, lr=0.060000, min=4, sub=0.925000
+Pass: 107/1 | Avg MSE: 272.879753 | Params: iter=210, depth=2, lr=0.060000, min=6, sub=0.870000
+Pass: 108/1 | Avg MSE: 275.046281 | Params: iter=210, depth=2, lr=0.060000, min=6, sub=0.900000
+Pass: 109/1 | Avg MSE: 272.926614 | Params: iter=210, depth=2, lr=0.060000, min=6, sub=0.925000
+Pass: 110/1 | Avg MSE: 276.290154 | Params: iter=225, depth=2, lr=0.052500, min=2, sub=0.870000
+Pass: 111/1 | Avg MSE: 277.680046 | Params: iter=225, depth=2, lr=0.052500, min=2, sub=0.900000
+Pass: 112/1 | Avg MSE: 274.711207 | Params: iter=225, depth=2, lr=0.052500, min=2, sub=0.925000
+Pass: 113/1 | Avg MSE: 275.952029 | Params: iter=225, depth=2, lr=0.052500, min=3, sub=0.870000
+Pass: 114/1 | Avg MSE: 274.545488 | Params: iter=225, depth=2, lr=0.052500, min=3, sub=0.900000
+Pass: 115/1 | Avg MSE: 274.075498 | Params: iter=225, depth=2, lr=0.052500, min=3, sub=0.925000
+Pass: 116/1 | Avg MSE: 274.547279 | Params: iter=225, depth=2, lr=0.052500, min=4, sub=0.870000
+Pass: 117/1 | Avg MSE: 274.311998 | Params: iter=225, depth=2, lr=0.052500, min=4, sub=0.900000
+Pass: 118/1 | Avg MSE: 273.863595 | Params: iter=225, depth=2, lr=0.052500, min=4, sub=0.925000
+Pass: 119/1 | Avg MSE: 274.942591 | Params: iter=225, depth=2, lr=0.052500, min=6, sub=0.870000
+Pass: 120/1 | Avg MSE: 275.193315 | Params: iter=225, depth=2, lr=0.052500, min=6, sub=0.900000
+Pass: 121/1 | Avg MSE: 272.272736 | Params: iter=225, depth=2, lr=0.052500, min=6, sub=0.925000
+Pass: 122/1 | Avg MSE: 276.173585 | Params: iter=225, depth=2, lr=0.055000, min=2, sub=0.870000
+Pass: 123/1 | Avg MSE: 277.432828 | Params: iter=225, depth=2, lr=0.055000, min=2, sub=0.900000
+Pass: 124/1 | Avg MSE: 275.215549 | Params: iter=225, depth=2, lr=0.055000, min=2, sub=0.925000
+Pass: 125/1 | Avg MSE: 274.794166 | Params: iter=225, depth=2, lr=0.055000, min=3, sub=0.870000
+Pass: 126/1 | Avg MSE: 276.394587 | Params: iter=225, depth=2, lr=0.055000, min=3, sub=0.900000
+Pass: 127/1 | Avg MSE: 273.559545 | Params: iter=225, depth=2, lr=0.055000, min=3, sub=0.925000
+Pass: 128/1 | Avg MSE: 273.247541 | Params: iter=225, depth=2, lr=0.055000, min=4, sub=0.870000
+Pass: 129/1 | Avg MSE: 271.118927 | Params: iter=225, depth=2, lr=0.055000, min=4, sub=0.900000
+Pass: 130/1 | Avg MSE: 273.604142 | Params: iter=225, depth=2, lr=0.055000, min=4, sub=0.925000
+Pass: 131/1 | Avg MSE: 274.191363 | Params: iter=225, depth=2, lr=0.055000, min=6, sub=0.870000
+Pass: 132/1 | Avg MSE: 274.272178 | Params: iter=225, depth=2, lr=0.055000, min=6, sub=0.900000
+Pass: 133/1 | Avg MSE: 275.730702 | Params: iter=225, depth=2, lr=0.055000, min=6, sub=0.925000
+Pass: 134/1 | Avg MSE: 276.013358 | Params: iter=225, depth=2, lr=0.060000, min=2, sub=0.870000
+Pass: 135/1 | Avg MSE: 279.483440 | Params: iter=225, depth=2, lr=0.060000, min=2, sub=0.900000
+Pass: 136/1 | Avg MSE: 274.466486 | Params: iter=225, depth=2, lr=0.060000, min=2, sub=0.925000
+Pass: 137/1 | Avg MSE: 275.428971 | Params: iter=225, depth=2, lr=0.060000, min=3, sub=0.870000
+Pass: 138/1 | Avg MSE: 276.667070 | Params: iter=225, depth=2, lr=0.060000, min=3, sub=0.900000
+Pass: 139/1 | Avg MSE: 272.839047 | Params: iter=225, depth=2, lr=0.060000, min=3, sub=0.925000
+Pass: 140/1 | Avg MSE: 272.949674 | Params: iter=225, depth=2, lr=0.060000, min=4, sub=0.870000
+Pass: 141/1 | Avg MSE: 276.364186 | Params: iter=225, depth=2, lr=0.060000, min=4, sub=0.900000
+Pass: 142/1 | Avg MSE: 272.434148 | Params: iter=225, depth=2, lr=0.060000, min=4, sub=0.925000
+Pass: 143/1 | Avg MSE: 274.499671 | Params: iter=225, depth=2, lr=0.060000, min=6, sub=0.870000
+Pass: 144/1 | Avg MSE: 276.198556 | Params: iter=225, depth=2, lr=0.060000, min=6, sub=0.900000
+Pass: 145/1 | Avg MSE: 274.050469 | Params: iter=225, depth=2, lr=0.060000, min=6, sub=0.925000
+STAGE 1 Complete. Identifying top 5 candidates
+Top 5 candidates selected. Starting STAGE 2: Full cross-validation.
+Pass: 1/5 | Avg MSE: 283.332014 | Params: iter=210, depth=2, lr=0.052500, min=6, sub=0.925000
+Pass: 2/5 | Avg MSE: 284.538909 | Params: iter=210, depth=2, lr=0.060000, min=3, sub=0.925000
+Pass: 3/5 | Avg MSE: 285.430939 | Params: iter=225, depth=2, lr=0.055000, min=4, sub=0.900000
+Pass: 4/5 | Avg MSE: 285.271544 | Params: iter=210, depth=2, lr=0.055000, min=4, sub=0.870000
+Pass: 5/5 | Avg MSE: 284.271307 | Params: iter=190, depth=2, lr=0.060000, min=3, sub=0.925000
+Hyperparameter tuning complete.
