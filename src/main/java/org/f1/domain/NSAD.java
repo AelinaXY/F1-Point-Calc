@@ -3,9 +3,17 @@ package org.f1.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.apache.spark.mllib.linalg.DenseVector;
-import org.apache.spark.mllib.linalg.Vector;
-import org.apache.spark.mllib.regression.LabeledPoint;
+import org.apache.spark.ml.attribute.Attribute;
+import org.apache.spark.ml.attribute.AttributeGroup;
+import org.apache.spark.ml.attribute.NominalAttribute;
+import org.apache.spark.ml.attribute.NumericAttribute;
+import org.apache.spark.ml.linalg.Vector;
+import org.apache.spark.ml.linalg.Vectors;
+import org.apache.spark.sql.Row;
+import org.apache.spark.sql.RowFactory;
+import org.apache.spark.sql.types.DataTypes;
+import org.apache.spark.sql.types.StructField;
+import org.apache.spark.sql.types.StructType;
 import org.f1.calculations.ScoreCalculator;
 import org.f1.utils.MathUtils;
 
@@ -25,9 +33,29 @@ public class NSAD {
     Double isSprint;
     Double teamId;
 
-    public LabeledPoint toLabeledPoint() {
-        Vector vector = new DenseVector(new double[]{avgPoints, avg4d1Points, stdev, isTeam, isSprint, teamId});
-        return new LabeledPoint(actualPoints, vector);
+    public Row toRegressionRow() {
+        return RowFactory.create(actualPoints.doubleValue(), toFeaturesVector());
+    }
+
+    public Vector toFeaturesVector() {
+        return Vectors.dense(avgPoints, avg4d1Points, stdev, isTeam, isSprint, teamId);
+    }
+
+    public static StructType regressionSchema() {
+        Attribute[] attributes = new Attribute[]{
+                NumericAttribute.defaultAttr().withName("Average Points"),
+                NumericAttribute.defaultAttr().withName("4-Race Average"),
+                NumericAttribute.defaultAttr().withName("Standard Deviation"),
+                NominalAttribute.defaultAttr().withName("Is Team").withNumValues(2),
+                NominalAttribute.defaultAttr().withName("Is Sprint").withNumValues(2),
+                NominalAttribute.defaultAttr().withName("Team ID").withNumValues(14)
+        };
+
+        StructField featuresField = new AttributeGroup("features", attributes).toStructField();
+        return new StructType(new StructField[]{
+                DataTypes.createStructField("label", DataTypes.DoubleType, false),
+                featuresField
+        });
     }
 
     public static NSAD buildFullNSAD(FullPointEntity fullPointEntity, String raceName, int meetingEntityReference, boolean isSprint, double teamId) {

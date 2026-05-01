@@ -1,14 +1,10 @@
 package org.f1.service;
 
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.Path;
-import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.mllib.regression.LabeledPoint;
-import org.apache.spark.mllib.tree.GradientBoostedTrees;
-import org.apache.spark.mllib.tree.configuration.BoostingStrategy;
-import org.apache.spark.mllib.tree.model.DecisionTreeModel;
-import org.apache.spark.mllib.tree.model.GradientBoostedTreesModel;
+import org.apache.spark.ml.linalg.Vector;
+import org.apache.spark.ml.regression.GBTRegressionModel;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
+import org.apache.spark.sql.SparkSession;
 import org.f1.controller.model.response.TrainModelResponse;
 import org.f1.domain.*;
 import org.f1.parsing.CSVParsing;
@@ -43,15 +39,15 @@ public class RegressionService {
     private final MERRepository merRepository;
     private final MeetingService meetingService;
     private final TeamRepository teamRepository;
-    private final JavaSparkContext sparkContext;
+    private final SparkSession sparkSession;
 
-    public RegressionService(DriverService driverService, NSADRepository nsadRepository, MERRepository merRepository, MeetingService meetingService, TeamRepository teamRepository, JavaSparkContext sparkContext) {
+    public RegressionService(DriverService driverService, NSADRepository nsadRepository, MERRepository merRepository, MeetingService meetingService, TeamRepository teamRepository, SparkSession sparkSession) {
         this.driverService = driverService;
         this.nsadRepository = nsadRepository;
         this.merRepository = merRepository;
         this.meetingService = meetingService;
         this.teamRepository = teamRepository;
-        this.sparkContext = sparkContext;
+        this.sparkSession = sparkSession;
     }
 
 
@@ -70,26 +66,15 @@ public class RegressionService {
     public TrainModelResponse trainNSADRegressionModel() throws IOException {
         List<NSAD> nsadSet = nsadRepository.getAll();
 
-        JavaRDD<LabeledPoint> dataSet = sparkContext.parallelize(
+        Dataset<Row> dataSet = sparkSession.createDataFrame(
                 nsadSet.stream()
-                        .map(NSAD::toLabeledPoint)
-                        .collect(Collectors.toList())
+                        .map(NSAD::toRegressionRow)
+                        .collect(Collectors.toList()),
+                NSAD.regressionSchema()
         );
 
-        Map<Integer, Integer> categoricalFeaturesInfo = new HashMap<>();
-        categoricalFeaturesInfo.put(3, 2);
-        categoricalFeaturesInfo.put(4, 2);
-        categoricalFeaturesInfo.put(5, 14);
-
-        EvaluationResult bestResult = EvaluationResult.parallelGridSearch(dataSet, sparkContext, categoricalFeaturesInfo);
-
-        BoostingStrategy bestStrategy = BoostingStrategy.defaultParams("Regression");
-        bestStrategy.setNumIterations(bestResult.getHyperParameters().getNumIterations());
-        bestStrategy.setLearningRate(bestResult.getHyperParameters().getLearningRate());
-        bestStrategy.treeStrategy().setMaxDepth(bestResult.getHyperParameters().getMaxDepth());
-        bestStrategy.treeStrategy().setMinInstancesPerNode(bestResult.getHyperParameters().getMinInstancesPerNode());
-        bestStrategy.treeStrategy().setSubsamplingRate(bestResult.getHyperParameters().getSubsamplingRate());
-        GradientBoostedTreesModel bestModel = GradientBoostedTrees.train(dataSet, bestStrategy);
+        EvaluationResult bestResult = EvaluationResult.parallelGridSearch(dataSet);
+        GBTRegressionModel bestModel = EvaluationResult.buildRegressor(bestResult.getHyperParameters()).fit(dataSet);
 
         System.out.println("Best parameters found:");
         System.out.println("Parameters: " + bestResult.getHyperParameters());
@@ -102,55 +87,18 @@ public class RegressionService {
         System.out.println("\nFeature Importances:");
 
         Map<String, Double> featureImportanceMap = new HashMap<>();
+        Vector featureImportances = bestModel.featureImportances();
         for (int i = 0; i < featureNames.length; i++) {
-            double importance = calculateFeatureImportance(bestModel, i);
+            double importance = featureImportances.apply(i);
             System.out.printf("%s: %.4f%n", featureNames[i], importance);
 
             featureImportanceMap.put(featureNames[i], importance);
         }
 
         String modelPath = "src/main/resources/regressionModel2";
-        FileSystem fs = FileSystem.get(sparkContext.hadoopConfiguration());
-        fs.delete(new Path(modelPath), true);
-        bestModel.save(sparkContext.sc(), modelPath);
+        bestModel.write().overwrite().save(modelPath);
 
         return new TrainModelResponse(bestResult.getHyperParameters(), bestResult.getMeanSquaredError(), bestResult.getMeanAbsoluteError(), bestResult.getRSquared(), featureImportanceMap);
-    }
-
-    private double calculateFeatureImportance(GradientBoostedTreesModel model, int featureIndex) {
-        double totalGain = 0.0;
-        double featureGain = 0.0;
-
-        for (DecisionTreeModel tree : model.trees()) {
-            String[] lines = tree.toDebugString().split("\n");
-            for (int i = 0; i < lines.length - 2; i++) {
-                String line = lines[i];
-                if (line.contains("If (feature")) {
-                    double leftPredict = extractPredictValue(lines[i + 1]);
-                    double rightPredict = extractPredictValue(lines[i + 2]);
-                    double gain = Math.abs(leftPredict - rightPredict);
-
-                    totalGain += gain;
-                    if (line.contains("If (feature " + featureIndex + " ")) {
-                        featureGain += gain;
-                    }
-                }
-            }
-        }
-
-        return totalGain > 0 ? featureGain / totalGain : 0.0;
-    }
-
-    private double extractPredictValue(String line) {
-        if (line.contains("Predict: ")) {
-            String valueStr = line.substring(line.indexOf("Predict: ") + 9).trim();
-            try {
-                return Double.parseDouble(valueStr);
-            } catch (NumberFormatException e) {
-                return 0.0;
-            }
-        }
-        return 0.0;
     }
 
 

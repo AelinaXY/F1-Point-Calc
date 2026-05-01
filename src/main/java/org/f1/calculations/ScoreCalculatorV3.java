@@ -1,7 +1,7 @@
 package org.f1.calculations;
 
 import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.mllib.tree.model.GradientBoostedTreesModel;
+import org.apache.spark.ml.regression.GBTRegressionModel;
 import org.f1.domain.FullPointEntity;
 import org.f1.domain.NSAD;
 import org.f1.domain.TeamLookup;
@@ -12,17 +12,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ScoreCalculatorV3 implements ScoreCalculatorInterface {
-    private final JavaSparkContext sparkContext;
-    private final GradientBoostedTreesModel gradientBoostedTreesModel;
+    private final GBTRegressionModel gradientBoostedTreesModel;
     private final TeamRepository teamRepository;
     private final DriverService driverService;
 
 
     public ScoreCalculatorV3(JavaSparkContext javaSparkContext, TeamRepository teamRepository, DriverService driverService) {
-        this.sparkContext = javaSparkContext;
-
-        this.gradientBoostedTreesModel = GradientBoostedTreesModel
-                .load(sparkContext.sc(), "src/main/resources/regressionModel2V1");
+        this.gradientBoostedTreesModel = GBTRegressionModel.load("src/main/resources/regressionModel2");
+//        this.gradientBoostedTreesModel = new GBTRegressionModel();
         this.teamRepository = teamRepository;
         this.driverService = driverService;
     }
@@ -38,8 +35,7 @@ public class ScoreCalculatorV3 implements ScoreCalculatorInterface {
         }
 
         NSAD nsad = NSAD.buildUnlabelledNSAD(fullPointEntity, raceName, isSprint, teamId);
-
-        return gradientBoostedTreesModel.predict(nsad.toLabeledPoint().features());
+        return gradientBoostedTreesModel.predict(nsad.toFeaturesVector());
     }
 
     private Integer getDriverMerId(FullPointEntity driver) {

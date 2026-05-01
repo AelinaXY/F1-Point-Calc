@@ -1,16 +1,12 @@
 package org.f1.regression;
 
 import lombok.Data;
-import org.apache.spark.api.java.JavaPairRDD;
-import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.mllib.regression.LabeledPoint;
-import org.apache.spark.mllib.tree.GradientBoostedTrees;
-import org.apache.spark.mllib.tree.configuration.BoostingStrategy;
-import org.apache.spark.mllib.tree.model.DecisionTreeModel;
-import org.apache.spark.mllib.tree.model.GradientBoostedTreesModel;
+import org.apache.spark.ml.evaluation.RegressionEvaluator;
+import org.apache.spark.ml.regression.GBTRegressionModel;
+import org.apache.spark.ml.regression.GBTRegressor;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
 import org.f1.service.RegressionService;
-import scala.Tuple2;
 
 import java.io.IOException;
 import java.util.*;
@@ -20,6 +16,7 @@ import java.util.logging.Logger;
 import java.util.logging.Formatter;
 import java.util.logging.LogRecord;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Data
 public class EvaluationResult {
@@ -27,82 +24,65 @@ public class EvaluationResult {
     private final double meanSquaredError;
     private final double meanAbsoluteError;
     private final double rSquared;
-    private static final int numFolds = 5;
+    private static final int numFolds = 3;
+    private static final long SEED_BASE = 42L;
 
 
-    public static EvaluationResult parallelGridSearch(JavaRDD<LabeledPoint> dataSet, JavaSparkContext sparkContext, Map<Integer, Integer> categoricalFeaturesInfo) throws IOException {
+    public static EvaluationResult parallelGridSearch(Dataset<Row> dataSet) throws IOException {
         Logger logger = getEvaluationResultLogger();
 
         List<HyperParameters> paramGrid = generateParameterGrid();
-        dataSet.cache();
 
-        List<Tuple2<JavaRDD<LabeledPoint>, JavaRDD<LabeledPoint>>> folds = new ArrayList<>();
-        long seedBase = System.currentTimeMillis();
+        //Old best
+        paramGrid.addFirst(new HyperParameters(100, 3, 0.03, 1, 0.8));
+        dataSet.cache();
+        dataSet.count();
+
+        List<Dataset<Row>[]> folds = new ArrayList<>();
         for (int i = 0; i < numFolds; i++) {
-            JavaRDD<LabeledPoint>[] splits = dataSet.randomSplit(
-                    new double[]{0.8, 0.2}, i * 1000L + seedBase
+            Dataset<Row>[] splits = dataSet.randomSplit(
+                    new double[]{0.8, 0.2}, i * 1000L + SEED_BASE
             );
-            folds.add(new Tuple2<>(splits[0], splits[1]));
+            splits[0].cache();
+            splits[0].count();
+            splits[1].cache();
+            splits[1].count();
+            folds.add(splits);
         }
 
         AtomicInteger count = new AtomicInteger(0);
+        RegressionEvaluator mseEvaluator = getEvaluator("mse");
+        RegressionEvaluator maeEvaluator = getEvaluator("mae");
+        RegressionEvaluator r2Evaluator = getEvaluator("r2");
 
         Set<EvaluationResult> results = paramGrid.stream().flatMap(params -> {
             int currentCount = count.incrementAndGet();
 
-            Map<Integer, double[]> metricsMap = new HashMap<>();
-            int[] iterationsToCheck = {25, 50, 100};
-            for (int iter : iterationsToCheck) {
-                metricsMap.put(iter, new double[3]);
+            double[] metrics = new double[3];
+
+            for (Dataset<Row>[] fold : folds) {
+                Dataset<Row> training = fold[0];
+                Dataset<Row> testing = fold[1];
+
+                GBTRegressionModel model = buildRegressor(params).fit(training);
+                Dataset<Row> predictions = model.transform(testing).cache();
+
+                metrics[0] += mseEvaluator.evaluate(predictions);
+                metrics[1] += maeEvaluator.evaluate(predictions);
+                metrics[2] += r2Evaluator.evaluate(predictions);
+                predictions.unpersist();
+
             }
 
-            for (Tuple2<JavaRDD<LabeledPoint>, JavaRDD<LabeledPoint>> fold : folds) {
-                JavaRDD<LabeledPoint> training = fold._1();
-                JavaRDD<LabeledPoint> testing = fold._2();
+            logger.info(String.format("Version %d of %d | Total mean error: %f | Params of %s.",
+                    currentCount, paramGrid.size(), metrics[0] / numFolds, params));
 
-                BoostingStrategy boostingStrategy = BoostingStrategy.defaultParams("Regression");
-                boostingStrategy.setNumIterations(params.getNumIterations());
-                boostingStrategy.setLearningRate(params.getLearningRate());
-                boostingStrategy.treeStrategy().setMaxDepth(params.getMaxDepth());
-                boostingStrategy.treeStrategy().setSubsamplingRate(params.getSubsamplingRate());
-                boostingStrategy.treeStrategy().setCategoricalFeaturesInfo(categoricalFeaturesInfo);
-                boostingStrategy.treeStrategy().setMinInstancesPerNode(params.getMinInstancesPerNode());
-                boostingStrategy.treeStrategy().setMinInfoGain(0.01);
-                boostingStrategy.treeStrategy().setMaxBins(32);
-
-                GradientBoostedTreesModel model = GradientBoostedTrees.train(training, boostingStrategy);
-
-                for (int iter : iterationsToCheck) {
-                    GradientBoostedTreesModel slicedModel = (iter == params.getNumIterations()) ?
-                            model : sliceModel(model, iter);
-
-                    JavaPairRDD<Double, Double> predictionAndLabel = testing.mapToPair(
-                            p -> new Tuple2<>(slicedModel.predict(p.features()), p.label())
-                    );
-
-                    double[] m = metricsMap.get(iter);
-                    m[0] += getMeanSquaredError(predictionAndLabel);
-                    m[1] += getMeanAbsoluteError(predictionAndLabel);
-                    m[2] += getRSquared(predictionAndLabel);
-                }
-            }
-
-            return Arrays.stream(iterationsToCheck).mapToObj(iter -> {
-                double[] m = metricsMap.get(iter);
-                HyperParameters currentParams = (iter == params.getNumIterations()) ? params :
-                        new HyperParameters(iter, params.getMaxDepth(), params.getLearningRate(),
-                                params.getMinInstancesPerNode(), params.getSubsamplingRate());
-
-                logger.info(String.format("Version %d of %d [%d] | Total mean error: %f | Params of %s.",
-                        currentCount, paramGrid.size(), iter, m[0] / numFolds, currentParams));
-
-                return new EvaluationResult(
-                        currentParams,
-                        m[0] / numFolds,
-                        m[1] / numFolds,
-                        m[2] / numFolds
-                );
-            });
+            return Stream.of(new EvaluationResult(
+                    params,
+                    metrics[0] / numFolds,
+                    metrics[1] / numFolds,
+                    metrics[2] / numFolds
+            ));
         }).collect(Collectors.toSet());
 
 
@@ -114,20 +94,35 @@ public class EvaluationResult {
         return bestResult.orElseThrow(() -> new RuntimeException("No results found"));
     }
 
-    private static GradientBoostedTreesModel sliceModel(GradientBoostedTreesModel model, int numTrees) {
-        DecisionTreeModel[] trees = Arrays.copyOf(model.trees(), numTrees);
-        double[] weights = Arrays.copyOf(model.treeWeights(), numTrees);
-        return new GradientBoostedTreesModel(model.algo(), trees, weights);
+    public static GBTRegressor buildRegressor(HyperParameters params) {
+        return new GBTRegressor()
+                .setLabelCol("label")
+                .setFeaturesCol("features")
+                .setPredictionCol("prediction")
+                .setMaxIter(params.getNumIterations())
+                .setStepSize(params.getLearningRate())
+                .setMaxDepth(params.getMaxDepth())
+                .setSubsamplingRate(params.getSubsamplingRate())
+                .setMinInstancesPerNode(params.getMinInstancesPerNode())
+                .setMinInfoGain(0.01)
+                .setMaxBins(32);
+    }
+
+    private static RegressionEvaluator getEvaluator(String metricName) {
+        return new RegressionEvaluator()
+                .setLabelCol("label")
+                .setPredictionCol("prediction")
+                .setMetricName(metricName);
     }
 
     private static List<HyperParameters> generateParameterGrid() {
         List<HyperParameters> paramGrid = new ArrayList<>();
 
-        int[] numIterations = {100};
-        int[] maxDepths = {3, 5, 7};
-        double[] learningRates = {0.01, 0.03, 0.1};
-        int[] minInstancesPerNode = {1, 3, 5};
-        double[] subsamplingRates = {0.8, 1.0};
+        int[] numIterations = {100, 125, 150, 200, 250};
+        int[] maxDepths = {2, 3};
+        double[] learningRates = {0.035, 0.05, 0.065};
+        int[] minInstancesPerNode = {3, 5, 8, 10};
+        double[] subsamplingRates = {0.8, 0.85, 0.9};
 
         for (int numIterationsValue : numIterations) {
             for (int maxDepthValue : maxDepths) {
@@ -145,27 +140,6 @@ public class EvaluationResult {
             }
         }
         return paramGrid;
-    }
-
-    private static double getMeanSquaredError(JavaPairRDD<Double, Double> predictionAndLabel) {
-        return predictionAndLabel.mapToDouble(pair ->
-                        Math.pow(pair._1 - pair._2, 2))
-                .mean();
-    }
-
-    private static double getMeanAbsoluteError(JavaPairRDD<Double, Double> predictionAndLabel) {
-        return predictionAndLabel.mapToDouble(pair ->
-                Math.abs(pair._1() - pair._2())).mean();
-    }
-
-    private static double getRSquared(JavaPairRDD<Double, Double> predictionAndLabel) {
-        double mean = predictionAndLabel.mapToDouble(Tuple2::_2).mean();
-        double totalSS = predictionAndLabel.mapToDouble(pl ->
-                        Math.pow(pl._2() - mean, 2))
-                .sum();
-        double residualSS = predictionAndLabel.mapToDouble(pl ->
-                Math.pow(pl._1() - pl._2(), 2)).sum();
-        return 1 - (residualSS / totalSS);
     }
 
     private static Logger getEvaluationResultLogger() throws IOException {
