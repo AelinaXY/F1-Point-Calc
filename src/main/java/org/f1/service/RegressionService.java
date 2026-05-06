@@ -81,7 +81,7 @@ public class RegressionService {
         System.out.println("MSE: " + bestResult.getMeanSquaredError());
 
         String[] featureNames = {"Average Points", "4-Race Average",
-                "Standard Deviation", "Is Team", "Is Sprint", "Team ID"};
+                "Standard Deviation", "Is Team", "Is Sprint", "Team ID", "Days Since First Race"};
         System.out.println("\nFeature Importances:");
 
         Map<String, Double> featureImportanceMap = new HashMap<>();
@@ -102,8 +102,10 @@ public class RegressionService {
 
     private void populateNSADyear(Set<FullPointEntity> fullPointEntities, int year) {
         Set<NSAD> returnSet = new HashSet<>();
+
         for (Meeting meeting : Meeting.getMeetings(year)) {
             String shortName = meeting.getShortName();
+            int daysSinceFirstRace = meetingService.getDaysSinceFirstRace(year, meeting.getFullNames());
             for (FullPointEntity entity : fullPointEntities) {
                 if (entity.getRaceNameList().contains(shortName)) {
                     List<Double> pointList = getListOfPoints(entity.getRaceList(), shortName);
@@ -117,7 +119,7 @@ public class RegressionService {
 
                         boolean isSprint = meeting.getSprintYears().contains(year);
 
-                        NSAD nsad = NSAD.buildFullNSAD(entity, shortName, mer.getId(), isSprint, mer.getTeamId());
+                        NSAD nsad = NSAD.buildFullNSAD(entity, shortName, mer.getId(), isSprint, mer.getTeamId(), daysSinceFirstRace);
                         returnSet.add(nsad);
                     } else {
                         System.out.println("Skipping NSAD entry for entity " + entity.getName() + " with year " + year + " with circuit " + shortName);

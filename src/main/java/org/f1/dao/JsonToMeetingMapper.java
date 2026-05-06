@@ -7,6 +7,7 @@ import org.f1.domain.openf1.Country;
 import org.f1.domain.openf1.Meeting;
 import org.springframework.stereotype.Component;
 
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class JsonToMeetingMapper {
                     .withName(jsonObject.getString("meeting_name"))
                     .withOfficialName(jsonObject.getString("meeting_official_name"))
                     .withGmtOffset(jsonObject.getString("gmt_offset"))
-                    .withStartDate(jsonObject.getDate("date_start"))
+                    .withStartDate(OffsetDateTime.parse(jsonObject.getString("date_start")))
                     .withYear(jsonObject.getIntValue("year"))
                     .withCircuit(new Circuit(jsonObject.getIntValue("circuit_key"), jsonObject.getString("circuit_short_name")))
                     .withCountry(new Country(jsonObject.getIntValue("country_key"), jsonObject.getString("country_name"), jsonObject.getString("country_code"))).build());

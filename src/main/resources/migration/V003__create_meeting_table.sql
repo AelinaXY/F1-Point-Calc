@@ -5,7 +5,7 @@ create table f1.meeting
             primary key,
     circuit_id    int references f1.circuit (id),
     country_id    int references f1.country (id),
-    date_start    timestamp,
+    date_start    timestamp with time zone,
     location      varchar(50),
     name          varchar(50),
     official_name varchar(200),

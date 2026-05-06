@@ -5,6 +5,7 @@ import com.alibaba.fastjson2.JSONObject;
 import org.f1.domain.openf1.Session;
 import org.springframework.stereotype.Component;
 
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,8 +22,8 @@ public class JsonToSessionMapper {
             sessions.add(aSession()
                     .withId(jsonObject.getIntValue("session_key"))
                     .withMeetingId(jsonObject.getIntValue("meeting_key"))
-                    .withStartDate(jsonObject.getDate("date_start"))
-                    .withEndDate(jsonObject.getDate("date_end"))
+                    .withStartDate(OffsetDateTime.parse(jsonObject.getString("date_start")))
+                    .withEndDate(OffsetDateTime.parse(jsonObject.getString("date_end")))
                     .withSessionName(jsonObject.getString("session_name"))
                     .withSessionType(jsonObject.getString("session_type"))
                     .build());

@@ -1,15 +1,15 @@
 package org.f1.domain.openf1;
 
-import java.util.Date;
+import java.time.OffsetDateTime;
 
-public record Session(int id, int meetingId, Date startDate, Date endDate, String sessionName, String sessionType) {
+public record Session(int id, int meetingId, OffsetDateTime startDate, OffsetDateTime endDate, String sessionName, String sessionType) {
 
 
     public static final class SessionBuilder {
         private int id;
         private int meetingId;
-        private Date startDate;
-        private Date endDate;
+        private OffsetDateTime startDate;
+        private OffsetDateTime endDate;
         private String sessionName;
         private String sessionType;
 
@@ -30,12 +30,12 @@ public record Session(int id, int meetingId, Date startDate, Date endDate, Strin
             return this;
         }
 
-        public SessionBuilder withStartDate(Date startDate) {
+        public SessionBuilder withStartDate(OffsetDateTime startDate) {
             this.startDate = startDate;
             return this;
         }
 
-        public SessionBuilder withEndDate(Date endDate) {
+        public SessionBuilder withEndDate(OffsetDateTime endDate) {
             this.endDate = endDate;
             return this;
         }

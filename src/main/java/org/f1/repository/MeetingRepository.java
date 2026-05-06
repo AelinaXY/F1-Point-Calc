@@ -5,7 +5,8 @@ import org.f1.generated.tables.records.MeetingRecord;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
-import java.time.ZoneOffset;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static org.f1.generated.tables.Meeting.MEETING;
@@ -41,7 +42,7 @@ public class MeetingRepository {
         meetingRecord.setLocation(meeting.location());
         meetingRecord.setCircuitId(meeting.circuit().id());
         meetingRecord.setCountryId(meeting.country().id());
-        meetingRecord.setDateStart(meeting.startDate().toInstant().atZone(ZoneOffset.UTC).toLocalDateTime());
+        meetingRecord.setDateStart(meeting.startDate());
         meetingRecord.setYear(meeting.year());
         meetingRecord.setOfficialName(meeting.officialName());
         return meetingRecord;
@@ -55,5 +56,34 @@ public class MeetingRepository {
                 .and(MEETING.NAME.in(fullNames))
                 .limit(1)
                 .fetchOneInto(Integer.class);
+    }
+
+    public LocalDateTime getFirstRaceDateOfYear(int year) {
+        return dslContext.select(MEETING.DATE_START)
+                .from(MEETING)
+                .where(MEETING.YEAR.eq(year))
+                .orderBy(MEETING.DATE_START.asc())
+                .limit(1)
+                .fetchOneInto(LocalDateTime.class);
+    }
+
+    public LocalDateTime getRaceDate(int year, List<String> fullNames) {
+        return dslContext.select(MEETING.DATE_START)
+                .from(MEETING)
+                .where(MEETING.YEAR.eq(year))
+                .and(MEETING.NAME.in(fullNames))
+                .limit(1)
+                .fetchOneInto(LocalDateTime.class);
+    }
+
+    public int getDaysSinceFirstRace(int year, List<String> fullNames) {
+        LocalDateTime firstRaceDate = getFirstRaceDateOfYear(year);
+        LocalDateTime raceDate = getRaceDate(year, fullNames);
+
+        if (firstRaceDate == null || raceDate == null) {
+            return 0;
+        }
+
+        return Math.toIntExact(ChronoUnit.DAYS.between(firstRaceDate, raceDate));
     }
 }

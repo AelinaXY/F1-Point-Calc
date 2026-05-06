@@ -5,8 +5,6 @@ import org.f1.generated.tables.records.SessionRecord;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
-import java.time.ZoneOffset;
-
 import static org.f1.generated.tables.Session.SESSION;
 
 
@@ -36,8 +34,8 @@ public class SessionRepository {
         SessionRecord sessionRecord = new SessionRecord();
         sessionRecord.setId(session.id());
         sessionRecord.setMeetingId(session.meetingId());
-        sessionRecord.setDateStart(session.startDate().toInstant().atZone(ZoneOffset.UTC).toLocalDateTime());
-        sessionRecord.setDateEnd(session.endDate().toInstant().atZone(ZoneOffset.UTC).toLocalDateTime());
+        sessionRecord.setDateStart(session.startDate());
+        sessionRecord.setDateEnd(session.endDate());
         sessionRecord.setSessionName(session.sessionName());
         sessionRecord.setSessionType(session.sessionType());
         return sessionRecord;

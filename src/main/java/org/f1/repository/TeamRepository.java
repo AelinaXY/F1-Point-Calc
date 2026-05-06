@@ -1,5 +1,6 @@
 package org.f1.repository;
 
+import org.f1.domain.TeamLookup;
 import org.f1.domain.openf1.Team;
 import org.f1.generated.tables.records.TeamRecord;
 import org.jooq.DSLContext;
@@ -17,10 +18,8 @@ public class TeamRepository {
         this.dslContext = dslContext;
     }
 
-    public Team saveTeam(String teamName) {
-
-        TeamRecord teamRecord = new TeamRecord();
-        teamRecord.setTeamName(teamName);
+    public Team saveTeam(TeamLookup team) {
+        TeamRecord teamRecord = new TeamRecord(team.getId(), team.getLineageName());
 
         TeamRecord returnedTeamRecord = dslContext.insertInto(TEAM)
                 .set(teamRecord)
@@ -30,8 +29,7 @@ public class TeamRepository {
                 .fetchOne();
 
         if (returnedTeamRecord == null) {
-            Integer teamId = getTeam(teamName);
-            return new Team(teamId, teamName);
+            return null;
         }
 
         return new Team(returnedTeamRecord.getId(), returnedTeamRecord.getTeamName());

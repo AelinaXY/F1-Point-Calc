@@ -2,6 +2,7 @@ package org.f1.service;
 
 import org.f1.dao.OpenF1Dao;
 import org.f1.domain.MeetingEntityReference;
+import org.f1.domain.TeamLookup;
 import org.f1.domain.openf1.Driver;
 import org.f1.domain.openf1.Team;
 import org.f1.repository.DriverRepository;
@@ -31,20 +32,13 @@ public class DriverService {
     public List<Driver> populateDrivers() {
         List<Driver> drivers = openF1Dao.getAllDrivers();
 
-        Set<String> teamNameList = drivers.stream().map(d -> d.team().getTeamName()).collect(Collectors.toSet());
-
-        Map<String, Integer> teamNameMap = new HashMap<>();
-        for (String teamName : teamNameList) {
-            Team team = teamRepository.saveTeam(teamName);
-            teamNameMap.put(team.getTeamName(), team.getId());
+        for (TeamLookup teamLookup : TeamLookup.values()) {
+            teamRepository.saveTeam(teamLookup);
         }
 
         Set<Driver> driverSet = drivers.stream().filter(StreamUtils.distinctByDualKey(Driver::meetingId, Driver::driverNumber)).collect(Collectors.toSet());
 
-        driverSet.forEach(driver -> {
-            driver.team().setId(teamNameMap.get(driver.team().getTeamName()));
-            driverRepository.saveDriver(driver);
-        });
+        driverSet.forEach(driverRepository::saveDriver);
         return drivers;
     }
 

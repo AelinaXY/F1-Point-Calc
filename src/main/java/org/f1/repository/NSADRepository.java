@@ -43,6 +43,7 @@ public class NSADRepository {
         record.setIsTeam(nsadRecord.getIsTeam());
         record.setIsSprint(nsadRecord.getIsSprint());
         record.setTeamId(nsadRecord.getTeamId());
+        record.setDaysSinceFirstRace(nsadRecord.getDaysSinceFirstRace());
         return record;
     }
 
@@ -60,6 +61,7 @@ public class NSADRepository {
                 record.getStdev(),
                 record.getIsTeam(),
                 record.getIsSprint(),
-                record.getTeamId());
+                record.getTeamId(),
+                record.getDaysSinceFirstRace());
     }
 }

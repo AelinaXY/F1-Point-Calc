@@ -23,13 +23,14 @@ public class JsonToDriverMapper {
         for (int i = 0; i < jsonArray.size(); i++) {
             JSONObject jsonObject = jsonArray.getJSONObject(i);
             String teamName = jsonObject.getString("team_name");
-            String preferredTeamName = TeamLookup.apiToPreferred(teamName);
+            TeamLookup preferredTeamName = TeamLookup.apiToTeam(teamName);
 
             if (preferredTeamName == null) {
                 unmappedDrivers.add("OpenF1 driver row has unmapped team_name '" + teamName
                                 + "' for driver_number " + jsonObject.getIntValue("driver_number")
                                 + " and meeting_key " + jsonObject.getIntValue("meeting_key")
                                 + " and driver_name " + jsonObject.getString("full_name"));
+                preferredTeamName = TeamLookup.NONEXISTENT;
             }
 
             drivers.add(aDriver()
@@ -41,7 +42,7 @@ public class JsonToDriverMapper {
                     .withHeadshotUrl(jsonObject.getString("headshot_url"))
                     .withLastName(jsonObject.getString("last_name"))
                     .withNameAcronym(jsonObject.getString("name_acronym"))
-                    .withTeam(new Team(null, preferredTeamName))
+                    .withTeam(new Team(preferredTeamName.getId(), preferredTeamName.getLineageName()))
                     .withMeetingId(jsonObject.getIntValue("meeting_key"))
                     .build()
             );
