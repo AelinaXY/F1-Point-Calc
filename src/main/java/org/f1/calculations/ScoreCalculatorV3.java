@@ -18,7 +18,6 @@ public class ScoreCalculatorV3 implements ScoreCalculatorInterface {
     private final TeamRepository teamRepository;
     private final DriverService driverService;
     private final MeetingService meetingService;
-    private final int CURRENT_YEAR = 2026;
 
 
     public ScoreCalculatorV3(JavaSparkContext javaSparkContext, TeamRepository teamRepository, DriverService driverService, MeetingService meetingService) {
@@ -37,7 +36,7 @@ public class ScoreCalculatorV3 implements ScoreCalculatorInterface {
         } else {
             teamId = getTeamId(fullPointEntity);
         }
-        int daysSinceFirstRace = meetingService.getDaysSinceFirstRace(CURRENT_YEAR, Meeting.getMeeting(raceName).getFullNames());
+        int daysSinceFirstRace = meetingService.getDaysSinceFirstRace(fullPointEntity.getYear(), Meeting.getMeeting(raceName).getFullNames());
 
         NSAD nsad = NSAD.buildUnlabelledNSAD(fullPointEntity, raceName, isSprint, teamId, daysSinceFirstRace);
         return gradientBoostedTreesModel.predict(nsad.toFeaturesVector());

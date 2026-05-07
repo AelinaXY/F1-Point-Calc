@@ -17,7 +17,7 @@ public class CSVParsing {
 
     public static final int GARBAGE_COLUMNS = 7;
 
-    public static Set<FullPointEntity> parseFullPointEntities(String fileName, EntityType entityType) {
+    public static Set<FullPointEntity> parseFullPointEntities(String fileName, EntityType entityType, int year) {
         Set<FullPointEntity> result = new HashSet<>();
 
         List<String> baseList = loadInput(fileName);
@@ -84,7 +84,7 @@ public class CSVParsing {
                 }
                 races.add(currentRaceBuilder.build());
             }
-            result.add(new FullPointEntity(name, cost, races, entityType, baseCost));
+            result.add(new FullPointEntity(name, cost, races, entityType, baseCost, year));
         }
 
         return result;

@@ -1,23 +1,27 @@
 package org.f1.domain;
 
+import lombok.Getter;
 import org.f1.calculations.ScoreCalculator;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@Getter
 public class FullPointEntity extends BasicPointEntity {
-    private List<Race> raceList;
-    private List<String> raceNameList;
-    private Double simplePredictedPoints;
-    private EntityType entityType;
+    private final List<Race> raceList;
+    private final List<String> raceNameList;
+    private final Double simplePredictedPoints;
+    private final EntityType entityType;
     private Double baseCost;
+    private final int year;
 
-    public FullPointEntity(String name, Double cost, List<Race> points, EntityType entityType, Double baseCost) {
+    public FullPointEntity(String name, Double cost, List<Race> points, EntityType entityType, Double baseCost, int year) {
         super(name, cost, null, null);
 
         this.raceList = new ArrayList<>(points);
         this.baseCost = baseCost;
+        this.year = year;
 
         List<Double> pointsList = raceList.stream().map(Race::totalPoints).toList();
 
@@ -32,22 +36,6 @@ public class FullPointEntity extends BasicPointEntity {
         this.raceNameList = raceList.stream().map(Race::name).toList();
 
         this.entityType = entityType;
-    }
-
-    public Double getSimplePredictedPoints() {
-        return simplePredictedPoints;
-    }
-
-    public List<Race> getRaceList() {
-        return raceList;
-    }
-
-    public List<String> getRaceNameList() {
-        return raceNameList;
-    }
-
-    public EntityType getEntityType() {
-        return entityType;
     }
 
     public boolean isDriver() {
@@ -71,11 +59,8 @@ public class FullPointEntity extends BasicPointEntity {
         return Objects.hash(super.hashCode(), raceList, raceNameList, simplePredictedPoints, entityType);
     }
 
-    public Double getBaseCost() {
-        return baseCost;
-    }
-
     public void setBaseCost(Double baseCost) {
         this.baseCost = baseCost;
     }
+
 }

@@ -21,7 +21,17 @@ public class SparkConfig {
                 .set("spark.executor.userClassPathFirst", "true")
                 .set("spark.driver.userClassPathFirst", "true")
                 .set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
-                .set("spark.sql.shuffle.partitions", "4");
+                .set("spark.driver.memory", "4g")
+                .set("spark.executor.memory", "20g")
+                .set("spark.sql.shuffle.partitions", "8")
+                .set("spark.default.parallelism", "8")
+                .set("spark.sql.execution.adaptive.enabled", "true")
+                .set("spark.sql.adaptive.coalescePartitions", "true")
+                .set("spark.memory.offHeap.enabled", "true")
+                .set("spark.memory.offHeap.size", "10g")
+                .set("spark.io.compression.codec", "snappy")
+                .set("spark.sql.execution.arrow.maxRecordsPerBatch", "50000")
+                .set("spark.sql.optimizer.maxIterations", "100");
 
         return new JavaSparkContext(sparkConf);
     }

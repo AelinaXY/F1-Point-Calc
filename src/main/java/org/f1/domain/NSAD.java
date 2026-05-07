@@ -36,7 +36,7 @@ public class NSAD {
     }
 
     public Vector toFeaturesVector() {
-        return Vectors.dense(avgPoints, avg4d1Points, stdev, isTeam, isSprint, teamId);
+        return Vectors.dense(avgPoints, avg4d1Points, stdev, isTeam, isSprint, teamId, daysSinceFirstRace);
     }
 
     public static StructType regressionSchema() {
@@ -46,7 +46,7 @@ public class NSAD {
                 NumericAttribute.defaultAttr().withName("Standard Deviation"),
                 BinaryAttribute.defaultAttr().withName("Is Team"),
                 BinaryAttribute.defaultAttr().withName("Is Sprint"),
-                NominalAttribute.defaultAttr().withName("Team ID").withNumValues(12),
+                NominalAttribute.defaultAttr().withName("Team ID").withNumValues(11),
                 NumericAttribute.defaultAttr().withName("Days Since First Race")
         };
 

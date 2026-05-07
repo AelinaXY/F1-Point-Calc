@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 @Data
 public class EvaluationResult {
+    private static final HyperParameters CONTROL_HYPERPARAMETERS = new HyperParameters(200, 2, 0.05, 3, 0.85);
     private final HyperParameters hyperParameters;
     private final double meanSquaredError;
     private static final int numFolds = 5;
@@ -31,31 +32,34 @@ public class EvaluationResult {
         List<HyperParameters> paramGrid = generateParameterGrid();
 
         //Old best
-        paramGrid.addFirst(new HyperParameters(200, 2, 0.05, 3, 0.85));
+        paramGrid.addFirst(CONTROL_HYPERPARAMETERS);
         dataSet.cache();
         dataSet.count();
 
         List<Dataset<Row>[]> folds = getFolds(dataSet);
 
+        long startTime = System.currentTimeMillis();
         logger.info("Starting two-stage hyperparameter tuning");
         logger.info("STAGE 1: Shallow pass on all " + paramGrid.size() + " parameter combinations");
 
         // Stage 1: Shallow pass with single fold evaluation
-        Set<EvaluationResult> shallowResults = evaluateHyperparameters(paramGrid, folds.subList(0,1) , logger);
+        Set<EvaluationResult> shallowResults = evaluateHyperparameters(paramGrid, folds.subList(0,1) , logger, startTime);
 
         logger.info("STAGE 1 Complete. Identifying top 5 candidates");
 
         // Get top 5 parameter combinations by MSE
-        List<HyperParameters> top5Params = shallowResults.stream()
+        List<HyperParameters> topParams = shallowResults.stream()
                 .sorted(Comparator.comparingDouble(EvaluationResult::getMeanSquaredError))
                 .limit(5)
                 .map(EvaluationResult::getHyperParameters)
                 .collect(Collectors.toList());
 
-        logger.info("Top 5 candidates selected. Starting STAGE 2: Full cross-validation.");
+        topParams.addFirst(CONTROL_HYPERPARAMETERS);
 
-        // Stage 2: Full evaluation with 3-fold cross-validation on top 5
-        Set<EvaluationResult> deepResults = evaluateHyperparameters(top5Params, folds, logger);
+        logger.info("Top 5 candidates selected plus control. Starting STAGE 2: Full cross-validation.");
+
+        // Stage 2: Full evaluation with 3-fold cross-validation on top 5 and control
+        Set<EvaluationResult> deepResults = evaluateHyperparameters(topParams, folds, logger, startTime);
 
         dataSet.unpersist();
 
@@ -81,10 +85,11 @@ public class EvaluationResult {
         return folds;
     }
 
-    private static Set<EvaluationResult> evaluateHyperparameters(List<HyperParameters> inputParams, List<Dataset<Row>[]> folds, Logger logger) {
+    private static Set<EvaluationResult> evaluateHyperparameters(List<HyperParameters> inputParams, List<Dataset<Row>[]> folds, Logger logger, long startTime) {
         RegressionEvaluator mseEvaluator = getEvaluator("mse");
 
         AtomicInteger count = new AtomicInteger(0);
+        int paramCount = inputParams.size();
 
         return inputParams.stream().map(params -> {
             int currentCount = count.incrementAndGet();
@@ -104,8 +109,11 @@ public class EvaluationResult {
                 predictions.unpersist();
             }
 
-            logger.info(String.format("Pass: %d/%d | Avg MSE: %f | Params: %s",
-                    currentCount, inputParams.size(), mse / numFolds, params));
+            long elapsed = System.currentTimeMillis() - startTime;
+            String timeStr = String.format("%d:%02d:%02d", elapsed / 3600000, (elapsed % 3600000) / 60000, (elapsed % 60000) / 1000);
+
+            logger.info(String.format("Pass: %03d/%03d | Time: %s | Avg MSE: %f | Params: %s",
+                    currentCount, paramCount, timeStr, mse / numFolds, params));
 
             return new EvaluationResult(
                     params,

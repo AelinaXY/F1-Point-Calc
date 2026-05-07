@@ -21,8 +21,8 @@ import static org.f1.domain.EntityType.TEAM;
 @RestController
 @RequestMapping("/api/job")
 public class JobController {
-    private static Set<FullPointEntity> DRIVER_SET = CSVParsing.parseFullPointEntities("Drivers_Full.csv", DRIVER);
-    private static Set<FullPointEntity> TEAM_SET = CSVParsing.parseFullPointEntities("Teams_Full.csv", TEAM);
+    private static Set<FullPointEntity> DRIVER_SET = CSVParsing.parseFullPointEntities("Drivers_Full.csv", DRIVER, 2026);
+    private static Set<FullPointEntity> TEAM_SET = CSVParsing.parseFullPointEntities("Teams_Full.csv", TEAM, 2026);
     private static final String DEFAULT_RACE_NAME = "Singapore";
     private static final boolean DEFAULT_IS_SPRINT = false;
     private static final int DEFAULT_RACES_LEFT = 6;
