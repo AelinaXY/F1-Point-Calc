@@ -1,8 +1,7 @@
 package org.f1.domain;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 import org.apache.spark.ml.attribute.*;
 import org.apache.spark.ml.linalg.Vector;
 import org.apache.spark.ml.linalg.Vectors;
@@ -12,24 +11,30 @@ import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 import org.f1.calculations.ScoreCalculator;
+import org.f1.generated.tables.records.NonSprintAggregateDataRecord;
 import org.f1.utils.MathUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
 public class NSAD {
-    Integer id;
-    int meetingEntityReference;
-    Integer actualPoints;
-    Double avgPoints;
-    Double avg4d1Points;
-    Double stdev;
-    Double isTeam;
-    Double isSprint;
-    Double teamId;
-    Integer daysSinceFirstRace;
+    private Integer id;
+    private int meetingEntityReference;
+    private Integer actualPoints;
+    private Double avgPoints;
+    private Double avg4d1Points;
+    private Double stdev;
+    private Double isTeam;
+    private Double isSprint;
+    private Double teamId;
+    private Integer daysSinceFirstRace;
+    private Integer fp1Pos;
+    private Double fp1Gap;
+    private Integer fp1LapsDone;
+
+    private NSAD() {
+    }
 
     public Row toRegressionRow() {
         return RowFactory.create(actualPoints.doubleValue(), toFeaturesVector());
@@ -57,24 +62,56 @@ public class NSAD {
         });
     }
 
-    public static NSAD buildFullNSAD(FullPointEntity fullPointEntity, String raceName, int meetingEntityReference, boolean isSprint, double teamId, Integer daysSinceFirstRace) {
-        NSAD basicNSAD = buildUnlabelledNSAD(fullPointEntity, raceName, isSprint, teamId, daysSinceFirstRace);
-        Integer actualPoints = fullPointEntity.getRaceList().stream().filter(r -> r.name().equals(raceName)).findFirst().orElseThrow().totalPoints().intValue();
-
-        basicNSAD.setActualPoints(actualPoints);
-        basicNSAD.setMeetingEntityReference(meetingEntityReference);
-
-        return basicNSAD;
+    public static NSAD unlabelled(FullPointEntity fullPointEntity,
+                                  String raceName,
+                                  boolean isSprint,
+                                  double teamId,
+                                  int daysSinceFirstRace) {
+        NSAD result = new NSAD();
+        List<Double> pointList = getListOfPoints(fullPointEntity.getRaceList(), raceName);
+        result.setAvgPoints(ScoreCalculator.calcAveragePoints(pointList));
+        result.setAvg4d1Points(ScoreCalculator.calcThreeRaceAverage(new ArrayList<>(pointList)));
+        result.setStdev(MathUtils.stdev(pointList));
+        result.setIsTeam(booleanToDouble(fullPointEntity.isTeam()));
+        result.setIsSprint(booleanToDouble(isSprint));
+        result.setTeamId(teamId);
+        result.setDaysSinceFirstRace(daysSinceFirstRace);
+        return result;
     }
 
+    public static NSAD full(FullPointEntity fullPointEntity,
+                            String raceName,
+                            int meetingEntityReference,
+                            boolean isSprint,
+                            double teamId,
+                            int daysSinceFirstRace) {
+        NSAD result = unlabelled(fullPointEntity,
+                raceName,
+                isSprint,
+                teamId,
+                daysSinceFirstRace);
 
-    public static NSAD buildUnlabelledNSAD(FullPointEntity fullPointEntity, String raceName, boolean isSprint, double teamId, int daysSinceFirstRace) {
-        List<Double> pointList = getListOfPoints(fullPointEntity.getRaceList(), raceName);
-        Double avgPoints = ScoreCalculator.calcAveragePoints(pointList);
-        Double avg4d1Points = ScoreCalculator.calcThreeRaceAverage(new ArrayList<>(pointList));
-        Double stdev = MathUtils.stdev(pointList);
+        result.setMeetingEntityReference(meetingEntityReference);
+        result.setActualPoints(fullPointEntity.getRaceList().stream().filter(r -> r.name().equals(raceName)).findFirst().orElseThrow().totalPoints().intValue());
+        return result;
+    }
 
-        return new NSAD(null, 0, 0, avgPoints, avg4d1Points, stdev, fullPointEntity.isTeam() ? 1d : 0, isSprint ? 1d : 0, teamId, daysSinceFirstRace);
+    public static NSAD fromRecord(NonSprintAggregateDataRecord record) {
+        NSAD result = new NSAD();
+        result.setId(record.getId());
+        result.setMeetingEntityReference(record.getMeetingEntityReference());
+        result.setActualPoints(record.getActualPoints());
+        result.setAvgPoints(record.getAvgPoints());
+        result.setAvg4d1Points(record.getAvg_4d1Points());
+        result.setStdev(record.getStdev());
+        result.setIsTeam(record.getIsTeam());
+        result.setIsSprint(record.getIsSprint());
+        result.setTeamId(record.getTeamId());
+        result.setDaysSinceFirstRace(record.getDaysSinceFirstRace());
+        result.setFp1Pos(record.getFp1Pos());
+        result.setFp1Gap(record.getFp1Gap());
+        result.setFp1LapsDone(record.getFp1LapsDone());
+        return result;
     }
 
     private static List<Double> getListOfPoints(List<Race> raceList, String currentRace) {
@@ -83,5 +120,10 @@ public class NSAD {
                 .takeWhile(race -> !race.name().equals(currentRace))
                 .map(r -> r.qualiPoints() + r.racePoints()).toList();
     }
+
+    private static double booleanToDouble(boolean b) {
+        return b ? 1d : 0d;
+    }
+
 
 }

@@ -2,12 +2,10 @@ package org.f1.calculations;
 
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.ml.regression.GBTRegressionModel;
-import org.f1.domain.FullPointEntity;
-import org.f1.domain.Meeting;
-import org.f1.domain.NSAD;
-import org.f1.domain.TeamLookup;
+import org.f1.domain.*;
 import org.f1.repository.TeamRepository;
 import org.f1.service.DriverService;
+import org.f1.service.MERService;
 import org.f1.service.MeetingService;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -18,9 +16,11 @@ public class ScoreCalculatorV3 implements ScoreCalculatorInterface {
     private final TeamRepository teamRepository;
     private final DriverService driverService;
     private final MeetingService meetingService;
+    private final MERService merService;
 
 
-    public ScoreCalculatorV3(JavaSparkContext javaSparkContext, TeamRepository teamRepository, DriverService driverService, MeetingService meetingService) {
+    public ScoreCalculatorV3(JavaSparkContext javaSparkContext, TeamRepository teamRepository, DriverService driverService, MeetingService meetingService, MERService merService) {
+        this.merService = merService;
         this.gradientBoostedTreesModel = GBTRegressionModel.load("src/main/resources/regressionModel2");
         this.teamRepository = teamRepository;
         this.driverService = driverService;
@@ -30,25 +30,11 @@ public class ScoreCalculatorV3 implements ScoreCalculatorInterface {
     @Override
     @Cacheable("scoreV3")
     public Double calculateScore(FullPointEntity fullPointEntity, String raceName, boolean isSprint) {
-        Integer teamId;
-        if (fullPointEntity.isDriver()) {
-            teamId = getDriverMerId(fullPointEntity);
-        } else {
-            teamId = getTeamId(fullPointEntity);
-        }
+        MeetingEntityReference meetingEntityReference = merService.getOrCreateMeetingEntityReference(fullPointEntity.getYear(), Meeting.getMeeting(raceName), fullPointEntity);
+
         int daysSinceFirstRace = meetingService.getDaysSinceFirstRace(fullPointEntity.getYear(), Meeting.getMeeting(raceName).getFullNames());
 
-        NSAD nsad = NSAD.buildUnlabelledNSAD(fullPointEntity, raceName, isSprint, teamId, daysSinceFirstRace);
+        NSAD nsad = NSAD.unlabelled(fullPointEntity, raceName, isSprint, meetingEntityReference.getTeamId(), daysSinceFirstRace);
         return gradientBoostedTreesModel.predict(nsad.toFeaturesVector());
     }
-
-    private Integer getDriverMerId(FullPointEntity driver) {
-        return driverService.getLatestTeam(driver.getName());
-    }
-
-    private Integer getTeamId(FullPointEntity team) {
-        return teamRepository.getTeam(TeamLookup.csvToPreferred(team.getName()));
-    }
-
-
 }

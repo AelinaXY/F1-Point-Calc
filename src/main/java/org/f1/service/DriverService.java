@@ -46,8 +46,8 @@ public class DriverService {
         return driverRepository.getDriverIdFromNumberAndSessionId(driverNumber, sessionId);
     }
 
-    public MeetingEntityReference getDriverMRFromYearAndMeetingName(String fullName, int year, List<String> meetingNames) {
-        return driverRepository.getDriverMRFromYearAndMeetingNames(fullName, year, meetingNames);
+    public MeetingEntityReference getDriverMRFromYearAndMeetingName(String fullName, int year, int meetingId) {
+        return driverRepository.getDriverMRFromYearAndMeetingNames(fullName, year, meetingId);
     }
 
     public Integer getLatestTeam(String fullName)

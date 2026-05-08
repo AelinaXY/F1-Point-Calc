@@ -75,14 +75,14 @@ public class DriverRepository {
         return driverRecord;
     }
 
-    public MeetingEntityReference getDriverMRFromYearAndMeetingNames(String fullName, int year, List<String> meetingNames) {
+    public MeetingEntityReference getDriverMRFromYearAndMeetingNames(String fullName, int year, int meetingId) {
         return dslContext.select(DRIVER.ID, DRIVER.TEAM_ID, MEETING.ID)
                 .from(DRIVER.join(MEETING)
                         .on(DRIVER.MEETING_ID.eq(MEETING.ID)))
                 .where(MEETING.YEAR.eq(year))
                 .and(DRIVER.FULL_NAME
                         .equalIgnoreCase(fullName))
-                .and(MEETING.NAME.in(meetingNames))
+                .and(MEETING.ID.eq(meetingId))
                 .limit(1)
                 .fetchOneInto(MeetingEntityReference.class);
     }

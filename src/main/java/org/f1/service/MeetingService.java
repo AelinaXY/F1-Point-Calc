@@ -7,7 +7,6 @@ import org.f1.repository.CountryRepository;
 import org.f1.repository.MeetingRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -39,7 +38,7 @@ public class MeetingService {
 
     public Integer getMeeting(int year, List<String> fullNames)
     {
-        return meetingRepository.getMeeting(year, fullNames);
+        return meetingRepository.findMeeting(year, fullNames);
     }
 
     public int getDaysSinceFirstRace(int year, List<String> fullNames) {

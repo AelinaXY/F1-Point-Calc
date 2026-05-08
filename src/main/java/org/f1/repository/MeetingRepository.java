@@ -47,8 +47,7 @@ public class MeetingRepository {
         meetingRecord.setOfficialName(meeting.officialName());
         return meetingRecord;
     }
-
-    public Integer getMeeting(int year, List<String> fullNames) {
+    public Integer findMeeting(int year, List<String> fullNames) {
 
         return dslContext.select(MEETING.ID)
                 .from(MEETING)
@@ -56,24 +55,6 @@ public class MeetingRepository {
                 .and(MEETING.NAME.in(fullNames))
                 .limit(1)
                 .fetchOneInto(Integer.class);
-    }
-
-    public LocalDateTime getFirstRaceDateOfYear(int year) {
-        return dslContext.select(MEETING.DATE_START)
-                .from(MEETING)
-                .where(MEETING.YEAR.eq(year))
-                .orderBy(MEETING.DATE_START.asc())
-                .limit(1)
-                .fetchOneInto(LocalDateTime.class);
-    }
-
-    public LocalDateTime getRaceDate(int year, List<String> fullNames) {
-        return dslContext.select(MEETING.DATE_START)
-                .from(MEETING)
-                .where(MEETING.YEAR.eq(year))
-                .and(MEETING.NAME.in(fullNames))
-                .limit(1)
-                .fetchOneInto(LocalDateTime.class);
     }
 
     public int getDaysSinceFirstRace(int year, List<String> fullNames) {
@@ -85,5 +66,23 @@ public class MeetingRepository {
         }
 
         return Math.toIntExact(ChronoUnit.DAYS.between(firstRaceDate, raceDate));
+    }
+
+    private LocalDateTime getFirstRaceDateOfYear(int year) {
+        return dslContext.select(MEETING.DATE_START)
+                .from(MEETING)
+                .where(MEETING.YEAR.eq(year))
+                .orderBy(MEETING.DATE_START.asc())
+                .limit(1)
+                .fetchOneInto(LocalDateTime.class);
+    }
+
+    private LocalDateTime getRaceDate(int year, List<String> fullNames) {
+        return dslContext.select(MEETING.DATE_START)
+                .from(MEETING)
+                .where(MEETING.YEAR.eq(year))
+                .and(MEETING.NAME.in(fullNames))
+                .limit(1)
+                .fetchOneInto(LocalDateTime.class);
     }
 }

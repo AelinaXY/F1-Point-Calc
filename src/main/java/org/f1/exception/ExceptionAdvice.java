@@ -17,6 +17,7 @@ public class ExceptionAdvice {
     @Order
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleBaseException(RuntimeException e) {
+        e.printStackTrace();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value()));
     }
 }

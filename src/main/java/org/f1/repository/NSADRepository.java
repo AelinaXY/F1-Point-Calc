@@ -49,19 +49,6 @@ public class NSADRepository {
 
     public List<NSAD> getAll() {
         return dslContext.selectFrom(NON_SPRINT_AGGREGATE_DATA)
-                .fetch().map(this::fromRecord);
-    }
-
-    private NSAD fromRecord(NonSprintAggregateDataRecord record) {
-        return new NSAD(record.getId(),
-                record.getMeetingEntityReference(),
-                record.getActualPoints(),
-                record.getAvgPoints(),
-                record.getAvg_4d1Points(),
-                record.getStdev(),
-                record.getIsTeam(),
-                record.getIsSprint(),
-                record.getTeamId(),
-                record.getDaysSinceFirstRace());
+                .fetch().map(NSAD::fromRecord);
     }
 }

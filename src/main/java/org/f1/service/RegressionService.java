@@ -9,9 +9,7 @@ import org.f1.controller.model.response.TrainModelResponse;
 import org.f1.domain.*;
 import org.f1.parsing.CSVParsing;
 import org.f1.regression.EvaluationResult;
-import org.f1.repository.MERRepository;
 import org.f1.repository.NSADRepository;
-import org.f1.repository.TeamRepository;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -34,19 +32,15 @@ public class RegressionService {
     private static final Set<FullPointEntity> teams2025 = CSVParsing.parseFullPointEntities("Teams_Full_2025.csv", TEAM, 2025);
 
 
-    private final DriverService driverService;
     private final NSADRepository nsadRepository;
-    private final MERRepository merRepository;
     private final MeetingService meetingService;
-    private final TeamRepository teamRepository;
+    private final MERService merService;
     private final SparkSession sparkSession;
 
-    public RegressionService(DriverService driverService, NSADRepository nsadRepository, MERRepository merRepository, MeetingService meetingService, TeamRepository teamRepository, SparkSession sparkSession) {
-        this.driverService = driverService;
+    public RegressionService(NSADRepository nsadRepository, MeetingService meetingService, MERService merService, SparkSession sparkSession) {
+        this.merService = merService;
         this.nsadRepository = nsadRepository;
-        this.merRepository = merRepository;
         this.meetingService = meetingService;
-        this.teamRepository = teamRepository;
         this.sparkSession = sparkSession;
     }
 
@@ -110,16 +104,11 @@ public class RegressionService {
                 if (entity.getRaceNameList().contains(shortName)) {
                     List<Double> pointList = getListOfPoints(entity.getRaceList(), shortName);
                     if (!pointList.isEmpty()) {
-                        MeetingEntityReference mer;
-                        if (entity.isDriver()) {
-                            mer = getDriverMerId(year, meeting, entity);
-                        } else {
-                            mer = getTeamMerId(year, meeting, entity);
-                        }
+                        MeetingEntityReference mer = merService.getOrCreateMeetingEntityReference(year, meeting, entity);
 
                         boolean isSprint = meeting.getSprintYears().contains(year);
 
-                        NSAD nsad = NSAD.buildFullNSAD(entity, shortName, mer.getId(), isSprint, mer.getTeamId(), daysSinceFirstRace);
+                        NSAD nsad = NSAD.full(entity, shortName, mer.getId(), isSprint, mer.getTeamId(), daysSinceFirstRace);
                         returnSet.add(nsad);
                     } else {
                         System.out.println("Skipping NSAD entry for entity " + entity.getName() + " with year " + year + " with circuit " + shortName);
@@ -130,18 +119,6 @@ public class RegressionService {
         nsadRepository.saveNSAD(returnSet);
     }
 
-    private MeetingEntityReference getDriverMerId(int year, Meeting meeting, FullPointEntity driver) {
-        MeetingEntityReference meetingEntityReference = driverService.getDriverMRFromYearAndMeetingName(driver.getName(), year, meeting.getFullNames());
-
-        return merRepository.saveMeetingReference(meetingEntityReference);
-    }
-
-    private MeetingEntityReference getTeamMerId(int year, Meeting meeting, FullPointEntity team) {
-        Integer meetingId = meetingService.getMeeting(year, meeting.getFullNames());
-        Integer teamId = teamRepository.getTeam(TeamLookup.csvToPreferred(team.getName()));
-
-        return merRepository.saveMeetingReference(new MeetingEntityReference(null, null, teamId, meetingId));
-    }
 
     private List<Double> getListOfPoints(List<Race> raceList, String currentRace) {
         return raceList
