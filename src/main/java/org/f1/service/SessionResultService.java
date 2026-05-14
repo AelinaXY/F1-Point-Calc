@@ -1,6 +1,8 @@
 package org.f1.service;
 
 import org.f1.dao.OpenF1Dao;
+import org.f1.domain.MeetingEntityReference;
+import org.f1.domain.NSAD;
 import org.f1.domain.openf1.SessionResult;
 import org.f1.repository.SessionResultRepository;
 import org.springframework.stereotype.Service;
@@ -11,8 +13,8 @@ import java.util.List;
 public class SessionResultService {
 
     private final DriverService driverService;
-    SessionResultRepository sessionResultRepository;
-    OpenF1Dao openF1Dao;
+    private final SessionResultRepository sessionResultRepository;
+    private final OpenF1Dao openF1Dao;
 
     public SessionResultService(OpenF1Dao openF1Dao, SessionResultRepository sessionResultRepository, DriverService driverService) {
         this.openF1Dao = openF1Dao;
@@ -31,5 +33,9 @@ public class SessionResultService {
         });
 
         return sessionResults;
+    }
+
+    public List<SessionResult> getSessionResultsFromName(MeetingEntityReference meetingEntityReference, String sessionName) {
+        return sessionResultRepository.getSessionResults(meetingEntityReference, sessionName);
     }
 }

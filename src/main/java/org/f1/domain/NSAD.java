@@ -8,6 +8,7 @@ import org.apache.spark.ml.linalg.Vectors;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.RowFactory;
 import org.apache.spark.sql.types.DataTypes;
+import org.apache.spark.sql.types.IntegerType;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 import org.f1.calculations.ScoreCalculator;
@@ -31,7 +32,7 @@ public class NSAD {
     private Integer daysSinceFirstRace;
     private Integer fp1Pos;
     private Double fp1Gap;
-    private Integer fp1LapsDone;
+    private Double fp1LapsDone;
 
     private NSAD() {
     }
@@ -41,7 +42,7 @@ public class NSAD {
     }
 
     public Vector toFeaturesVector() {
-        return Vectors.dense(avgPoints, avg4d1Points, stdev, isTeam, isSprint, teamId, daysSinceFirstRace);
+        return Vectors.dense(avgPoints, avg4d1Points, stdev, isTeam, isSprint, teamId, daysSinceFirstRace, fp1Pos, fp1Gap, fp1LapsDone);
     }
 
     public static StructType regressionSchema() {
@@ -52,7 +53,10 @@ public class NSAD {
                 BinaryAttribute.defaultAttr().withName("Is Team"),
                 BinaryAttribute.defaultAttr().withName("Is Sprint"),
                 NominalAttribute.defaultAttr().withName("Team ID").withNumValues(11),
-                NumericAttribute.defaultAttr().withName("Days Since First Race")
+                NumericAttribute.defaultAttr().withName("Days Since First Race"),
+                NominalAttribute.defaultAttr().withName("FP1 Position").withNumValues(24),
+                NumericAttribute.defaultAttr().withName("FP1 Gap"),
+                NumericAttribute.defaultAttr().withName("FP1 Laps Done")
         };
 
         StructField featuresField = new AttributeGroup("features", attributes).toStructField();
@@ -66,7 +70,10 @@ public class NSAD {
                                   String raceName,
                                   boolean isSprint,
                                   double teamId,
-                                  int daysSinceFirstRace) {
+                                  int daysSinceFirstRace,
+                                  Long fp1Pos,
+                                  Double fp1Gap,
+                                  Double fp1LapsDone) {
         NSAD result = new NSAD();
         List<Double> pointList = getListOfPoints(fullPointEntity.getRaceList(), raceName);
         result.setAvgPoints(ScoreCalculator.calcAveragePoints(pointList));
@@ -76,6 +83,9 @@ public class NSAD {
         result.setIsSprint(booleanToDouble(isSprint));
         result.setTeamId(teamId);
         result.setDaysSinceFirstRace(daysSinceFirstRace);
+        result.setFp1Pos(fp1Pos == null ? 23 : Math.toIntExact(fp1Pos));
+        result.setFp1Gap(fp1Gap == null ? -1 : fp1Gap);
+        result.setFp1LapsDone(fp1LapsDone == null ? -1 : fp1LapsDone);
         return result;
     }
 
@@ -84,12 +94,18 @@ public class NSAD {
                             int meetingEntityReference,
                             boolean isSprint,
                             double teamId,
-                            int daysSinceFirstRace) {
+                            int daysSinceFirstRace,
+                            Long fp1Pos,
+                            Double fp1Gap,
+                            Double fp1LapsDone) {
         NSAD result = unlabelled(fullPointEntity,
                 raceName,
                 isSprint,
                 teamId,
-                daysSinceFirstRace);
+                daysSinceFirstRace,
+                fp1Pos,
+                fp1Gap,
+                fp1LapsDone);
 
         result.setMeetingEntityReference(meetingEntityReference);
         result.setActualPoints(fullPointEntity.getRaceList().stream().filter(r -> r.name().equals(raceName)).findFirst().orElseThrow().totalPoints().intValue());
@@ -110,7 +126,7 @@ public class NSAD {
         result.setDaysSinceFirstRace(record.getDaysSinceFirstRace());
         result.setFp1Pos(record.getFp1Pos());
         result.setFp1Gap(record.getFp1Gap());
-        result.setFp1LapsDone(record.getFp1LapsDone());
+        result.setFp1LapsDone(record.getFp1LapsDone().doubleValue());
         return result;
     }
 

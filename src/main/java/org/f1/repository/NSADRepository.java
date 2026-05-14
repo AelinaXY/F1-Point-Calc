@@ -44,6 +44,9 @@ public class NSADRepository {
         record.setIsSprint(nsadRecord.getIsSprint());
         record.setTeamId(nsadRecord.getTeamId());
         record.setDaysSinceFirstRace(nsadRecord.getDaysSinceFirstRace());
+        record.setFp1Pos(nsadRecord.getFp1Pos());
+        record.setFp1Gap(nsadRecord.getFp1Gap());
+        record.setFp1LapsDone(nsadRecord.getFp1LapsDone().intValue());
         return record;
     }
 

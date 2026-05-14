@@ -1,12 +1,16 @@
 package org.f1.service;
 
+import org.apache.spark.ml.attribute.AttributeGroup;
 import org.apache.spark.ml.linalg.Vector;
+import org.apache.spark.ml.param.ParamMap;
 import org.apache.spark.ml.regression.GBTRegressionModel;
+import org.apache.spark.ml.regression.GBTRegressor;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 import org.f1.controller.model.response.TrainModelResponse;
 import org.f1.domain.*;
+import org.f1.domain.openf1.SessionResult;
 import org.f1.parsing.CSVParsing;
 import org.f1.regression.EvaluationResult;
 import org.f1.repository.NSADRepository;
@@ -36,12 +40,14 @@ public class RegressionService {
     private final MeetingService meetingService;
     private final MERService merService;
     private final SparkSession sparkSession;
+    private final SessionResultService sessionResultService;
 
-    public RegressionService(NSADRepository nsadRepository, MeetingService meetingService, MERService merService, SparkSession sparkSession) {
+    public RegressionService(NSADRepository nsadRepository, MeetingService meetingService, MERService merService, SparkSession sparkSession, SessionResultService sessionResultService) {
         this.merService = merService;
         this.nsadRepository = nsadRepository;
         this.meetingService = meetingService;
         this.sparkSession = sparkSession;
+        this.sessionResultService = sessionResultService;
     }
 
 
@@ -69,28 +75,43 @@ public class RegressionService {
 
         EvaluationResult bestResult = EvaluationResult.parallelGridSearch(dataSet);
         GBTRegressionModel bestModel = EvaluationResult.buildRegressor(bestResult.getHyperParameters()).fit(dataSet);
+        ParamMap paramMap = bestModel.paramMap();
+        GBTRegressionModel bestModel2 = new GBTRegressor().copy(paramMap).fit(dataSet);
 
         System.out.println("Best parameters found:");
         System.out.println("Parameters: " + bestResult.getHyperParameters());
         System.out.println("MSE: " + bestResult.getMeanSquaredError());
 
-        String[] featureNames = {"Average Points", "4-Race Average",
-                "Standard Deviation", "Is Team", "Is Sprint", "Team ID", "Days Since First Race"};
-        System.out.println("\nFeature Importances:");
+        String[] featureNames = Arrays.stream(
+                AttributeGroup.fromStructField(NSAD
+                        .regressionSchema()
+                        .fields()[1])
+                        .attributes().get())
+                .map(attr -> attr.name().get())
+                .toArray(String[]::new);
 
         Map<String, Double> featureImportanceMap = new HashMap<>();
         Vector featureImportances = bestModel.featureImportances();
+
         for (int i = 0; i < featureNames.length; i++) {
             double importance = featureImportances.apply(i);
-            System.out.printf("%s: %.4f%n", featureNames[i], importance);
-
             featureImportanceMap.put(featureNames[i], importance);
         }
+
+        Map<String, Double> sortedFeatureImportanceMap = featureImportanceMap.entrySet()
+                .stream()
+                .sorted(Map.Entry.<String, Double>comparingByValue().reversed())
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (a, b) -> a,
+                        LinkedHashMap::new
+                ));
 
         String modelPath = "src/main/resources/regressionModel2";
         bestModel.write().overwrite().save(modelPath);
 
-        return new TrainModelResponse(bestResult.getHyperParameters(), bestResult.getMeanSquaredError(), featureImportanceMap);
+        return new TrainModelResponse(bestResult.getHyperParameters(), bestResult.getMeanSquaredError(), sortedFeatureImportanceMap);
     }
 
 
@@ -99,17 +120,17 @@ public class RegressionService {
 
         for (Meeting meeting : Meeting.getMeetings(year)) {
             String shortName = meeting.getShortName();
+            boolean isSprint = meeting.getSprintYears().contains(year);
             int daysSinceFirstRace = meetingService.getDaysSinceFirstRace(year, meeting.getFullNames());
+
             for (FullPointEntity entity : fullPointEntities) {
                 if (entity.getRaceNameList().contains(shortName)) {
                     List<Double> pointList = getListOfPoints(entity.getRaceList(), shortName);
                     if (!pointList.isEmpty()) {
                         MeetingEntityReference mer = merService.getOrCreateMeetingEntityReference(year, meeting, entity);
 
-                        boolean isSprint = meeting.getSprintYears().contains(year);
+                        returnSet.add(buildNsad(mer, entity, shortName, daysSinceFirstRace, isSprint));
 
-                        NSAD nsad = NSAD.full(entity, shortName, mer.getId(), isSprint, mer.getTeamId(), daysSinceFirstRace);
-                        returnSet.add(nsad);
                     } else {
                         System.out.println("Skipping NSAD entry for entity " + entity.getName() + " with year " + year + " with circuit " + shortName);
                     }
@@ -117,6 +138,38 @@ public class RegressionService {
             }
         }
         nsadRepository.saveNSAD(returnSet);
+    }
+
+    private NSAD buildNsad(MeetingEntityReference mer, FullPointEntity entity, String shortName, int daysSinceFirstRace, boolean isSprint) {
+        List<SessionResult> fp1Results = sessionResultService.getSessionResultsFromName(mer, "Practice 1");
+        int size = fp1Results.size();
+        Long outPos = null;
+        Double outLaps = null;
+        Double outGap = null;
+
+        if (!fp1Results.isEmpty() && fp1Results.stream().allMatch(sessionResult -> sessionResult.getPosition() != null && sessionResult.getGapToLeader() != null && sessionResult.getNumberOfLaps() != null)) {
+            if (size > 1) {
+                double pos = 0;
+                double gap = 0;
+                double laps = 0;
+
+                for (SessionResult sessionResult : fp1Results) {
+                    pos += sessionResult.getPosition();
+                    gap += sessionResult.getGapToLeader();
+                    laps += sessionResult.getNumberOfLaps();
+                }
+                outPos = Math.round(pos / size);
+                outGap = gap / size;
+                outLaps = laps / size;
+            } else {
+                SessionResult fp1Result = fp1Results.getFirst();
+                outPos = Long.valueOf(fp1Result.getPosition());
+                outGap = fp1Result.getGapToLeader();
+                outLaps = (double) fp1Result.getNumberOfLaps();
+            }
+        }
+
+        return NSAD.full(entity, shortName, mer.getId(), isSprint, mer.getTeamId(), daysSinceFirstRace, outPos, outGap, outLaps);
     }
 
 

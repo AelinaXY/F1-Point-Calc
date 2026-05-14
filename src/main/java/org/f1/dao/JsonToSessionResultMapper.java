@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.BinaryOperator;
 
-import static org.f1.domain.openf1.SessionResult.SessionResultBuilder.aSessionResult;
 
 @Component
 public class JsonToSessionResultMapper {
@@ -27,7 +26,7 @@ public class JsonToSessionResultMapper {
                 Double duration = getDoubleFromArray(jsonObject.get("duration"));
                 Double gapToLeader = getDoubleFromArray(jsonObject.get("gap_to_leader"));
 
-                sessionResults.add(aSessionResult()
+                sessionResults.add(SessionResult.builder()
                         .withDriverNumber(jsonObject.getIntValue("driver_number"))
                         .withSessionId(jsonObject.getIntValue("session_key"))
                         .withDuration(duration)

@@ -1,12 +1,16 @@
 package org.f1.repository;
 
+import org.f1.domain.MeetingEntityReference;
 import org.f1.domain.openf1.SessionResult;
 import org.f1.generated.tables.records.SessionResultRecord;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.UUID;
 
+import static org.f1.generated.Tables.DRIVER;
+import static org.f1.generated.Tables.SESSION;
 import static org.f1.generated.tables.SessionResult.SESSION_RESULT;
 
 
@@ -39,6 +43,18 @@ public class SessionResultRepository {
                 .fetchOne();
     }
 
+    public List<SessionResult> getSessionResults(MeetingEntityReference meetingEntityReference, String sessionName) {
+        return dslContext.select(SESSION_RESULT.fields())
+                .select(DRIVER.DRIVER_NUMBER.as("driver_number"))
+                .from(SESSION_RESULT
+                        .join(SESSION).on(SESSION_RESULT.SESSION_ID.eq(SESSION.ID))
+                        .join(DRIVER).on(SESSION_RESULT.DRIVER_ID.eq(DRIVER.ID)))
+                .where(SESSION.MEETING_ID.eq(meetingEntityReference.getMeetingId()))
+                .and(SESSION.SESSION_NAME.eq(sessionName))
+                .and(DRIVER.TEAM_ID.eq(meetingEntityReference.getTeamId()))
+                .fetchInto(SessionResult.class);
+    }
+
     private SessionResultRecord buildSessionResult(SessionResult sessionResult, String previousId) {
         SessionResultRecord sessionResultRecord = new SessionResultRecord();
         if (previousId != null) {
@@ -52,9 +68,9 @@ public class SessionResultRepository {
         sessionResultRecord.setGapToLeader(sessionResult.getGapToLeader());
         sessionResultRecord.setNumberOfLaps(sessionResult.getNumberOfLaps());
         sessionResultRecord.setPosition(sessionResult.getPosition());
-        sessionResultRecord.setDnf(sessionResult.isDnf());
-        sessionResultRecord.setDns(sessionResult.isDns());
-        sessionResultRecord.setDsq(sessionResult.isDsq());
+        sessionResultRecord.setDnf(sessionResult.getDnf());
+        sessionResultRecord.setDns(sessionResult.getDns());
+        sessionResultRecord.setDsq(sessionResult.getDsq());
         return sessionResultRecord;
     }
 }
