@@ -1,8 +1,11 @@
 package org.f1.service;
 
+import org.apache.spark.ml.Model;
 import org.apache.spark.ml.attribute.AttributeGroup;
 import org.apache.spark.ml.linalg.Vector;
+import org.apache.spark.ml.param.ParamMap;
 import org.apache.spark.ml.regression.GBTRegressionModel;
+import org.apache.spark.ml.regression.GBTRegressor;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
@@ -11,6 +14,7 @@ import org.f1.domain.*;
 import org.f1.domain.openf1.SessionResult;
 import org.f1.parsing.CSVParsing;
 import org.f1.regression.EvaluationResult;
+import org.f1.regression.EvaluationResult2;
 import org.f1.repository.NSADRepository;
 import org.springframework.stereotype.Service;
 
