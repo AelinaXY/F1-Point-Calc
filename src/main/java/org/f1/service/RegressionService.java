@@ -1,6 +1,5 @@
 package org.f1.service;
 
-import org.apache.spark.ml.Model;
 import org.apache.spark.ml.attribute.AttributeGroup;
 import org.apache.spark.ml.linalg.Vector;
 import org.apache.spark.ml.param.ParamMap;
@@ -14,7 +13,6 @@ import org.f1.domain.*;
 import org.f1.domain.openf1.SessionResult;
 import org.f1.parsing.CSVParsing;
 import org.f1.regression.EvaluationResult;
-import org.f1.regression.EvaluationResult2;
 import org.f1.repository.NSADRepository;
 import org.springframework.stereotype.Service;
 
@@ -76,7 +74,13 @@ public class RegressionService {
         );
 
         EvaluationResult bestResult = EvaluationResult.parallelGridSearch(dataSet);
-        GBTRegressionModel bestModel = bestResult.getTrainedModel();
+        GBTRegressionModel bestModel = EvaluationResult.buildRegressor(bestResult.getHyperParameters()).fit(dataSet);
+        ParamMap paramMap = bestModel.paramMap();
+        GBTRegressionModel bestModel2 = new GBTRegressor().copy(paramMap).fit(dataSet);
+
+        System.out.println("Best parameters found:");
+        System.out.println("Parameters: " + bestResult.getHyperParameters());
+        System.out.println("MSE: " + bestResult.getMeanSquaredError());
 
         String[] featureNames = Arrays.stream(
                 AttributeGroup.fromStructField(NSAD
@@ -107,7 +111,7 @@ public class RegressionService {
         String modelPath = "src/main/resources/regressionModel2";
         bestModel.write().overwrite().save(modelPath);
 
-        return new TrainModelResponse(EvaluationResult.getBestParams(bestModel), bestResult.getMeanSquaredError(), sortedFeatureImportanceMap);
+        return new TrainModelResponse(bestResult.getHyperParameters(), bestResult.getMeanSquaredError(), sortedFeatureImportanceMap);
     }
 
 
