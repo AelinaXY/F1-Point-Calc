@@ -18,7 +18,7 @@ import java.util.Optional;
 public class NSADFactory {
     private static final String FP1_SESSION_NAME = "Practice 1";
     private static final int MISSING_FP1_POSITION = 23;
-    private static final double MISSING_FP1_VALUE = -1d;
+    private static final double MISSING_FP1_GAP = -1d;
 
     private final MERService merService;
     private final MeetingService meetingService;
@@ -71,8 +71,8 @@ public class NSADFactory {
         nsad.setTeamId((double) meetingEntityReference.getTeamId());
         nsad.setDaysSinceFirstRace(meetingService.getDaysSinceFirstRace(fullPointEntity.getYear(), meeting.getFullNames()));
         nsad.setFp1Pos(fp1Summary.position() == null ? MISSING_FP1_POSITION : Math.toIntExact(fp1Summary.position()));
-        nsad.setFp1Gap(fp1Summary.gap() == null ? MISSING_FP1_VALUE : fp1Summary.gap());
-        nsad.setFp1LapsDone(fp1Summary.lapsDone() == null ? MISSING_FP1_VALUE : fp1Summary.lapsDone());
+        nsad.setFp1Gap(fp1Summary.gap() == null ? MISSING_FP1_GAP : fp1Summary.gap());
+        nsad.setFp1LapsDone(fp1Summary.lapsDone() == null ? MISSING_FP1_GAP : fp1Summary.lapsDone());
         return nsad;
     }
 
