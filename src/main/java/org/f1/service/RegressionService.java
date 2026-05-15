@@ -9,8 +9,9 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 import org.f1.controller.model.response.TrainModelResponse;
-import org.f1.domain.*;
-import org.f1.domain.openf1.SessionResult;
+import org.f1.domain.FullPointEntity;
+import org.f1.domain.Meeting;
+import org.f1.domain.NSAD;
 import org.f1.parsing.CSVParsing;
 import org.f1.regression.EvaluationResult;
 import org.f1.repository.NSADRepository;
@@ -35,21 +36,15 @@ public class RegressionService {
     private static final Set<FullPointEntity> drivers2025 = CSVParsing.parseFullPointEntities("Drivers_Full_2025.csv", DRIVER, 2025);
     private static final Set<FullPointEntity> teams2025 = CSVParsing.parseFullPointEntities("Teams_Full_2025.csv", TEAM, 2025);
 
-
     private final NSADRepository nsadRepository;
-    private final MeetingService meetingService;
-    private final MERService merService;
+    private final NSADFactory nsadFactory;
     private final SparkSession sparkSession;
-    private final SessionResultService sessionResultService;
 
-    public RegressionService(NSADRepository nsadRepository, MeetingService meetingService, MERService merService, SparkSession sparkSession, SessionResultService sessionResultService) {
-        this.merService = merService;
+    public RegressionService(NSADRepository nsadRepository, NSADFactory nsadFactory, SparkSession sparkSession) {
         this.nsadRepository = nsadRepository;
-        this.meetingService = meetingService;
+        this.nsadFactory = nsadFactory;
         this.sparkSession = sparkSession;
-        this.sessionResultService = sessionResultService;
     }
-
 
     public void populateNSADRegressionData() {
         populateNSADyear(DRIVER_SET, 2026);
@@ -75,8 +70,6 @@ public class RegressionService {
 
         EvaluationResult bestResult = EvaluationResult.parallelGridSearch(dataSet);
         GBTRegressionModel bestModel = EvaluationResult.buildRegressor(bestResult.getHyperParameters()).fit(dataSet);
-        ParamMap paramMap = bestModel.paramMap();
-        GBTRegressionModel bestModel2 = new GBTRegressor().copy(paramMap).fit(dataSet);
 
         System.out.println("Best parameters found:");
         System.out.println("Parameters: " + bestResult.getHyperParameters());
@@ -121,64 +114,18 @@ public class RegressionService {
         for (Meeting meeting : Meeting.getMeetings(year)) {
             String shortName = meeting.getShortName();
             boolean isSprint = meeting.getSprintYears().contains(year);
-            int daysSinceFirstRace = meetingService.getDaysSinceFirstRace(year, meeting.getFullNames());
 
             for (FullPointEntity entity : fullPointEntities) {
                 if (entity.getRaceNameList().contains(shortName)) {
-                    List<Double> pointList = getListOfPoints(entity.getRaceList(), shortName);
-                    if (!pointList.isEmpty()) {
-                        MeetingEntityReference mer = merService.getOrCreateMeetingEntityReference(year, meeting, entity);
-
-                        returnSet.add(buildNsad(mer, entity, shortName, daysSinceFirstRace, isSprint));
-
-                    } else {
-                        System.out.println("Skipping NSAD entry for entity " + entity.getName() + " with year " + year + " with circuit " + shortName);
-                    }
+                    nsadFactory.createLabelled(entity, meeting, isSprint)
+                            .ifPresentOrElse(
+                                    returnSet::add,
+                                    () -> System.out.println("Skipping NSAD entry for entity " + entity.getName() + " with year " + year + " with circuit " + shortName)
+                            );
                 }
             }
         }
         nsadRepository.saveNSAD(returnSet);
     }
-
-    private NSAD buildNsad(MeetingEntityReference mer, FullPointEntity entity, String shortName, int daysSinceFirstRace, boolean isSprint) {
-        List<SessionResult> fp1Results = sessionResultService.getSessionResultsFromName(mer, "Practice 1");
-        int size = fp1Results.size();
-        Long outPos = null;
-        Double outLaps = null;
-        Double outGap = null;
-
-        if (!fp1Results.isEmpty() && fp1Results.stream().allMatch(sessionResult -> sessionResult.getPosition() != null && sessionResult.getGapToLeader() != null && sessionResult.getNumberOfLaps() != null)) {
-            if (size > 1) {
-                double pos = 0;
-                double gap = 0;
-                double laps = 0;
-
-                for (SessionResult sessionResult : fp1Results) {
-                    pos += sessionResult.getPosition();
-                    gap += sessionResult.getGapToLeader();
-                    laps += sessionResult.getNumberOfLaps();
-                }
-                outPos = Math.round(pos / size);
-                outGap = gap / size;
-                outLaps = laps / size;
-            } else {
-                SessionResult fp1Result = fp1Results.getFirst();
-                outPos = Long.valueOf(fp1Result.getPosition());
-                outGap = fp1Result.getGapToLeader();
-                outLaps = (double) fp1Result.getNumberOfLaps();
-            }
-        }
-
-        return NSAD.full(entity, shortName, mer.getId(), isSprint, mer.getTeamId(), daysSinceFirstRace, outPos, outGap, outLaps);
-    }
-
-
-    private List<Double> getListOfPoints(List<Race> raceList, String currentRace) {
-        return raceList
-                .stream()
-                .takeWhile(race -> !race.name().equals(currentRace))
-                .map(r -> r.qualiPoints() + r.racePoints()).toList();
-    }
-
 
 }
