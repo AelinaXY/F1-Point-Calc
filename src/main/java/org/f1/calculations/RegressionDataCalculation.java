@@ -19,7 +19,6 @@ import static org.f1.domain.EntityType.TEAM;
 public class RegressionDataCalculation extends AbstractCalculation {
 
     private ScoreCalculator scoreCalculatorV1 = new ScoreCalculator();
-    private ScoreCalculatorV2 scoreCalculatorV2 = new ScoreCalculatorV2();
     private ScoreCalculatorV3 scoreCalculatorV3;
 
 
@@ -82,13 +81,10 @@ public class RegressionDataCalculation extends AbstractCalculation {
 
         Set<Set<FullPointEntity>> pointEntitySets = Set.of(getDriverSet(), getTeamSet(), drivers2025, teams2025, drivers2024, teams2024, drivers2023, teams2023);
 
-        Map.Entry<String, Double> bestWeightsV1 = calculateSMEacrossSet(pointEntitySets, scoreCalculatorV1, "V1");
+        Map.Entry<String, Double> bestWeightsV1 = calculateSMEacrossSet(pointEntitySets, scoreCalculatorV1, "Hand Cranked Model");
         returnMap.put(bestWeightsV1.getKey(), bestWeightsV1.getValue());
 
-        Map.Entry<String, Double> bestWeightsV2 = calculateSMEacrossSet(pointEntitySets, scoreCalculatorV2, "V2");
-        returnMap.put(bestWeightsV2.getKey(), bestWeightsV2.getValue());
-
-        Map.Entry<String, Double> bestWeightsV3 = calculateSMEacrossSet(pointEntitySets, scoreCalculatorV3, "V3");
+        Map.Entry<String, Double> bestWeightsV3 = calculateSMEacrossSet(pointEntitySets, scoreCalculatorV3, "Machine Learning Model");
         returnMap.put(bestWeightsV3.getKey(), bestWeightsV3.getValue());
 
         return returnMap;
