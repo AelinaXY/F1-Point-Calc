@@ -19,6 +19,7 @@ public class NSADFactory {
     private static final String FP1_SESSION_NAME = "Practice 1";
     private static final int MISSING_FP1_POSITION = 23;
     private static final double MISSING_FP1_GAP = -1d;
+    private static final double MISSING_FP1_LAPS_DONE = -1d;
 
     private final MERService merService;
     private final MeetingService meetingService;
@@ -70,9 +71,10 @@ public class NSADFactory {
         nsad.setIsSprint(booleanToDouble(isSprint));
         nsad.setTeamId((double) meetingEntityReference.getTeamId());
         nsad.setDaysSinceFirstRace(meetingService.getDaysSinceFirstRace(fullPointEntity.getYear(), meeting.getFullNames()));
+        nsad.setFp1Available(booleanToDouble(fp1Summary.available()));
         nsad.setFp1Pos(fp1Summary.position() == null ? MISSING_FP1_POSITION : Math.toIntExact(fp1Summary.position()));
         nsad.setFp1Gap(fp1Summary.gap() == null ? MISSING_FP1_GAP : fp1Summary.gap());
-        nsad.setFp1LapsDone(fp1Summary.lapsDone() == null ? MISSING_FP1_GAP : fp1Summary.lapsDone());
+        nsad.setFp1LapsDone(fp1Summary.lapsDone() == null ? MISSING_FP1_LAPS_DONE : fp1Summary.lapsDone());
         return nsad;
     }
 
@@ -81,12 +83,13 @@ public class NSADFactory {
         if (fp1Results.isEmpty()
                 || fp1Results.stream().anyMatch(result ->
                 result.getPosition() == null || result.getGapToLeader() == null || result.getNumberOfLaps() == null)) {
-            return new SessionSummary(null, null, null);
+            return new SessionSummary(false, null, null, null);
         }
 
         if (fp1Results.size() == 1) {
             SessionResult fp1Result = fp1Results.getFirst();
             return new SessionSummary(
+                    true,
                     Long.valueOf(fp1Result.getPosition()),
                     fp1Result.getGapToLeader(),
                     (double) fp1Result.getNumberOfLaps()
@@ -104,6 +107,7 @@ public class NSADFactory {
         }
 
         return new SessionSummary(
+                true,
                 Math.round(totalPosition / fp1Results.size()),
                 totalGap / fp1Results.size(),
                 totalLaps / fp1Results.size()
@@ -132,6 +136,6 @@ public class NSADFactory {
         return value ? 1d : 0d;
     }
 
-    private record SessionSummary(Long position, Double gap, Double lapsDone) {
+    private record SessionSummary(boolean available, Long position, Double gap, Double lapsDone) {
     }
 }

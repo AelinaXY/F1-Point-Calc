@@ -33,6 +33,11 @@ public class NSADRepository {
         }
     }
 
+    public List<NSAD> getAll() {
+        return dslContext.selectFrom(NON_SPRINT_AGGREGATE_DATA)
+                .fetch().map(NSAD::fromRecord);
+    }
+
     private NonSprintAggregateDataRecord toRecord(NSAD nsadRecord) {
         NonSprintAggregateDataRecord record = new NonSprintAggregateDataRecord();
         record.setMeetingEntityReference(nsadRecord.getMeetingEntityReference());
@@ -44,14 +49,10 @@ public class NSADRepository {
         record.setIsSprint(nsadRecord.getIsSprint());
         record.setTeamId(nsadRecord.getTeamId());
         record.setDaysSinceFirstRace(nsadRecord.getDaysSinceFirstRace());
+        record.setFp1Available(nsadRecord.getFp1Available() == 1 ? Boolean.TRUE : Boolean.FALSE);
         record.setFp1Pos(nsadRecord.getFp1Pos());
         record.setFp1Gap(nsadRecord.getFp1Gap());
         record.setFp1LapsDone(nsadRecord.getFp1LapsDone().intValue());
         return record;
-    }
-
-    public List<NSAD> getAll() {
-        return dslContext.selectFrom(NON_SPRINT_AGGREGATE_DATA)
-                .fetch().map(NSAD::fromRecord);
     }
 }

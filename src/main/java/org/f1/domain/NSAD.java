@@ -29,6 +29,7 @@ public class NSAD {
     private Double isSprint;
     private Double teamId;
     private Integer daysSinceFirstRace;
+    private Double fp1Available;
     private Integer fp1Pos;
     private Double fp1Gap;
     private Double fp1LapsDone;
@@ -46,6 +47,7 @@ public class NSAD {
                 isSprint,
                 teamId,
                 daysSinceFirstRace,
+                fp1Available,
                 fp1Pos,
                 fp1Gap,
                 fp1LapsDone
@@ -68,6 +70,7 @@ public class NSAD {
         result.setIsSprint(record.getIsSprint());
         result.setTeamId(record.getTeamId());
         result.setDaysSinceFirstRace(record.getDaysSinceFirstRace());
+        result.setFp1Available(record.getFp1Available() ? 1.0 : 0.0);
         result.setFp1Pos(record.getFp1Pos());
         result.setFp1Gap(record.getFp1Gap());
         result.setFp1LapsDone(record.getFp1LapsDone().doubleValue());
@@ -83,6 +86,7 @@ public class NSAD {
                 BinaryAttribute.defaultAttr().withName("Is Sprint"),
                 NominalAttribute.defaultAttr().withName("Team ID").withNumValues(11),
                 NumericAttribute.defaultAttr().withName("Days Since First Race"),
+                BinaryAttribute.defaultAttr().withName("FP1 Available"),
                 NominalAttribute.defaultAttr().withName("FP1 Position").withNumValues(24),
                 NumericAttribute.defaultAttr().withName("FP1 Gap"),
                 NumericAttribute.defaultAttr().withName("FP1 Laps Done")
