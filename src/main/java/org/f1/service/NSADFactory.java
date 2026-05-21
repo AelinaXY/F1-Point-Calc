@@ -1,11 +1,7 @@
 package org.f1.service;
 
 import org.f1.calculations.ScoreCalculator;
-import org.f1.domain.FullPointEntity;
-import org.f1.domain.Meeting;
-import org.f1.domain.MeetingEntityReference;
-import org.f1.domain.NSAD;
-import org.f1.domain.Race;
+import org.f1.domain.*;
 import org.f1.domain.openf1.SessionResult;
 import org.f1.utils.MathUtils;
 import org.springframework.stereotype.Service;
@@ -17,9 +13,7 @@ import java.util.Optional;
 @Service
 public class NSADFactory {
     private static final String FP1_SESSION_NAME = "Practice 1";
-    private static final int MISSING_FP1_POSITION = 23;
-    private static final double MISSING_FP1_GAP = -1d;
-    private static final double MISSING_FP1_LAPS_DONE = -1d;
+    private static final String FP2_SESSION_NAME = "Practice 2";
 
     private final MERService merService;
     private final MeetingService meetingService;
@@ -61,7 +55,8 @@ public class NSADFactory {
             MeetingEntityReference meetingEntityReference,
             List<Double> pointHistory
     ) {
-        SessionSummary fp1Summary = getFp1Summary(meetingEntityReference);
+        SessionSummary fp1Summary = getSessionSummary(meetingEntityReference, FP1_SESSION_NAME);
+        SessionSummary fp2Summary = getSessionSummary(meetingEntityReference, FP2_SESSION_NAME);
 
         NSAD nsad = new NSAD();
         nsad.setAvgPoints(ScoreCalculator.calcAveragePoints(pointHistory));
@@ -71,15 +66,19 @@ public class NSADFactory {
         nsad.setIsSprint(booleanToDouble(isSprint));
         nsad.setTeamId((double) meetingEntityReference.getTeamId());
         nsad.setDaysSinceFirstRace(meetingService.getDaysSinceFirstRace(fullPointEntity.getYear(), meeting.getFullNames()));
-        nsad.setFp1Available(booleanToDouble(fp1Summary.available()));
-        nsad.setFp1Pos(fp1Summary.position() == null ? MISSING_FP1_POSITION : Math.toIntExact(fp1Summary.position()));
-        nsad.setFp1Gap(fp1Summary.gap() == null ? MISSING_FP1_GAP : fp1Summary.gap());
-        nsad.setFp1LapsDone(fp1Summary.lapsDone() == null ? MISSING_FP1_LAPS_DONE : fp1Summary.lapsDone());
+        nsad.setFp1Available(booleanToDouble(fp1Summary.isAvailable()));
+        nsad.setFp1Pos(fp1Summary.getPosition());
+        nsad.setFp1Gap(fp1Summary.getGap());
+        nsad.setFp1LapsDone(fp1Summary.getLapsDone());
+        nsad.setFp2Available(booleanToDouble(fp2Summary.isAvailable()));
+        nsad.setFp2Pos(fp2Summary.getPosition());
+        nsad.setFp2Gap(fp2Summary.getGap());
+        nsad.setFp2LapsDone(fp2Summary.getLapsDone());
         return nsad;
     }
 
-    private SessionSummary getFp1Summary(MeetingEntityReference meetingEntityReference) {
-        List<SessionResult> fp1Results = sessionResultService.getSessionResultsFromName(meetingEntityReference, FP1_SESSION_NAME);
+    private SessionSummary getSessionSummary(MeetingEntityReference meetingEntityReference, String sessionName) {
+        List<SessionResult> fp1Results = sessionResultService.getSessionResultsFromName(meetingEntityReference, sessionName);
         if (fp1Results.isEmpty()
                 || fp1Results.stream().anyMatch(result ->
                 result.getPosition() == null || result.getGapToLeader() == null || result.getNumberOfLaps() == null)) {
@@ -90,7 +89,7 @@ public class NSADFactory {
             SessionResult fp1Result = fp1Results.getFirst();
             return new SessionSummary(
                     true,
-                    Long.valueOf(fp1Result.getPosition()),
+                    fp1Result.getPosition(),
                     fp1Result.getGapToLeader(),
                     (double) fp1Result.getNumberOfLaps()
             );
@@ -108,7 +107,7 @@ public class NSADFactory {
 
         return new SessionSummary(
                 true,
-                Math.round(totalPosition / fp1Results.size()),
+                (int) Math.round(totalPosition / fp1Results.size()),
                 totalGap / fp1Results.size(),
                 totalLaps / fp1Results.size()
         );
@@ -136,6 +135,5 @@ public class NSADFactory {
         return value ? 1d : 0d;
     }
 
-    private record SessionSummary(boolean available, Long position, Double gap, Double lapsDone) {
-    }
+
 }

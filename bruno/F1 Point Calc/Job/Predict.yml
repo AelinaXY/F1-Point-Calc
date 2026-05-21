@@ -1,0 +1,22 @@
+info:
+  name: Predict
+  type: http
+  seq: 4
+
+http:
+  method: GET
+  url: http://localhost:8080/api/job/predict?raceName=Miami&isSprint=True
+  params:
+    - name: raceName
+      value: Miami
+      type: query
+    - name: isSprint
+      value: "True"
+      type: query
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

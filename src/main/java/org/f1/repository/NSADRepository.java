@@ -53,6 +53,10 @@ public class NSADRepository {
         record.setFp1Pos(nsadRecord.getFp1Pos());
         record.setFp1Gap(nsadRecord.getFp1Gap());
         record.setFp1LapsDone(nsadRecord.getFp1LapsDone().intValue());
+        record.setFp2Available(nsadRecord.getFp2Available() == 1 ? Boolean.TRUE : Boolean.FALSE);
+        record.setFp2Pos(nsadRecord.getFp2Pos());
+        record.setFp2Gap(nsadRecord.getFp2Gap());
+        record.setFp2LapsDone(nsadRecord.getFp2LapsDone().intValue());
         return record;
     }
 }

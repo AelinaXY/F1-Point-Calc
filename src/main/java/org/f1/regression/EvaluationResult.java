@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 @Data
 public class EvaluationResult {
-    private static final HyperParameters CONTROL_HYPERPARAMETERS = new HyperParameters(200, 2, 0.05, 3, 0.85);
+    private static final HyperParameters CONTROL_HYPERPARAMETERS = new HyperParameters(225, 2, 0.06, 4, 0.87);
     private final HyperParameters hyperParameters;
     private final double meanSquaredError;
     private static final int numFolds = 5;
@@ -146,8 +146,8 @@ public class EvaluationResult {
     private static List<HyperParameters> generateParameterGrid() {
         List<HyperParameters> paramGrid = new ArrayList<>();
 
-        int[] numIterations = {175, 190, 210, 225};
-        int[] maxDepths = {2};
+        int[] numIterations = {210, 225};
+        int[] maxDepths = {4};
         double[] learningRates = {0.0525, 0.055, 0.060};
         int[] minInstancesPerNode = {2, 3, 4, 6};
         double[] subsamplingRates = {0.87, 0.90, 0.925};
