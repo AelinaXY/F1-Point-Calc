@@ -5,10 +5,10 @@ info:
 
 http:
   method: GET
-  url: http://localhost:8080/api/job/predict?raceName=Miami&isSprint=True
+  url: http://localhost:8080/api/job/predict?raceName=Canada&isSprint=True
   params:
     - name: raceName
-      value: Miami
+      value: Canada
       type: query
     - name: isSprint
       value: "True"

@@ -22,17 +22,18 @@ public class EvaluationResult {
     private static final HyperParameters CONTROL_HYPERPARAMETERS = new HyperParameters(225, 2, 0.06, 4, 0.87);
     private final HyperParameters hyperParameters;
     private final double meanSquaredError;
-    private static final int numFolds = 5;
+    private static final int numFolds = 1;
     private static final long SEED_BASE = 42L;
 
 
     public static EvaluationResult parallelGridSearch(Dataset<Row> dataSet) throws IOException {
         Logger logger = getEvaluationResultLogger();
 
-        List<HyperParameters> paramGrid = generateParameterGrid();
+//        List<HyperParameters> paramGrid = generateParameterGrid();
+        List<HyperParameters> paramGrid = new ArrayList<>();
 
         //Old best
-        paramGrid.addFirst(CONTROL_HYPERPARAMETERS);
+//        paramGrid.addFirst(CONTROL_HYPERPARAMETERS);
         dataSet.cache();
         dataSet.count();
 
