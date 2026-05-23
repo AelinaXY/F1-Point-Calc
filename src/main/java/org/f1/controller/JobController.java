@@ -6,6 +6,7 @@ import org.f1.controller.model.response.OptimalTeamResponse;
 import org.f1.controller.model.response.PredictResponse;
 import org.f1.domain.DifferenceEntity;
 import org.f1.domain.FullPointEntity;
+import org.f1.domain.Race;
 import org.f1.domain.ScoreCard;
 import org.f1.parsing.CSVParsing;
 import org.springframework.http.HttpStatus;

@@ -3,7 +3,9 @@ package org.f1.repository;
 import org.f1.domain.MeetingEntityReference;
 import org.f1.domain.openf1.SessionResult;
 import org.f1.generated.tables.records.SessionResultRecord;
+import org.jooq.Condition;
 import org.jooq.DSLContext;
+import org.jooq.SelectConditionStep;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -44,14 +46,20 @@ public class SessionResultRepository {
     }
 
     public List<SessionResult> getSessionResults(MeetingEntityReference meetingEntityReference, String sessionName) {
+        Condition whereClause = SESSION.MEETING_ID.eq(meetingEntityReference.getMeetingId());
+        whereClause = whereClause.and(SESSION.SESSION_NAME.eq(sessionName));
+        whereClause = whereClause.and(DRIVER.TEAM_ID.eq(meetingEntityReference.getTeamId()));
+        if (meetingEntityReference.getDriverId() != null) {
+            whereClause = whereClause.and(SESSION_RESULT.DRIVER_ID.eq(meetingEntityReference.getDriverId()));
+        }
+
+
         return dslContext.select(SESSION_RESULT.fields())
                 .select(DRIVER.DRIVER_NUMBER.as("driver_number"))
                 .from(SESSION_RESULT
                         .join(SESSION).on(SESSION_RESULT.SESSION_ID.eq(SESSION.ID))
                         .join(DRIVER).on(SESSION_RESULT.DRIVER_ID.eq(DRIVER.ID)))
-                .where(SESSION.MEETING_ID.eq(meetingEntityReference.getMeetingId()))
-                .and(SESSION.SESSION_NAME.eq(sessionName))
-                .and(DRIVER.TEAM_ID.eq(meetingEntityReference.getTeamId()))
+                .where(whereClause)
                 .fetchInto(SessionResult.class);
     }
 

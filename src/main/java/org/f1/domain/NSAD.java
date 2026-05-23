@@ -37,6 +37,10 @@ public class NSAD {
     private Integer fp2Pos;
     private Double fp2Gap;
     private Double fp2LapsDone;
+    private Double sqAvailable;
+    private Integer sqPos;
+    private Double sqGap;
+    private Double sqLapsDone;
 
     public Row toRegressionRow() {
         return RowFactory.create(actualPoints.doubleValue(), toFeaturesVector());
@@ -58,7 +62,11 @@ public class NSAD {
                 fp2Available,
                 fp2Pos,
                 fp2Gap,
-                fp2LapsDone
+                fp2LapsDone,
+                sqAvailable,
+                sqPos,
+                sqGap,
+                sqLapsDone
         );
     }
 
@@ -86,6 +94,10 @@ public class NSAD {
         result.setFp2Pos(record.getFp2Pos());
         result.setFp2Gap(record.getFp2Gap());
         result.setFp2LapsDone(record.getFp2LapsDone().doubleValue());
+        result.setSqAvailable(record.getSqAvailable() ? 1.0 : 0.0);
+        result.setSqPos(record.getSqPos());
+        result.setSqGap(record.getSqGap());
+        result.setSqLapsDone(record.getSqLapsDone().doubleValue());
         return result;
     }
 
@@ -105,7 +117,11 @@ public class NSAD {
                 BinaryAttribute.defaultAttr().withName("FP2 Available"),
                 NominalAttribute.defaultAttr().withName("FP2 Position").withNumValues(24),
                 NumericAttribute.defaultAttr().withName("FP2 Gap"),
-                NumericAttribute.defaultAttr().withName("FP2 Laps Done")
+                NumericAttribute.defaultAttr().withName("FP2 Laps Done"),
+                BinaryAttribute.defaultAttr().withName("SQ Available"),
+                NominalAttribute.defaultAttr().withName("SQ Position").withNumValues(24),
+                NumericAttribute.defaultAttr().withName("SQ Gap"),
+                NumericAttribute.defaultAttr().withName("SQ Laps Done")
         };
 
         StructField featuresField = new AttributeGroup("features", attributes).toStructField();

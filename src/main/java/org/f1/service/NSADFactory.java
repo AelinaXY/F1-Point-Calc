@@ -14,6 +14,7 @@ import java.util.Optional;
 public class NSADFactory {
     private static final String FP1_SESSION_NAME = "Practice 1";
     private static final String FP2_SESSION_NAME = "Practice 2";
+    private static final String SPRINT_QUALIFYING_NAME = "Sprint Qualifying";
 
     private final MERService merService;
     private final MeetingService meetingService;
@@ -57,6 +58,7 @@ public class NSADFactory {
     ) {
         SessionSummary fp1Summary = getSessionSummary(meetingEntityReference, FP1_SESSION_NAME);
         SessionSummary fp2Summary = getSessionSummary(meetingEntityReference, FP2_SESSION_NAME);
+        SessionSummary sqSummary = getSessionSummary(meetingEntityReference, SPRINT_QUALIFYING_NAME);
 
         NSAD nsad = new NSAD();
         nsad.setAvgPoints(ScoreCalculator.calcAveragePoints(pointHistory));
@@ -74,6 +76,10 @@ public class NSADFactory {
         nsad.setFp2Pos(fp2Summary.getPosition());
         nsad.setFp2Gap(fp2Summary.getGap());
         nsad.setFp2LapsDone(fp2Summary.getLapsDone());
+        nsad.setSqAvailable(booleanToDouble(sqSummary.isAvailable()));
+        nsad.setSqPos(sqSummary.getPosition());
+        nsad.setSqGap(sqSummary.getGap());
+        nsad.setSqLapsDone(sqSummary.getLapsDone());
         return nsad;
     }
 

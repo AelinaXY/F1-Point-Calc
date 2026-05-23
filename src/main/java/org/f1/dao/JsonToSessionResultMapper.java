@@ -53,11 +53,15 @@ public class JsonToSessionResultMapper {
         if (Objects.isNull(potentialArray)) {
             return null;
         } else if (potentialArray instanceof JSONArray) {
-            return ((JSONArray) potentialArray).toJavaList(Double.class)
-                    .stream()
-                    .filter(Objects::nonNull)
-                    .reduce(BinaryOperator.maxBy(Comparator.naturalOrder()))
-                    .orElse(null);
+            List<Double> qualiTimeList = ((JSONArray) potentialArray).toJavaList(Double.class);
+            int size = qualiTimeList.size();
+
+            for (int i = size - 1; i >= 0; i--) {
+                if (qualiTimeList.get(i) != null) {
+                    return qualiTimeList.get(i);
+                }
+            }
+            return null;
 
         } else if (potentialArray instanceof String) {
             return null;
