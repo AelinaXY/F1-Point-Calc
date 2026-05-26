@@ -5,13 +5,13 @@ info:
 
 http:
   method: GET
-  url: http://localhost:8080/api/job/predict?raceName=Canada&isSprint=True
+  url: http://localhost:8080/api/job/predict?raceName=Monaco&isSprint=False
   params:
     - name: raceName
-      value: Canada
+      value: Monaco
       type: query
     - name: isSprint
-      value: "True"
+      value: "False"
       type: query
   auth: inherit
 

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ScoreCalculatorV3 implements ScoreCalculatorInterface {
-    private final GBTRegressionModel gradientBoostedTreesModel;
+    private GBTRegressionModel gradientBoostedTreesModel;
     private final NSADFactory nsadFactory;
 
 
@@ -25,5 +25,9 @@ public class ScoreCalculatorV3 implements ScoreCalculatorInterface {
     public Double calculateScore(FullPointEntity fullPointEntity, String raceName, boolean isSprint) {
         NSAD nsad = nsadFactory.createUnlabelled(fullPointEntity, Meeting.getMeeting(raceName), isSprint);
         return gradientBoostedTreesModel.predict(nsad.toFeaturesVector());
+    }
+
+    public void reloadModel(){
+        this.gradientBoostedTreesModel = GBTRegressionModel.load("src/main/resources/regressionModel2");
     }
 }

@@ -1,7 +1,6 @@
 package org.f1.regression;
 
 import lombok.Data;
-import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.ml.evaluation.RegressionEvaluator;
 import org.apache.spark.ml.regression.GBTRegressionModel;
 import org.apache.spark.ml.regression.GBTRegressor;
@@ -33,10 +32,6 @@ public class EvaluationResult {
         Logger logger = getEvaluationResultLogger();
 
         List<HyperParameters> paramGrid = generateParameterGrid();
-
-        //Old best
-        paramGrid.addFirst(CONTROL_HYPERPARAMETERS);
-
 
         List<List<Dataset<Row>>> folds = getFolds(dataSet, sparkSession);
 
@@ -76,15 +71,26 @@ public class EvaluationResult {
                 .stream()
                 .collect(Collectors.groupingBy(nsad -> nsad.getMeetingEntityReference().getMeetingId()));
         List<Integer> meetingIds = new ArrayList<>(meetingToNsadMap.keySet());
-        int trainingSize = Math.toIntExact(Math.round(meetingIds.size() * 0.8));
+
+        int targetTrainingPool = Math.toIntExact(Math.round(dataSet.size() * 0.8));
+
         for (int i = 0; i < numFolds; i++) {
             Collections.shuffle(meetingIds, new Random(i * 1000 + SEED_BASE));
 
-            List<Integer> trainingIds = meetingIds.subList(0, trainingSize);
-            List<Integer> testingIds = meetingIds.subList(trainingSize, meetingIds.size());
+            List<Row> trainingData = new ArrayList<>();
+            List<Row> testingData = new ArrayList<>();
 
-            List<Row> trainingData = trainingIds.stream().map(meetingToNsadMap::get).flatMap(Collection::stream).map(NSAD::toRegressionRow).toList();
-            List<Row> testingData = testingIds.stream().map(meetingToNsadMap::get).flatMap(Collection::stream).map(NSAD::toRegressionRow).toList();
+            int count = 0;
+            for(Map.Entry<Integer, List<NSAD>> entry : meetingToNsadMap.entrySet()) {
+                int dataSize = entry.getValue().size();
+                if (count < targetTrainingPool) {
+                    trainingData.addAll(entry.getValue().stream().map(NSAD::toRegressionRow).toList());
+                    count += dataSize;
+                }
+                else {
+                    testingData.addAll(entry.getValue().stream().map(NSAD::toRegressionRow).toList());
+                }
+            }
 
             List<Dataset<Row>> splits = List.of(
                     sparkSession.createDataFrame(trainingData, NSAD.regressionSchema()),

@@ -6,6 +6,7 @@ import org.apache.spark.ml.regression.GBTRegressionModel;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
+import org.f1.calculations.ScoreCalculatorV3;
 import org.f1.controller.model.response.TrainModelResponse;
 import org.f1.domain.FullPointEntity;
 import org.f1.domain.Meeting;
@@ -37,11 +38,13 @@ public class RegressionService {
     private final NSADRepository nsadRepository;
     private final NSADFactory nsadFactory;
     private final SparkSession sparkSession;
+    private final ScoreCalculatorV3 scoreCalculator;
 
-    public RegressionService(NSADRepository nsadRepository, NSADFactory nsadFactory, SparkSession sparkSession) {
+    public RegressionService(NSADRepository nsadRepository, NSADFactory nsadFactory, SparkSession sparkSession, ScoreCalculatorV3 scoreCalculator) {
         this.nsadRepository = nsadRepository;
         this.nsadFactory = nsadFactory;
         this.sparkSession = sparkSession;
+        this.scoreCalculator = scoreCalculator;
     }
 
     public void populateNSADRegressionData() {
@@ -101,6 +104,8 @@ public class RegressionService {
 
         String modelPath = "src/main/resources/regressionModel2";
         bestModel.write().overwrite().save(modelPath);
+        
+        scoreCalculator.reloadModel();
 
         return new TrainModelResponse(bestResult.getHyperParameters(), bestResult.getMeanSquaredError(), sortedFeatureImportanceMap);
     }
