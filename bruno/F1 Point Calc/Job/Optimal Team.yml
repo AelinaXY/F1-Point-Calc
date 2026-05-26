@@ -18,10 +18,10 @@ http:
     data: |-
       {
         "costCap": 107.8,
-        "changeLimit": 2,
-        "raceName": "Canada",
-        "isSprint": true,
-        "racesLeft": 18,
+        "changeLimit": 3,
+        "raceName": "Monaco",
+        "isSprint": false,
+        "racesLeft": 17,
         "costCapMult": 1.2
       }
   auth: inherit
