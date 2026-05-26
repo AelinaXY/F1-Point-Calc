@@ -28,7 +28,9 @@ public class TrainModelResponse {
                                 .fluentPut("learningRate", hyperParameters.getLearningRate())
                                 .fluentPut("maxDepth", hyperParameters.getMaxDepth())
                                 .fluentPut("minInstancesPerNode", hyperParameters.getMinInstancesPerNode())
-                                .fluentPut("subSamplingRate", hyperParameters.getSubsamplingRate()))
+                                .fluentPut("subSamplingRate", hyperParameters.getSubsamplingRate())
+                                .fluentPut("maxBins", hyperParameters.getMaxBin())
+                                .fluentPut("minInfoGain", hyperParameters.getMinInfoGain()))
                 .fluentPut("meanSquaredError", mse)
                 .fluentPut("featureImportance", featureImportance);
         return jsonObject;

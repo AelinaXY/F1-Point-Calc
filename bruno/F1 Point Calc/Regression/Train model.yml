@@ -15,8 +15,7 @@ settings:
   maxRedirects: 5
 
 examples:
-  - name: Best with Fp1 Data
-    description: The best run with fp1 data. It took 4030.17s and was ran on the 15th May
+  - name: Feature Importance
     request:
       url: http://localhost:8080/api/regression/trainNSAD
       method: GET
@@ -29,7 +28,7 @@ examples:
         - name: transfer-encoding
           value: chunked
         - name: date
-          value: Fri, 15 May 2026 09:41:52 GMT
+          value: Sat, 23 May 2026 15:11:38 GMT
         - name: keep-alive
           value: timeout=60
         - name: connection
@@ -40,22 +39,33 @@ examples:
           {
             "hyperParameters": {
               "numIterations": 225,
-              "learningRate": 0.055,
+              "learningRate": 0.06,
               "maxDepth": 2,
-              "minInstancesPerNode": 2,
-              "subSamplingRate": 0.925
+              "minInstancesPerNode": 4,
+              "subSamplingRate": 0.87,
+              "maxBins": 32,
+              "minInfoGain": 0.01
             },
-            "meanSquaredError": 256.1065823384972,
+            "meanSquaredError": 311.0355188602991,
             "featureImportance": {
-              "FP1 Position": 0.2934446822553064,
-              "4-Race Average": 0.16857911128579678,
-              "Team ID": 0.1562632533139778,
-              "Average Points": 0.12640045734285682,
-              "Standard Deviation": 0.07314319498138051,
-              "FP1 Gap": 0.056618816048099534,
-              "Days Since First Race": 0.037966186553547096,
-              "Is Sprint": 0.03307195782143176,
-              "FP1 Laps Done": 0.028933828409589038,
-              "Is Team": 0.025578511988014266
+              "FP1 Position": 0.22834665145532,
+              "SQ Position": 0.15393432166559856,
+              "4-Race Average": 0.12265156345659242,
+              "Average Points": 0.12123463880548127,
+              "FP2 Position": 0.1165153982114324,
+              "Team ID": 0.08491696356028043,
+              "Standard Deviation": 0.051303441859136156,
+              "Is Team": 0.03787860158577247,
+              "FP2 Gap": 0.021288905878235682,
+              "FP1 Laps Done": 0.01812925169708961,
+              "Days Since First Race": 0.01413478525913371,
+              "FP2 Laps Done": 0.011896681709574825,
+              "SQ Laps Done": 0.009896628363587831,
+              "FP1 Gap": 0.006981132333281992,
+              "SQ Gap": 8.910341594825567E-4,
+              "Is Sprint": 0.0,
+              "FP1 Available": 0.0,
+              "SQ Available": 0.0,
+              "FP2 Available": 0.0
             }
           }
