@@ -66,7 +66,7 @@ public class RegressionService {
                 NSAD.regressionSchema()
         );
 
-        EvaluationResult bestResult = EvaluationResult.parallelGridSearch(dataSet);
+        EvaluationResult bestResult = EvaluationResult.parallelGridSearch(nsadSet, sparkSession);
         GBTRegressionModel bestModel = EvaluationResult.buildRegressor(bestResult.getHyperParameters()).fit(dataSet);
 
         System.out.println("Best parameters found:");

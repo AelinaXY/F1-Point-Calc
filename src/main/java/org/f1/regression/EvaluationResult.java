@@ -1,11 +1,14 @@
 package org.f1.regression;
 
 import lombok.Data;
+import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.ml.evaluation.RegressionEvaluator;
 import org.apache.spark.ml.regression.GBTRegressionModel;
 import org.apache.spark.ml.regression.GBTRegressor;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
+import org.apache.spark.sql.SparkSession;
+import org.f1.domain.NSAD;
 import org.f1.service.RegressionService;
 
 import java.io.IOException;
@@ -26,17 +29,16 @@ public class EvaluationResult {
     private static final long SEED_BASE = 42L;
 
 
-    public static EvaluationResult parallelGridSearch(Dataset<Row> dataSet) throws IOException {
+    public static EvaluationResult parallelGridSearch(List<NSAD> dataSet, SparkSession sparkSession) throws IOException {
         Logger logger = getEvaluationResultLogger();
 
         List<HyperParameters> paramGrid = generateParameterGrid();
 
         //Old best
         paramGrid.addFirst(CONTROL_HYPERPARAMETERS);
-        dataSet.cache();
-        dataSet.count();
 
-        List<Dataset<Row>[]> folds = getFolds(dataSet);
+
+        List<List<Dataset<Row>>> folds = getFolds(dataSet, sparkSession);
 
         long startTime = System.currentTimeMillis();
         logger.info("Starting two-stage hyperparameter tuning");
@@ -61,8 +63,6 @@ public class EvaluationResult {
         // Stage 2: Full evaluation with 3-fold cross-validation on top 5 and control
         Set<EvaluationResult> deepResults = evaluateHyperparameters(topParams, folds, logger, startTime);
 
-        dataSet.unpersist();
-
         Optional<EvaluationResult> bestResult = deepResults.stream().reduce((r1, r2) ->
                 r1.getMeanSquaredError() < r2.getMeanSquaredError() ? r1 : r2);
 
@@ -70,22 +70,37 @@ public class EvaluationResult {
         return bestResult.orElseThrow(() -> new RuntimeException("No results found"));
     }
 
-    private static List<Dataset<Row>[]> getFolds(Dataset<Row> dataSet) {
-        List<Dataset<Row>[]> folds = new ArrayList<>();
+    private static List<List<Dataset<Row>>> getFolds(List<NSAD> dataSet, SparkSession sparkSession) {
+        List<List<Dataset<Row>>> folds = new ArrayList<>();
+        Map<Integer, List<NSAD>> meetingToNsadMap = dataSet
+                .stream()
+                .collect(Collectors.groupingBy(nsad -> nsad.getMeetingEntityReference().getMeetingId()));
+        List<Integer> meetingIds = new ArrayList<>(meetingToNsadMap.keySet());
+        int trainingSize = Math.toIntExact(Math.round(meetingIds.size() * 0.8));
         for (int i = 0; i < numFolds; i++) {
-            Dataset<Row>[] splits = dataSet.randomSplit(
-                    new double[]{0.8, 0.2}, i * 1000L + SEED_BASE
+            Collections.shuffle(meetingIds, new Random(i * 1000 + SEED_BASE));
+
+            List<Integer> trainingIds = meetingIds.subList(0, trainingSize);
+            List<Integer> testingIds = meetingIds.subList(trainingSize, meetingIds.size());
+
+            List<Row> trainingData = trainingIds.stream().map(meetingToNsadMap::get).flatMap(Collection::stream).map(NSAD::toRegressionRow).toList();
+            List<Row> testingData = testingIds.stream().map(meetingToNsadMap::get).flatMap(Collection::stream).map(NSAD::toRegressionRow).toList();
+
+            List<Dataset<Row>> splits = List.of(
+                    sparkSession.createDataFrame(trainingData, NSAD.regressionSchema()),
+                    sparkSession.createDataFrame(testingData, NSAD.regressionSchema())
             );
-            splits[0].cache();
-            splits[0].count();
-            splits[1].cache();
-            splits[1].count();
+
+            splits.get(0).cache();
+            splits.get(0).count();
+            splits.get(1).cache();
+            splits.get(1).count();
             folds.add(splits);
         }
         return folds;
     }
 
-    private static Set<EvaluationResult> evaluateHyperparameters(List<HyperParameters> inputParams, List<Dataset<Row>[]> folds, Logger logger, long startTime) {
+    private static Set<EvaluationResult> evaluateHyperparameters(List<HyperParameters> inputParams, List<List<Dataset<Row>>> folds, Logger logger, long startTime) {
         RegressionEvaluator mseEvaluator = getEvaluator("mse");
 
         AtomicInteger count = new AtomicInteger(0);
@@ -98,9 +113,9 @@ public class EvaluationResult {
 
             int numFolds = folds.size();
 
-            for (Dataset<Row>[] fold : folds) {
-                Dataset<Row> training = fold[0];
-                Dataset<Row> testing = fold[1];
+            for (List<Dataset<Row>> fold : folds) {
+                Dataset<Row> training = fold.get(0);
+                Dataset<Row> testing = fold.get(1);
 
                 GBTRegressionModel model = buildRegressor(params).fit(training);
                 Dataset<Row> predictions = model.transform(testing).cache();
@@ -146,12 +161,12 @@ public class EvaluationResult {
     private static List<HyperParameters> generateParameterGrid() {
         List<HyperParameters> paramGrid = new ArrayList<>();
 
-        int[] numIterations = {80, 100, 120, 150};
-        int[] maxDepths = {2, 3, 4};
-        double[] learningRates = {0.03, 0.04, 0.05};
+        int[] numIterations = {125, 150, 175};
+        int[] maxDepths = {2, 3};
+        double[] learningRates = {0.04, 0.05, 0.06};
         int[] minInstancesPerNode = {8, 12, 16, 24};
         double[] subsamplingRates = {0.6, 0.7, 0.8};
-        int[] maxBins = {24, 32};
+        int[] maxBins = {32};
         double[] minInfoGains = {0.01};
 
         for (int numIterationsValue : numIterations) {

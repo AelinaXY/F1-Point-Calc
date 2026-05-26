@@ -88,6 +88,14 @@ public class MERRepository {
         return map(Objects.requireNonNull(meetingEntityReferenceRecord.getFirst()));
     }
 
+    public MeetingEntityReference getMeetingEntityReference(int id) {
+        MeetingEntityReferenceRecord meetingEntityReferenceRecord = dslContext.selectFrom(MEETING_ENTITY_REFERENCE)
+                .where(MEETING_ENTITY_REFERENCE.ID.eq(id))
+                .fetchOneInto(MeetingEntityReferenceRecord.class);
+
+        return map(Objects.requireNonNull(meetingEntityReferenceRecord));
+    }
+
     private MeetingEntityReference getMeetingEntityReference(MeetingEntityReference meetingEntityReference) {
         MeetingEntityReferenceRecord meetingEntityReferenceRecord = dslContext.selectFrom(MEETING_ENTITY_REFERENCE)
                 .where(equalOrIsNull(MEETING_ENTITY_REFERENCE.DRIVER_ID,  meetingEntityReference.getDriverId())

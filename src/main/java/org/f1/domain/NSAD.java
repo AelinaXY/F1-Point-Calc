@@ -19,9 +19,12 @@ import org.f1.generated.tables.records.NonSprintAggregateDataRecord;
 public class NSAD {
     private static final StructType REGRESSION_SCHEMA = createRegressionSchema();
 
+    //Non-regression information fields
     private Integer id;
-    private int meetingEntityReference;
+    private MeetingEntityReference meetingEntityReference;
+    //Regression label
     private Integer actualPoints;
+    //Regression features
     private Double avgPoints;
     private Double avg4d1Points;
     private Double stdev;
@@ -74,10 +77,10 @@ public class NSAD {
         return REGRESSION_SCHEMA;
     }
 
-    public static NSAD fromRecord(NonSprintAggregateDataRecord record) {
+    public static NSAD fromRecord(NonSprintAggregateDataRecord record, MeetingEntityReference meetingEntityReference) {
         NSAD result = new NSAD();
         result.setId(record.getId());
-        result.setMeetingEntityReference(record.getMeetingEntityReference());
+        result.setMeetingEntityReference(meetingEntityReference);
         result.setActualPoints(record.getActualPoints());
         result.setAvgPoints(record.getAvgPoints());
         result.setAvg4d1Points(record.getAvg_4d1Points());

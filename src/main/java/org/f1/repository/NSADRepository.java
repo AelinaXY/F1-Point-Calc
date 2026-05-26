@@ -6,6 +6,7 @@ import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import static org.f1.generated.Tables.NON_SPRINT_AGGREGATE_DATA;
@@ -15,9 +16,11 @@ import static org.f1.generated.Tables.NON_SPRINT_AGGREGATE_DATA;
 public class NSADRepository {
 
     DSLContext dslContext;
+    private final MERRepository merRepository;
 
-    public NSADRepository(DSLContext dslContext) {
+    public NSADRepository(DSLContext dslContext, MERRepository merRepository) {
         this.dslContext = dslContext;
+        this.merRepository = merRepository;
     }
 
     public void saveNSAD(Set<NSAD> nsadSet) {
@@ -35,12 +38,16 @@ public class NSADRepository {
 
     public List<NSAD> getAll() {
         return dslContext.selectFrom(NON_SPRINT_AGGREGATE_DATA)
-                .fetch().map(NSAD::fromRecord);
+                .fetch()
+                .map(record -> NSAD.fromRecord(
+                        record,
+                        merRepository.getMeetingEntityReference(record.getMeetingEntityReference())
+                ));
     }
 
     private NonSprintAggregateDataRecord toRecord(NSAD nsadRecord) {
         NonSprintAggregateDataRecord record = new NonSprintAggregateDataRecord();
-        record.setMeetingEntityReference(nsadRecord.getMeetingEntityReference());
+        record.setMeetingEntityReference(Objects.requireNonNull(nsadRecord.getMeetingEntityReference()).getId());
         record.setActualPoints(nsadRecord.getActualPoints());
         record.setAvgPoints(nsadRecord.getAvgPoints());
         record.setAvg_4d1Points(nsadRecord.getAvg4d1Points());

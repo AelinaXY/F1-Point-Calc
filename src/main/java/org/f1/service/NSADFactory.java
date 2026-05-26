@@ -37,7 +37,6 @@ public class NSADFactory {
                 merService.getOrCreateMeetingEntityReference(fullPointEntity.getYear(), meeting, fullPointEntity);
 
         NSAD nsad = buildBaseNsad(fullPointEntity, meeting, isSprint, meetingEntityReference, pointHistory);
-        nsad.setMeetingEntityReference(meetingEntityReference.getId());
         nsad.setActualPoints(getActualPoints(fullPointEntity, raceName));
         return Optional.of(nsad);
     }
@@ -61,6 +60,7 @@ public class NSADFactory {
         SessionSummary sqSummary = getSessionSummary(meetingEntityReference, SPRINT_QUALIFYING_NAME);
 
         NSAD nsad = new NSAD();
+        nsad.setMeetingEntityReference(meetingEntityReference);
         nsad.setAvgPoints(ScoreCalculator.calcAveragePoints(pointHistory));
         nsad.setAvg4d1Points(ScoreCalculator.calcThreeRaceAverage(new ArrayList<>(pointHistory)));
         nsad.setStdev(MathUtils.stdev(pointHistory));
