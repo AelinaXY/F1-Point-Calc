@@ -13,7 +13,6 @@ import org.apache.spark.sql.RowFactory;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
-import org.f1.generated.tables.records.NonSprintAggregateDataRecord;
 
 @Data
 public class NSAD {
@@ -32,17 +31,9 @@ public class NSAD {
     private Double teamId;
     private Integer daysSinceFirstRace;
     private Integer fp1Pos;
-    private Double fp1Gap;
-    private Double fp1LapsDone;
     private Integer fp2Pos;
-    private Double fp2Gap;
-    private Double fp2LapsDone;
     private Integer sqPos;
-    private Double sqGap;
-    private Double sqLapsDone;
     private Integer fp3Pos;
-    private Double fp3Gap;
-    private Double fp3LapsDone;
 
     public Row toRegressionRow() {
         return RowFactory.create(actualPoints.doubleValue(), toFeaturesVector());
@@ -57,17 +48,9 @@ public class NSAD {
                 teamId,
                 daysSinceFirstRace,
                 fp1Pos,
-                fp1Gap,
-                fp1LapsDone,
                 fp2Pos,
-                fp2Gap,
-                fp2LapsDone,
                 sqPos,
-                sqGap,
-                sqLapsDone,
-                fp3Pos,
-                fp3Gap,
-                fp3LapsDone
+                fp3Pos
         );
     }
 
@@ -84,17 +67,9 @@ public class NSAD {
                 NominalAttribute.defaultAttr().withName("Team ID").withNumValues(11),
                 NumericAttribute.defaultAttr().withName("Days Since First Race"),
                 NominalAttribute.defaultAttr().withName("FP1 Position").withNumValues(24),
-                NumericAttribute.defaultAttr().withName("FP1 Gap"),
-                NumericAttribute.defaultAttr().withName("FP1 Laps Done"),
                 NominalAttribute.defaultAttr().withName("FP2 Position").withNumValues(24),
-                NumericAttribute.defaultAttr().withName("FP2 Gap"),
-                NumericAttribute.defaultAttr().withName("FP2 Laps Done"),
                 NominalAttribute.defaultAttr().withName("SQ Position").withNumValues(24),
-                NumericAttribute.defaultAttr().withName("SQ Gap"),
-                NumericAttribute.defaultAttr().withName("SQ Laps Done"),
                 NominalAttribute.defaultAttr().withName("FP3 Position").withNumValues(24),
-                NumericAttribute.defaultAttr().withName("FP3 Gap"),
-                NumericAttribute.defaultAttr().withName("FP3 Laps Done")
         };
 
         StructField featuresField = new AttributeGroup("features", attributes).toStructField();

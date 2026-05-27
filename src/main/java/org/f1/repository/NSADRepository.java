@@ -57,17 +57,9 @@ public class NSADRepository {
         record.setTeamId(nsadRecord.getTeamId());
         record.setDaysSinceFirstRace(nsadRecord.getDaysSinceFirstRace());
         record.setFp1Pos(nsadRecord.getFp1Pos());
-        record.setFp1Gap(nsadRecord.getFp1Gap());
-        record.setFp1LapsDone(nsadRecord.getFp1LapsDone().intValue());
         record.setFp2Pos(nsadRecord.getFp2Pos());
-        record.setFp2Gap(nsadRecord.getFp2Gap());
-        record.setFp2LapsDone(nsadRecord.getFp2LapsDone().intValue());
         record.setSqPos(nsadRecord.getSqPos());
-        record.setSqGap(nsadRecord.getSqGap());
-        record.setSqLapsDone(nsadRecord.getSqLapsDone().intValue());
         record.setFp3Pos(nsadRecord.getFp3Pos());
-        record.setFp3Gap(nsadRecord.getFp3Gap());
-        record.setFp3LapsDone(nsadRecord.getFp3LapsDone().intValue());
         return record;
     }
 
@@ -83,17 +75,9 @@ public class NSADRepository {
         result.setTeamId(record.getTeamId());
         result.setDaysSinceFirstRace(record.getDaysSinceFirstRace());
         result.setFp1Pos(record.getFp1Pos());
-        result.setFp1Gap(record.getFp1Gap());
-        result.setFp1LapsDone(record.getFp1LapsDone().doubleValue());
         result.setFp2Pos(record.getFp2Pos());
-        result.setFp2Gap(record.getFp2Gap());
-        result.setFp2LapsDone(record.getFp2LapsDone().doubleValue());
         result.setSqPos(record.getSqPos());
-        result.setSqGap(record.getSqGap());
-        result.setSqLapsDone(record.getSqLapsDone().doubleValue());
         result.setFp3Pos(record.getFp3Pos());
-        result.setFp3Gap(record.getFp3Gap());
-        result.setFp3LapsDone(record.getFp3LapsDone().doubleValue());
         return result;
     }
 }

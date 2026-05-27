@@ -70,17 +70,9 @@ public class NSADFactory {
         nsad.setTeamId((double) meetingEntityReference.getTeamId());
         nsad.setDaysSinceFirstRace(meetingService.getDaysSinceFirstRace(fullPointEntity.getYear(), meeting.getFullNames()));
         nsad.setFp1Pos(fp1Summary.getPosition());
-        nsad.setFp1Gap(fp1Summary.getGap());
-        nsad.setFp1LapsDone(fp1Summary.getLapsDone());
         nsad.setFp2Pos(fp2Summary.getPosition());
-        nsad.setFp2Gap(fp2Summary.getGap());
-        nsad.setFp2LapsDone(fp2Summary.getLapsDone());
         nsad.setSqPos(sqSummary.getPosition());
-        nsad.setSqGap(sqSummary.getGap());
-        nsad.setSqLapsDone(sqSummary.getLapsDone());
         nsad.setFp3Pos(fp3Summary.getPosition());
-        nsad.setFp3Gap(fp3Summary.getGap());
-        nsad.setFp3LapsDone(fp3Summary.getLapsDone());
         return nsad;
     }
 

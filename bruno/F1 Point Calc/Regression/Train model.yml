@@ -138,3 +138,52 @@ examples:
               "FP3 Gap": 0.0011776157644159
             }
           }
+  - name: Post prune 2
+    request:
+      url: http://localhost:8080/api/regression/trainNSAD?controlOnly=True
+      method: GET
+      params:
+        - name: controlOnly
+          value: "True"
+          type: query
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: content-type
+          value: application/json
+        - name: transfer-encoding
+          value: chunked
+        - name: date
+          value: Wed, 27 May 2026 10:38:55 GMT
+        - name: keep-alive
+          value: timeout=60
+        - name: connection
+          value: keep-alive
+      body:
+        type: json
+        data: |-
+          {
+            "hyperParameters": {
+              "numIterations": 225,
+              "learningRate": 0.06,
+              "maxDepth": 2,
+              "minInstancesPerNode": 4,
+              "subSamplingRate": 0.87,
+              "maxBins": 32,
+              "minInfoGain": 0.01
+            },
+            "meanSquaredError": 346.3245235083989,
+            "featureImportance": {
+              "FP1 Position": 0.18604580086734782,
+              "SQ Position": 0.1575273772583747,
+              "4-Race Average": 0.14072058225379233,
+              "FP3 Position": 0.11690968229695829,
+              "Average Points": 0.11638663531818642,
+              "FP2 Position": 0.10577080466651649,
+              "Team ID": 0.0848549499658459,
+              "Standard Deviation": 0.04041692351707101,
+              "Is Team": 0.03302745432269733,
+              "Days Since First Race": 0.018339789533209538
+            }
+          }
