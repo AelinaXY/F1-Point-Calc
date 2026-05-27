@@ -28,14 +28,19 @@ public class EvaluationResult {
     private static final long SEED_BASE = 42L;
 
 
-    public static EvaluationResult parallelGridSearch(List<NSAD> dataSet, SparkSession sparkSession) throws IOException {
+    public static EvaluationResult parallelGridSearch(List<NSAD> dataSet, SparkSession sparkSession, boolean controlOnly) throws IOException {
         Logger logger = getEvaluationResultLogger();
-
-        List<HyperParameters> paramGrid = generateParameterGrid();
 
         List<List<Dataset<Row>>> folds = getFolds(dataSet, sparkSession);
 
         long startTime = System.currentTimeMillis();
+
+        if (controlOnly) {
+            return getControlOnlyResult(logger, folds, startTime);
+        }
+
+        List<HyperParameters> paramGrid = generateParameterGrid();
+
         logger.info("Starting two-stage hyperparameter tuning");
         logger.info("STAGE 1: Shallow pass on all " + paramGrid.size() + " parameter combinations");
 
@@ -65,6 +70,17 @@ public class EvaluationResult {
         return bestResult.orElseThrow(() -> new RuntimeException("No results found"));
     }
 
+    private static EvaluationResult getControlOnlyResult(Logger logger, List<List<Dataset<Row>>> folds, long startTime) {
+        logger.info("Control-only mode enabled. Evaluating CONTROL_HYPERPARAMETERS only.");
+        Set<EvaluationResult> controlResults = evaluateHyperparameters(
+                List.of(CONTROL_HYPERPARAMETERS),
+                folds,
+                logger,
+                startTime
+        );
+        return controlResults.stream().findFirst().orElseThrow(() -> new RuntimeException("No results found"));
+    }
+
     private static List<List<Dataset<Row>>> getFolds(List<NSAD> dataSet, SparkSession sparkSession) {
         List<List<Dataset<Row>>> folds = new ArrayList<>();
         Map<Integer, List<NSAD>> meetingToNsadMap = dataSet
@@ -81,13 +97,12 @@ public class EvaluationResult {
             List<Row> testingData = new ArrayList<>();
 
             int count = 0;
-            for(Map.Entry<Integer, List<NSAD>> entry : meetingToNsadMap.entrySet()) {
+            for (Map.Entry<Integer, List<NSAD>> entry : meetingToNsadMap.entrySet()) {
                 int dataSize = entry.getValue().size();
                 if (count < targetTrainingPool) {
                     trainingData.addAll(entry.getValue().stream().map(NSAD::toRegressionRow).toList());
                     count += dataSize;
-                }
-                else {
+                } else {
                     testingData.addAll(entry.getValue().stream().map(NSAD::toRegressionRow).toList());
                 }
             }

@@ -1,6 +1,2 @@
-Starting two-stage hyperparameter tuning
-STAGE 1: Shallow pass on all 0 parameter combinations
-STAGE 1 Complete. Identifying top 5 candidates
-Top 5 candidates selected plus control. Starting STAGE 2: Full cross-validation.
-Pass: 001/001 | Time: 0:02:14 | Avg MSE: 352.738500 | Params: iter=225, depth=2, lr=0.060000, min=4, sub=0.870000, maxBin=32, minInfoGain=0.010000
-Hyperparameter tuning complete.
+Control-only mode enabled. Evaluating CONTROL_HYPERPARAMETERS only.
+Pass: 001/001 | Time: 0:02:18 | Avg MSE: 350.117370 | Params: iter=225, depth=2, lr=0.060000, min=4, sub=0.870000, maxBin=32, minInfoGain=0.010000

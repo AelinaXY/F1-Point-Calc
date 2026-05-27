@@ -3,6 +3,7 @@ package org.f1.controller;
 import org.f1.service.RegressionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,9 +27,9 @@ public class RegressionController {
     }
 
     @GetMapping("/trainNSAD")
-    public ResponseEntity<?> trainNSADRegressionModel() throws IOException {
+    public ResponseEntity<?> trainNSADRegressionModel(@RequestParam(defaultValue = "false") boolean controlOnly) throws IOException {
 
-        return ResponseEntity.ok().body(regressionService.trainNSADRegressionModel().toJson());
+        return ResponseEntity.ok().body(regressionService.trainNSADRegressionModel(controlOnly).toJson());
     }
 
 

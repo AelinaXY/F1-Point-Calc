@@ -59,7 +59,7 @@ public class RegressionService {
 
     }
 
-    public TrainModelResponse trainNSADRegressionModel() throws IOException {
+    public TrainModelResponse trainNSADRegressionModel(boolean controlOnly) throws IOException {
         List<NSAD> nsadSet = nsadRepository.getAll();
 
         Dataset<Row> dataSet = sparkSession.createDataFrame(
@@ -69,7 +69,7 @@ public class RegressionService {
                 NSAD.regressionSchema()
         );
 
-        EvaluationResult bestResult = EvaluationResult.parallelGridSearch(nsadSet, sparkSession);
+        EvaluationResult bestResult = EvaluationResult.parallelGridSearch(nsadSet, sparkSession, controlOnly);
         GBTRegressionModel bestModel = EvaluationResult.buildRegressor(bestResult.getHyperParameters()).fit(dataSet);
 
         System.out.println("Best parameters found:");
