@@ -15,6 +15,7 @@ public class NSADFactory {
     private static final String FP1_SESSION_NAME = "Practice 1";
     private static final String FP2_SESSION_NAME = "Practice 2";
     private static final String SPRINT_QUALIFYING_NAME = "Sprint Qualifying";
+    private static final String FP3_SESSION_NAME = "Practice 3";
 
     private final MERService merService;
     private final MeetingService meetingService;
@@ -58,6 +59,7 @@ public class NSADFactory {
         SessionSummary fp1Summary = getSessionSummary(meetingEntityReference, FP1_SESSION_NAME);
         SessionSummary fp2Summary = getSessionSummary(meetingEntityReference, FP2_SESSION_NAME);
         SessionSummary sqSummary = getSessionSummary(meetingEntityReference, SPRINT_QUALIFYING_NAME);
+        SessionSummary fp3Summary = getSessionSummary(meetingEntityReference, FP3_SESSION_NAME);
 
         NSAD nsad = new NSAD();
         nsad.setMeetingEntityReference(meetingEntityReference);
@@ -80,6 +82,10 @@ public class NSADFactory {
         nsad.setSqPos(sqSummary.getPosition());
         nsad.setSqGap(sqSummary.getGap());
         nsad.setSqLapsDone(sqSummary.getLapsDone());
+        nsad.setFp3Available(booleanToDouble(fp3Summary.isAvailable()));
+        nsad.setFp3Pos(fp3Summary.getPosition());
+        nsad.setFp3Gap(fp3Summary.getGap());
+        nsad.setFp3LapsDone(fp3Summary.getLapsDone());
         return nsad;
     }
 
