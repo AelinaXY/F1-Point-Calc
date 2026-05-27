@@ -3,7 +3,7 @@ services:
     image: postgres:latest
     container_name: f1-db
     healthcheck:
-      test: [ "CMD", "sh", "-c", "pg_isready --username=f1 --host=127.0.0.1 --port=5432 --dbname=tfgm" ]
+      test: [ "CMD", "sh", "-c", "pg_isready --username=f1 --host=127.0.0.1 --port=5432 --dbname=f1" ]
       interval: 5s
       timeout: 5s
       retries: 10

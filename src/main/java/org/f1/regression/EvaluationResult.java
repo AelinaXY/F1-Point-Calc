@@ -97,13 +97,14 @@ public class EvaluationResult {
             List<Row> testingData = new ArrayList<>();
 
             int count = 0;
-            for (Map.Entry<Integer, List<NSAD>> entry : meetingToNsadMap.entrySet()) {
-                int dataSize = entry.getValue().size();
+            for (Integer meetingId : meetingIds) {
+                List<NSAD> nsads = meetingToNsadMap.get(meetingId);
+                int dataSize = nsads.size();
                 if (count < targetTrainingPool) {
-                    trainingData.addAll(entry.getValue().stream().map(NSAD::toRegressionRow).toList());
+                    trainingData.addAll(nsads.stream().map(NSAD::toRegressionRow).toList());
                     count += dataSize;
                 } else {
-                    testingData.addAll(entry.getValue().stream().map(NSAD::toRegressionRow).toList());
+                    testingData.addAll(nsads.stream().map(NSAD::toRegressionRow).toList());
                 }
             }
 

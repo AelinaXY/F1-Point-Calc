@@ -60,6 +60,7 @@ public class NSADRepository {
         record.setFp2Pos(nsadRecord.getFp2Pos());
         record.setSqPos(nsadRecord.getSqPos());
         record.setFp3Pos(nsadRecord.getFp3Pos());
+        record.setQualiConversionDelta(nsadRecord.getQualiConversionDelta());
         return record;
     }
 
@@ -78,6 +79,7 @@ public class NSADRepository {
         result.setFp2Pos(record.getFp2Pos());
         result.setSqPos(record.getSqPos());
         result.setFp3Pos(record.getFp3Pos());
+        result.setQualiConversionDelta(record.getQualiConversionDelta());
         return result;
     }
 }

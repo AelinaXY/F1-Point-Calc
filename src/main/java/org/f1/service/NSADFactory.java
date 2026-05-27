@@ -16,6 +16,8 @@ public class NSADFactory {
     private static final String FP2_SESSION_NAME = "Practice 2";
     private static final String SPRINT_QUALIFYING_NAME = "Sprint Qualifying";
     private static final String FP3_SESSION_NAME = "Practice 3";
+    private static final String QUALIFYING_SESSION_NAME = "Qualifying";
+
 
     private final MERService merService;
     private final MeetingService meetingService;
@@ -73,7 +75,36 @@ public class NSADFactory {
         nsad.setFp2Pos(fp2Summary.getPosition());
         nsad.setSqPos(sqSummary.getPosition());
         nsad.setFp3Pos(fp3Summary.getPosition());
+        nsad.setQualiConversionDelta(getQualiConversionDelta(meetingEntityReference));
         return nsad;
+    }
+
+    private double getQualiConversionDelta(MeetingEntityReference meetingEntityReference) {
+        List<SessionResultsSummary> sessionResultsSummaryList = sessionResultService.findMappedResultsForDriverOrTeam(meetingEntityReference, List.of(FP1_SESSION_NAME, FP2_SESSION_NAME, FP3_SESSION_NAME), List.of(QUALIFYING_SESSION_NAME));
+        double lambda = 0.35;
+
+        double totalQualiDelta = 0;
+        double totalQualiDeltaCount = 0;
+
+        for (SessionResultsSummary summary : sessionResultsSummaryList) {
+            double avgQualiPos = 0d;
+            double avgPracticePos = 0d;
+
+            for (SessionResult result : summary.qualiSessionResults()) {
+                avgQualiPos += result.getPosition();
+            }
+            avgQualiPos /= summary.qualiSessionResults().size();
+
+            for (SessionResult result : summary.practiseSessionResults()) {
+                avgPracticePos += result.getPosition();
+            }
+            avgPracticePos /= summary.practiseSessionResults().size();
+
+            totalQualiDelta += (avgQualiPos - avgPracticePos) * Math.exp(-lambda * totalQualiDeltaCount);
+            totalQualiDeltaCount++;
+        }
+
+        return totalQualiDelta / totalQualiDeltaCount;
     }
 
     private SessionSummary getSessionSummary(MeetingEntityReference meetingEntityReference, String sessionName) {
