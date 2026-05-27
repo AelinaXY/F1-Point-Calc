@@ -29,22 +29,17 @@ public class NSAD {
     private Double avg4d1Points;
     private Double stdev;
     private Double isTeam;
-    private Double isSprint;
     private Double teamId;
     private Integer daysSinceFirstRace;
-    private Double fp1Available;
     private Integer fp1Pos;
     private Double fp1Gap;
     private Double fp1LapsDone;
-    private Double fp2Available;
     private Integer fp2Pos;
     private Double fp2Gap;
     private Double fp2LapsDone;
-    private Double sqAvailable;
     private Integer sqPos;
     private Double sqGap;
     private Double sqLapsDone;
-    private Double fp3Available;
     private Integer fp3Pos;
     private Double fp3Gap;
     private Double fp3LapsDone;
@@ -59,22 +54,17 @@ public class NSAD {
                 avg4d1Points,
                 stdev,
                 isTeam,
-                isSprint,
                 teamId,
                 daysSinceFirstRace,
-                fp1Available,
                 fp1Pos,
                 fp1Gap,
                 fp1LapsDone,
-                fp2Available,
                 fp2Pos,
                 fp2Gap,
                 fp2LapsDone,
-                sqAvailable,
                 sqPos,
                 sqGap,
                 sqLapsDone,
-                fp3Available,
                 fp3Pos,
                 fp3Gap,
                 fp3LapsDone
@@ -85,59 +75,23 @@ public class NSAD {
         return REGRESSION_SCHEMA;
     }
 
-    public static NSAD fromRecord(NonSprintAggregateDataRecord record, MeetingEntityReference meetingEntityReference) {
-        NSAD result = new NSAD();
-        result.setId(record.getId());
-        result.setMeetingEntityReference(meetingEntityReference);
-        result.setActualPoints(record.getActualPoints());
-        result.setAvgPoints(record.getAvgPoints());
-        result.setAvg4d1Points(record.getAvg_4d1Points());
-        result.setStdev(record.getStdev());
-        result.setIsTeam(record.getIsTeam());
-        result.setIsSprint(record.getIsSprint());
-        result.setTeamId(record.getTeamId());
-        result.setDaysSinceFirstRace(record.getDaysSinceFirstRace());
-        result.setFp1Available(record.getFp1Available() ? 1.0 : 0.0);
-        result.setFp1Pos(record.getFp1Pos());
-        result.setFp1Gap(record.getFp1Gap());
-        result.setFp1LapsDone(record.getFp1LapsDone().doubleValue());
-        result.setFp2Available(record.getFp2Available() ? 1.0 : 0.0);
-        result.setFp2Pos(record.getFp2Pos());
-        result.setFp2Gap(record.getFp2Gap());
-        result.setFp2LapsDone(record.getFp2LapsDone().doubleValue());
-        result.setSqAvailable(record.getSqAvailable() ? 1.0 : 0.0);
-        result.setSqPos(record.getSqPos());
-        result.setSqGap(record.getSqGap());
-        result.setSqLapsDone(record.getSqLapsDone().doubleValue());
-        result.setFp3Available(record.getFp3Available() ? 1.0 : 0.0);
-        result.setFp3Pos(record.getFp3Pos());
-        result.setFp3Gap(record.getFp3Gap());
-        result.setFp3LapsDone(record.getFp3LapsDone().doubleValue());
-        return result;
-    }
-
     private static StructType createRegressionSchema() {
         Attribute[] attributes = new Attribute[]{
                 NumericAttribute.defaultAttr().withName("Average Points"),
                 NumericAttribute.defaultAttr().withName("4-Race Average"),
                 NumericAttribute.defaultAttr().withName("Standard Deviation"),
                 BinaryAttribute.defaultAttr().withName("Is Team"),
-                BinaryAttribute.defaultAttr().withName("Is Sprint"),
                 NominalAttribute.defaultAttr().withName("Team ID").withNumValues(11),
                 NumericAttribute.defaultAttr().withName("Days Since First Race"),
-                BinaryAttribute.defaultAttr().withName("FP1 Available"),
                 NominalAttribute.defaultAttr().withName("FP1 Position").withNumValues(24),
                 NumericAttribute.defaultAttr().withName("FP1 Gap"),
                 NumericAttribute.defaultAttr().withName("FP1 Laps Done"),
-                BinaryAttribute.defaultAttr().withName("FP2 Available"),
                 NominalAttribute.defaultAttr().withName("FP2 Position").withNumValues(24),
                 NumericAttribute.defaultAttr().withName("FP2 Gap"),
                 NumericAttribute.defaultAttr().withName("FP2 Laps Done"),
-                BinaryAttribute.defaultAttr().withName("SQ Available"),
                 NominalAttribute.defaultAttr().withName("SQ Position").withNumValues(24),
                 NumericAttribute.defaultAttr().withName("SQ Gap"),
                 NumericAttribute.defaultAttr().withName("SQ Laps Done"),
-                BinaryAttribute.defaultAttr().withName("FP3 Available"),
                 NominalAttribute.defaultAttr().withName("FP3 Position").withNumValues(24),
                 NumericAttribute.defaultAttr().withName("FP3 Gap"),
                 NumericAttribute.defaultAttr().withName("FP3 Laps Done")

@@ -1,5 +1,6 @@
 package org.f1.repository;
 
+import org.f1.domain.MeetingEntityReference;
 import org.f1.domain.NSAD;
 import org.f1.generated.tables.records.NonSprintAggregateDataRecord;
 import org.jooq.DSLContext;
@@ -39,7 +40,7 @@ public class NSADRepository {
     public List<NSAD> getAll() {
         return dslContext.selectFrom(NON_SPRINT_AGGREGATE_DATA)
                 .fetch()
-                .map(record -> NSAD.fromRecord(
+                .map(record -> fromRecord(
                         record,
                         merRepository.getMeetingEntityReference(record.getMeetingEntityReference())
                 ));
@@ -53,25 +54,46 @@ public class NSADRepository {
         record.setAvg_4d1Points(nsadRecord.getAvg4d1Points());
         record.setStdev(nsadRecord.getStdev());
         record.setIsTeam(nsadRecord.getIsTeam());
-        record.setIsSprint(nsadRecord.getIsSprint());
         record.setTeamId(nsadRecord.getTeamId());
         record.setDaysSinceFirstRace(nsadRecord.getDaysSinceFirstRace());
-        record.setFp1Available(nsadRecord.getFp1Available() == 1 ? Boolean.TRUE : Boolean.FALSE);
         record.setFp1Pos(nsadRecord.getFp1Pos());
         record.setFp1Gap(nsadRecord.getFp1Gap());
         record.setFp1LapsDone(nsadRecord.getFp1LapsDone().intValue());
-        record.setFp2Available(nsadRecord.getFp2Available() == 1 ? Boolean.TRUE : Boolean.FALSE);
         record.setFp2Pos(nsadRecord.getFp2Pos());
         record.setFp2Gap(nsadRecord.getFp2Gap());
         record.setFp2LapsDone(nsadRecord.getFp2LapsDone().intValue());
-        record.setSqAvailable(nsadRecord.getSqAvailable() == 1 ? Boolean.TRUE : Boolean.FALSE);
         record.setSqPos(nsadRecord.getSqPos());
         record.setSqGap(nsadRecord.getSqGap());
         record.setSqLapsDone(nsadRecord.getSqLapsDone().intValue());
-        record.setFp3Available(nsadRecord.getFp3Available() == 1 ? Boolean.TRUE : Boolean.FALSE);
         record.setFp3Pos(nsadRecord.getFp3Pos());
         record.setFp3Gap(nsadRecord.getFp3Gap());
         record.setFp3LapsDone(nsadRecord.getFp3LapsDone().intValue());
         return record;
+    }
+
+    private NSAD fromRecord(NonSprintAggregateDataRecord record, MeetingEntityReference meetingEntityReference) {
+        NSAD result = new NSAD();
+        result.setId(record.getId());
+        result.setMeetingEntityReference(meetingEntityReference);
+        result.setActualPoints(record.getActualPoints());
+        result.setAvgPoints(record.getAvgPoints());
+        result.setAvg4d1Points(record.getAvg_4d1Points());
+        result.setStdev(record.getStdev());
+        result.setIsTeam(record.getIsTeam());
+        result.setTeamId(record.getTeamId());
+        result.setDaysSinceFirstRace(record.getDaysSinceFirstRace());
+        result.setFp1Pos(record.getFp1Pos());
+        result.setFp1Gap(record.getFp1Gap());
+        result.setFp1LapsDone(record.getFp1LapsDone().doubleValue());
+        result.setFp2Pos(record.getFp2Pos());
+        result.setFp2Gap(record.getFp2Gap());
+        result.setFp2LapsDone(record.getFp2LapsDone().doubleValue());
+        result.setSqPos(record.getSqPos());
+        result.setSqGap(record.getSqGap());
+        result.setSqLapsDone(record.getSqLapsDone().doubleValue());
+        result.setFp3Pos(record.getFp3Pos());
+        result.setFp3Gap(record.getFp3Gap());
+        result.setFp3LapsDone(record.getFp3LapsDone().doubleValue());
+        return result;
     }
 }

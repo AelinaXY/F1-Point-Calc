@@ -19,10 +19,14 @@ settings:
   maxRedirects: 5
 
 examples:
-  - name: Feature Importance
+  - name: Pre prune
     request:
-      url: http://localhost:8080/api/regression/trainNSAD
+      url: http://localhost:8080/api/regression/trainNSAD?controlOnly=True
       method: GET
+      params:
+        - name: controlOnly
+          value: "True"
+          type: query
     response:
       status: 200
       statusText: OK
@@ -32,7 +36,7 @@ examples:
         - name: transfer-encoding
           value: chunked
         - name: date
-          value: Sat, 23 May 2026 15:11:38 GMT
+          value: Wed, 27 May 2026 10:01:39 GMT
         - name: keep-alive
           value: timeout=60
         - name: connection
@@ -50,26 +54,87 @@ examples:
               "maxBins": 32,
               "minInfoGain": 0.01
             },
-            "meanSquaredError": 311.0355188602991,
+            "meanSquaredError": 350.1173700494917,
             "featureImportance": {
-              "FP1 Position": 0.22834665145532,
-              "SQ Position": 0.15393432166559856,
-              "4-Race Average": 0.12265156345659242,
-              "Average Points": 0.12123463880548127,
-              "FP2 Position": 0.1165153982114324,
-              "Team ID": 0.08491696356028043,
-              "Standard Deviation": 0.051303441859136156,
-              "Is Team": 0.03787860158577247,
-              "FP2 Gap": 0.021288905878235682,
-              "FP1 Laps Done": 0.01812925169708961,
-              "Days Since First Race": 0.01413478525913371,
-              "FP2 Laps Done": 0.011896681709574825,
-              "SQ Laps Done": 0.009896628363587831,
-              "FP1 Gap": 0.006981132333281992,
-              "SQ Gap": 8.910341594825567E-4,
+              "FP1 Position": 0.18326983693604132,
+              "SQ Position": 0.14183365708221415,
+              "4-Race Average": 0.13145902678899904,
+              "FP3 Position": 0.10966746767666535,
+              "Average Points": 0.09641702449340697,
+              "Team ID": 0.08737023492091155,
+              "FP2 Position": 0.08068665607079961,
+              "Is Team": 0.036596089256327916,
+              "Standard Deviation": 0.029365874119345433,
+              "FP2 Gap": 0.02348133380549598,
+              "Days Since First Race": 0.022363767259185957,
+              "FP3 Laps Done": 0.013598643664993191,
+              "FP1 Laps Done": 0.012890145134028235,
+              "FP1 Gap": 0.0085055180560901,
+              "FP2 Laps Done": 0.008432225744783762,
+              "SQ Laps Done": 0.007676869713921844,
+              "SQ Gap": 0.004876403615440298,
+              "FP3 Gap": 0.001509225661349468,
               "Is Sprint": 0.0,
               "FP1 Available": 0.0,
               "SQ Available": 0.0,
-              "FP2 Available": 0.0
+              "FP2 Available": 0.0,
+              "FP3 Available": 0.0
+            }
+          }
+  - name: Post prune 1
+    request:
+      url: http://localhost:8080/api/regression/trainNSAD?controlOnly=True
+      method: GET
+      params:
+        - name: controlOnly
+          value: "True"
+          type: query
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: content-type
+          value: application/json
+        - name: transfer-encoding
+          value: chunked
+        - name: date
+          value: Wed, 27 May 2026 10:24:58 GMT
+        - name: keep-alive
+          value: timeout=60
+        - name: connection
+          value: keep-alive
+      body:
+        type: json
+        data: |-
+          {
+            "hyperParameters": {
+              "numIterations": 225,
+              "learningRate": 0.06,
+              "maxDepth": 2,
+              "minInstancesPerNode": 4,
+              "subSamplingRate": 0.87,
+              "maxBins": 32,
+              "minInfoGain": 0.01
+            },
+            "meanSquaredError": 338.3542357612706,
+            "featureImportance": {
+              "FP1 Position": 0.18460280791537215,
+              "Average Points": 0.1422469954259285,
+              "SQ Position": 0.12069687505882216,
+              "FP3 Position": 0.11676165721595166,
+              "FP2 Position": 0.09936663697996012,
+              "4-Race Average": 0.09530438265755097,
+              "Is Team": 0.07805380159176048,
+              "Team ID": 0.0475107316445506,
+              "Standard Deviation": 0.030443949505972363,
+              "FP3 Laps Done": 0.01810633464688714,
+              "FP1 Laps Done": 0.01770275911594397,
+              "Days Since First Race": 0.014250702161796903,
+              "FP2 Gap": 0.012379746192002246,
+              "SQ Laps Done": 0.008323907661010339,
+              "SQ Gap": 0.004549678997483129,
+              "FP2 Laps Done": 0.00448137472968283,
+              "FP1 Gap": 0.004040042734908589,
+              "FP3 Gap": 0.0011776157644159
             }
           }
