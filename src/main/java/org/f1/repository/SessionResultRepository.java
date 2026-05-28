@@ -150,4 +150,27 @@ public class SessionResultRepository {
         sessionResultRecord.setDsq(sessionResult.getDsq());
         return sessionResultRecord;
     }
+
+    public Double getPreviousSessionAvgPos(MeetingEntityReference meetingEntityReference, int numberOfMeetings, String sessionName) {
+        Condition whereClause = SESSION.SESSION_NAME.eq(sessionName);
+        whereClause = whereClause.and(DRIVER.TEAM_ID.eq(meetingEntityReference.getTeamId()));
+        if (meetingEntityReference.getDriverId() != null) {
+            whereClause = whereClause.and(DRIVER.FULL_NAME.eq(dslContext.select(DRIVER.FULL_NAME).from(DRIVER).where(DRIVER.ID.eq(meetingEntityReference.getDriverId())).fetchOneInto(String.class)));
+        } else {
+            numberOfMeetings *= 2;
+        }
+
+        return dslContext.select(avg(field("position", SESSION_RESULT.POSITION.getType())))
+                .from(
+                        dslContext.select(SESSION_RESULT.POSITION.as("position"))
+                                .from(SESSION_RESULT)
+                                .join(SESSION).on(SESSION_RESULT.SESSION_ID.eq(SESSION.ID))
+                                .join(DRIVER).on(SESSION_RESULT.DRIVER_ID.eq(DRIVER.ID))
+                                .where(whereClause)
+                                .orderBy(SESSION.DATE_START.desc())
+                                .limit(numberOfMeetings)
+                )
+                .fetchOneInto(Double.class);
+
+    }
 }

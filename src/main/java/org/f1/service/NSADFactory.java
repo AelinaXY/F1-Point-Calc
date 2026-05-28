@@ -76,6 +76,8 @@ public class NSADFactory {
         nsad.setSqPos(sqSummary.getPosition());
         nsad.setFp3Pos(fp3Summary.getPosition());
         nsad.setQualiConversionDelta(getQualiConversionDelta(meetingEntityReference));
+        nsad.setPreviousQualiPos(getPreviousQualiPerformance(meetingEntityReference, 1));
+        nsad.setAvg4d1QualiPos(getPreviousQualiPerformance(meetingEntityReference, 4));
         return nsad;
     }
 
@@ -105,6 +107,10 @@ public class NSADFactory {
         }
 
         return totalQualiDelta / totalQualiDeltaCount;
+    }
+
+    private double getPreviousQualiPerformance(MeetingEntityReference meetingEntityReference, int numberOfMeetings) {
+        return Optional.ofNullable(sessionResultService.getPreviousSessionAvgPos(meetingEntityReference, numberOfMeetings, QUALIFYING_SESSION_NAME)).orElse(-1d);
     }
 
     private SessionSummary getSessionSummary(MeetingEntityReference meetingEntityReference, String sessionName) {

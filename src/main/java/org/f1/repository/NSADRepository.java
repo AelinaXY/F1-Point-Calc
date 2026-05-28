@@ -61,6 +61,8 @@ public class NSADRepository {
         record.setSqPos(nsadRecord.getSqPos());
         record.setFp3Pos(nsadRecord.getFp3Pos());
         record.setQualiConversionDelta(nsadRecord.getQualiConversionDelta());
+        record.setPreviousQualiPos(nsadRecord.getPreviousQualiPos());
+        record.setAvg_4d1PrevQuali(nsadRecord.getAvg4d1QualiPos());
         return record;
     }
 
@@ -80,6 +82,8 @@ public class NSADRepository {
         result.setSqPos(record.getSqPos());
         result.setFp3Pos(record.getFp3Pos());
         result.setQualiConversionDelta(record.getQualiConversionDelta());
+        result.setPreviousQualiPos(record.getPreviousQualiPos());
+        result.setAvg4d1QualiPos(record.getAvg_4d1PrevQuali());
         return result;
     }
 }

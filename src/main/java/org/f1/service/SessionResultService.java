@@ -42,4 +42,8 @@ public class SessionResultService {
     public List<SessionResultsSummary> findMappedResultsForDriverOrTeam(MeetingEntityReference meetingEntityReference, List<String> valueSessionNames, List<String> keySessionNames) {
         return sessionResultRepository.findMappedToQualiResultsForDriverOrTeam(meetingEntityReference, valueSessionNames, keySessionNames);
     }
+
+    public Double getPreviousSessionAvgPos(MeetingEntityReference meetingEntityReference, int numberOfMeetings, String sessionName) {
+        return sessionResultRepository.getPreviousSessionAvgPos(meetingEntityReference, numberOfMeetings, sessionName);
+    }
 }
