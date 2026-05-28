@@ -102,8 +102,9 @@ public class NSADFactory {
             }
             avgPracticePos /= summary.practiseSessionResults().size();
 
-            totalQualiDelta += (avgQualiPos - avgPracticePos) * Math.exp(-lambda * totalQualiDeltaCount);
-            totalQualiDeltaCount++;
+            double currentExponent = Math.exp(-lambda * totalQualiDeltaCount);
+            totalQualiDelta += (avgQualiPos - avgPracticePos) * currentExponent;
+            totalQualiDeltaCount+= currentExponent;
         }
 
         return totalQualiDelta / totalQualiDeltaCount;

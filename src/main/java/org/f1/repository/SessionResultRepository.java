@@ -3,11 +3,14 @@ package org.f1.repository;
 import org.f1.domain.MeetingEntityReference;
 import org.f1.domain.SessionResultsSummary;
 import org.f1.domain.openf1.SessionResult;
+import org.f1.generated.Tables;
 import org.f1.generated.tables.records.SessionResultRecord;
+import org.jetbrains.annotations.NotNull;
 import org.jooq.*;
 import org.jooq.Record;
 import org.springframework.stereotype.Repository;
 
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -152,10 +155,20 @@ public class SessionResultRepository {
     }
 
     public Double getPreviousSessionAvgPos(MeetingEntityReference meetingEntityReference, int numberOfMeetings, String sessionName) {
+
+        OffsetDateTime offset = dslContext
+                .select(MEETING.DATE_START)
+                .from(MEETING)
+                .where(MEETING.ID.eq(meetingEntityReference.getMeetingId()))
+                .fetchOneInto(OffsetDateTime.class);
+
+
         Condition whereClause = SESSION.SESSION_NAME.eq(sessionName);
         whereClause = whereClause.and(DRIVER.TEAM_ID.eq(meetingEntityReference.getTeamId()));
+        whereClause = whereClause.and(SESSION.DATE_START.lessThan(offset));
         if (meetingEntityReference.getDriverId() != null) {
-            whereClause = whereClause.and(DRIVER.FULL_NAME.eq(dslContext.select(DRIVER.FULL_NAME).from(DRIVER).where(DRIVER.ID.eq(meetingEntityReference.getDriverId())).fetchOneInto(String.class)));
+            String driverName = dslContext.select(DRIVER.FULL_NAME).from(DRIVER).where(DRIVER.ID.eq(meetingEntityReference.getDriverId())).fetchOneInto(String.class);
+            whereClause = whereClause.and(DRIVER.FULL_NAME.eq(driverName));
         } else {
             numberOfMeetings *= 2;
         }
