@@ -135,25 +135,6 @@ public class SessionResultRepository {
                 .toArray(Field<?>[]::new);
     }
 
-    private SessionResultRecord buildSessionResult(SessionResult sessionResult, String previousId) {
-        SessionResultRecord sessionResultRecord = new SessionResultRecord();
-        if (previousId != null) {
-            sessionResultRecord.setId(previousId);
-        } else {
-            sessionResultRecord.setId(UUID.randomUUID().toString());
-        }
-        sessionResultRecord.setDriverId(sessionResult.getDriverId());
-        sessionResultRecord.setSessionId(sessionResult.getSessionId());
-        sessionResultRecord.setDuration(sessionResult.getDuration());
-        sessionResultRecord.setGapToLeader(sessionResult.getGapToLeader());
-        sessionResultRecord.setNumberOfLaps(sessionResult.getNumberOfLaps());
-        sessionResultRecord.setPosition(sessionResult.getPosition());
-        sessionResultRecord.setDnf(sessionResult.getDnf());
-        sessionResultRecord.setDns(sessionResult.getDns());
-        sessionResultRecord.setDsq(sessionResult.getDsq());
-        return sessionResultRecord;
-    }
-
     public Double getPreviousSessionAvgPos(MeetingEntityReference meetingEntityReference, int numberOfMeetings, String sessionName) {
 
         OffsetDateTime offset = dslContext
@@ -185,5 +166,24 @@ public class SessionResultRepository {
                 )
                 .fetchOneInto(Double.class);
 
+    }
+
+    private SessionResultRecord buildSessionResult(SessionResult sessionResult, String previousId) {
+        SessionResultRecord sessionResultRecord = new SessionResultRecord();
+        if (previousId != null) {
+            sessionResultRecord.setId(previousId);
+        } else {
+            sessionResultRecord.setId(UUID.randomUUID().toString());
+        }
+        sessionResultRecord.setDriverId(sessionResult.getDriverId());
+        sessionResultRecord.setSessionId(sessionResult.getSessionId());
+        sessionResultRecord.setDuration(sessionResult.getDuration());
+        sessionResultRecord.setGapToLeader(sessionResult.getGapToLeader());
+        sessionResultRecord.setNumberOfLaps(sessionResult.getNumberOfLaps());
+        sessionResultRecord.setPosition(sessionResult.getPosition());
+        sessionResultRecord.setDnf(sessionResult.getDnf());
+        sessionResultRecord.setDns(sessionResult.getDns());
+        sessionResultRecord.setDsq(sessionResult.getDsq());
+        return sessionResultRecord;
     }
 }

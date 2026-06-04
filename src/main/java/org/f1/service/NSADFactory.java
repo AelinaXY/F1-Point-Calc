@@ -115,15 +115,15 @@ public class NSADFactory {
     }
 
     private SessionSummary getSessionSummary(MeetingEntityReference meetingEntityReference, String sessionName) {
-        List<SessionResult> fp1Results = sessionResultService.getSessionResultsFromName(meetingEntityReference, sessionName);
-        if (fp1Results.isEmpty()
-                || fp1Results.stream().anyMatch(result ->
+        List<SessionResult> sessionResults = sessionResultService.getSessionResultsFromName(meetingEntityReference, sessionName);
+        if (sessionResults.isEmpty()
+                || sessionResults.stream().anyMatch(result ->
                 result.getPosition() == null || result.getGapToLeader() == null || result.getNumberOfLaps() == null)) {
             return new SessionSummary(false, null, null, null);
         }
 
-        if (fp1Results.size() == 1) {
-            SessionResult fp1Result = fp1Results.getFirst();
+        if (sessionResults.size() == 1) {
+            SessionResult fp1Result = sessionResults.getFirst();
             return new SessionSummary(
                     true,
                     fp1Result.getPosition(),
@@ -136,7 +136,7 @@ public class NSADFactory {
         double totalGap = 0;
         double totalLaps = 0;
 
-        for (SessionResult sessionResult : fp1Results) {
+        for (SessionResult sessionResult : sessionResults) {
             totalPosition += sessionResult.getPosition();
             totalGap += sessionResult.getGapToLeader();
             totalLaps += sessionResult.getNumberOfLaps();
@@ -144,9 +144,9 @@ public class NSADFactory {
 
         return new SessionSummary(
                 true,
-                (int) Math.round(totalPosition / fp1Results.size()),
-                totalGap / fp1Results.size(),
-                totalLaps / fp1Results.size()
+                (int) Math.round(totalPosition / sessionResults.size()),
+                totalGap / sessionResults.size(),
+                totalLaps / sessionResults.size()
         );
     }
 
