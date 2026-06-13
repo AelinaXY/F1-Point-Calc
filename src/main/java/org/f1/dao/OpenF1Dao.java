@@ -2,6 +2,7 @@ package org.f1.dao;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
+import org.apache.hc.core5.http.HttpHeaders;
 import org.f1.domain.openf1.Driver;
 import org.f1.domain.openf1.Meeting;
 import org.f1.domain.openf1.Session;
@@ -28,15 +29,17 @@ public class OpenF1Dao {
     private final Traverson traverson;
     private final String baseUrl;
     private final JsonToMeetingMapper jsonToMeetingMapper;
+    private final String openF1BearerToken;
 
 
-    OpenF1Dao(Traverson traverson, @Value("${openf1.url}") String url, JsonToMeetingMapper jsonToMeetingMapper, JsonToSessionMapper jsonToSessionMapper, JsonToSessionResultMapper jsonToSessionResultMapper, JsonToDriverMapper jsonToDriverMapper) {
+    OpenF1Dao(Traverson traverson, @Value("${openf1.url}") String url, JsonToMeetingMapper jsonToMeetingMapper, JsonToSessionMapper jsonToSessionMapper, JsonToSessionResultMapper jsonToSessionResultMapper, JsonToDriverMapper jsonToDriverMapper, @Value("${openf1.bearer-token}") String openF1BearerToken) {
         this.traverson = traverson;
         baseUrl = url;
         this.jsonToMeetingMapper = jsonToMeetingMapper;
         this.jsonToSessionMapper = jsonToSessionMapper;
         this.jsonToSessionResultMapper = jsonToSessionResultMapper;
         this.jsonToDriverMapper = jsonToDriverMapper;
+        this.openF1BearerToken = openF1BearerToken;
     }
 
     public List<Session> getAllSessions() {
@@ -59,7 +62,7 @@ public class OpenF1Dao {
         String url = baseUrl + endpoint;
         Response<String> response;
 
-        response = traverson.from(url).get(String.class);
+        response = traverson.from(url).withHeader(HttpHeaders.AUTHORIZATION, "Bearer " + openF1BearerToken).get(String.class);
 
         if (response.isFailure()) {
             String message = "OpenF1 request failed for " + endpoint

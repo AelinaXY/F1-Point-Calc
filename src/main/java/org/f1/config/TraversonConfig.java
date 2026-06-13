@@ -8,6 +8,7 @@ import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
 import org.apache.hc.core5.http.HttpRequestInterceptor;
 import org.apache.hc.core5.util.Timeout;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -45,7 +46,7 @@ public class TraversonConfig {
 
     @Bean
     @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-    public HttpClientBuilder defaultHttpClient(List<HttpRequestInterceptor> interceptors) {
+    public HttpClientBuilder defaultHttpClient(List<HttpRequestInterceptor> interceptors,@Value("${openf1.bearer-token}") String openF1BearerToken ) {
         PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
         cm.setDefaultMaxPerRoute(20);
         cm.setMaxTotal(60);

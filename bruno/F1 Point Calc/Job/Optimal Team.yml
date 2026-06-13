@@ -5,7 +5,7 @@ info:
 
 http:
   method: POST
-  url: http://localhost:8080/api/job/optimalTeam?driverList=Kimi Antonelli,Oliver Bearman,Esteban Ocon,Liam Lawson,Pierre Gasly&teamList=Mercedes,Haas
+  url: http://localhost:8080/api/job/optimalTeam?driverList=Kimi Antonelli,Oliver Bearman,Esteban Ocon,Liam Lawson,Pierre Gasly&teamList=Mercedes,Haas&changeLimit=3
   params:
     - name: driverList
       value: Kimi Antonelli,Oliver Bearman,Esteban Ocon,Liam Lawson,Pierre Gasly
@@ -13,12 +13,14 @@ http:
     - name: teamList
       value: Mercedes,Haas
       type: query
+    - name: changeLimit
+      value: "3"
+      type: query
   body:
     type: json
     data: |-
       {
         "costCap": 107.8,
-        "changeLimit": 3,
         "raceName": "Monaco",
         "isSprint": false,
         "racesLeft": 17,

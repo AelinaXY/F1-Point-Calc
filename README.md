@@ -160,6 +160,7 @@ docker compose up -d postgres-db
     - user: `f1`
     - password: `pass`
     - OpenF1 base URL: `https://api.openf1.org/v1/`
+    - OpenF1 bearer token: set `openf1.bearer-token` (used as `Authorization: Bearer <token>` on OpenF1 requests)
 
 3. Build:
 

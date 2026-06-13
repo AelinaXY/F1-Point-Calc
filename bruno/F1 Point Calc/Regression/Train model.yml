@@ -5,11 +5,12 @@ info:
 
 http:
   method: GET
-  url: http://localhost:8080/api/regression/trainNSAD?controlOnly=True
+  url: http://localhost:8080/api/regression/trainNSAD
   params:
     - name: controlOnly
       value: "True"
       type: query
+      disabled: true
   auth: inherit
 
 settings:

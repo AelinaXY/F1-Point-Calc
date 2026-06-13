@@ -183,12 +183,12 @@ public class EvaluationResult {
     private static List<HyperParameters> generateParameterGrid() {
         List<HyperParameters> paramGrid = new ArrayList<>();
 
-        int[] numIterations = {125, 150, 175};
-        int[] maxDepths = {2, 3};
-        double[] learningRates = {0.04, 0.05, 0.06};
-        int[] minInstancesPerNode = {8, 12, 16, 24};
-        double[] subsamplingRates = {0.6, 0.7, 0.8};
-        int[] maxBins = {32};
+        int[] numIterations = {150, 190, 230};
+        int[] maxDepths = {2};
+        double[] learningRates = {0.05, 0.06, 0.07};
+        int[] minInstancesPerNode = {4, 8, 16, 24};
+        double[] subsamplingRates = {0.7, 0.8, 0.9};
+        int[] maxBins = {32, 48};
         double[] minInfoGains = {0.01};
 
         for (int numIterationsValue : numIterations) {
