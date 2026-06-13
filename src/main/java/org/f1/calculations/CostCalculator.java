@@ -11,7 +11,7 @@ public class CostCalculator {
     public static final double TERRIBLE = 0.605;
     public static final double POOR = 0.9;
     public static final double GOOD = 1.195;
-    public static final double MINIMUM_COST = 4.5d;
+    public static final double MINIMUM_COST = 3d;
 
     public static Double calculateCostChange(FullPointEntity fullPointEntity, String raceName, Double driverPredScore) {
         Double currentCost = fullPointEntity.getCost();

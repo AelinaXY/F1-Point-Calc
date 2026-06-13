@@ -11,6 +11,7 @@ public enum Meeting {
     AUSTRIA("Austria", List.of("Austrian Grand Prix"), List.of(2023, 2024, 2025, 2026), List.of(2023, 2024, 2026)),
     AZERBAIJAN("Azerbaijan", List.of("Azerbaijan Grand Prix"), List.of(2023, 2024, 2025, 2026), List.of(2023, 2026)),
     BAHRAIN("Bahrain", List.of("Bahrain Grand Prix"), List.of(2023, 2024, 2025), List.of()),
+    BARCELONA("Barcelona", List.of("Barcelona Grand Prix"), List.of(2026), List.of()),
     BELGIUM("Belgium", List.of("Belgian Grand Prix"), List.of(2023, 2024, 2025, 2026), List.of(2023, 2025)),
     BRAZIL("Brazil", List.of("São Paulo Grand Prix"), List.of(2023, 2024, 2025, 2026), List.of(2023, 2024, 2025, 2026)),
     BRITAIN("Britain", List.of("British Grand Prix"), List.of(2023, 2024, 2025, 2026), List.of()),
