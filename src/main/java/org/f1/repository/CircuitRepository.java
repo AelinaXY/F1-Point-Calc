@@ -5,6 +5,7 @@ import org.f1.generated.tables.records.CircuitRecord;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
+import static org.f1.generated.Tables.MEETING;
 import static org.f1.generated.tables.Circuit.CIRCUIT;
 
 
@@ -19,7 +20,7 @@ public class CircuitRepository {
 
     public Circuit saveCircuit(Circuit circuit) {
 
-        CircuitRecord circuitRecord = new CircuitRecord(circuit.id(), circuit.shortName());
+        CircuitRecord circuitRecord = new CircuitRecord(circuit.getId(), circuit.getShortName());
 
         CircuitRecord returnedCircuitRecord = dslContext.insertInto(CIRCUIT)
                 .set(circuitRecord)
@@ -30,5 +31,12 @@ public class CircuitRepository {
                 .fetchOne();
 
         return new Circuit(returnedCircuitRecord.getId(), returnedCircuitRecord.getShortName());
+    }
+
+    public Integer getId(Integer meetingId) {
+        return dslContext.select(MEETING.CIRCUIT_ID)
+                .from(MEETING)
+                .where(MEETING.ID.eq(meetingId))
+                .fetchOneInto(Integer.class);
     }
 }

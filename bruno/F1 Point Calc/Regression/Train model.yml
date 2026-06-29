@@ -187,3 +187,108 @@ examples:
               "Days Since First Race": 0.018339789533209538
             }
           }
+  - name: Pre-Austria model
+    request:
+      url: http://localhost:8080/api/regression/trainNSAD?controlOnly=True
+      method: GET
+      params:
+        - name: controlOnly
+          value: "True"
+          type: query
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: content-type
+          value: application/json
+        - name: transfer-encoding
+          value: chunked
+        - name: date
+          value: Tue, 23 Jun 2026 11:55:20 GMT
+        - name: keep-alive
+          value: timeout=60
+        - name: connection
+          value: keep-alive
+      body:
+        type: json
+        data: |-
+          {
+            "hyperParameters": {
+              "numIterations": 225,
+              "learningRate": 0.06,
+              "maxDepth": 2,
+              "minInstancesPerNode": 4,
+              "subSamplingRate": 0.87,
+              "maxBins": 32,
+              "minInfoGain": 0.01
+            },
+            "meanSquaredError": 289.83218334216747,
+            "featureImportance": {
+              "FP1 Position": 0.20356375036831495,
+              "4-Race Average": 0.132341985428825,
+              "SQ Position": 0.12631737377243482,
+              "FP3 Position": 0.124054776431497,
+              "Average Points": 0.10521152927163967,
+              "FP2 Position": 0.09771825825577882,
+              "Team ID": 0.06574477801040594,
+              "Is Team": 0.04400352521590605,
+              "Standard Deviation": 0.032667154698520905,
+              "Quali Conversion Delta": 0.028797557311182827,
+              "4-Race Average Quali Position": 0.021087198235885063,
+              "Days Since First Race": 0.011426232786813371,
+              "Previous Quali Position": 0.007065880212795476
+            }
+          }
+  - name: Circuit ID added
+    request:
+      url: http://localhost:8080/api/regression/trainNSAD?controlOnly=True
+      method: GET
+      params:
+        - name: controlOnly
+          value: "True"
+          type: query
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: content-type
+          value: application/json
+        - name: transfer-encoding
+          value: chunked
+        - name: date
+          value: Mon, 29 Jun 2026 13:34:42 GMT
+        - name: keep-alive
+          value: timeout=60
+        - name: connection
+          value: keep-alive
+      body:
+        type: json
+        data: |-
+          {
+            "hyperParameters": {
+              "numIterations": 225,
+              "learningRate": 0.06,
+              "maxDepth": 2,
+              "minInstancesPerNode": 4,
+              "subSamplingRate": 0.87,
+              "maxBins": 32,
+              "minInfoGain": 0.01
+            },
+            "meanSquaredError": 296.48851969129544,
+            "featureImportance": {
+              "Circuit ID": 0.18755938539813985,
+              "FP1 Position": 0.1420234636626196,
+              "4-Race Average": 0.11373670955092513,
+              "SQ Position": 0.11255817274898312,
+              "FP3 Position": 0.09871786801290848,
+              "Average Points": 0.09506960990409516,
+              "FP2 Position": 0.07915338592805474,
+              "Team ID": 0.06729241796494605,
+              "Is Team": 0.03670685031470377,
+              "Standard Deviation": 0.02916244797128396,
+              "Quali Conversion Delta": 0.021560667024020166,
+              "4-Race Average Quali Position": 0.009859829101798822,
+              "Previous Quali Position": 0.00600202185314391,
+              "Days Since First Race": 5.971705643773901E-4
+            }
+          }

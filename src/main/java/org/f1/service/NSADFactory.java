@@ -78,6 +78,7 @@ public class NSADFactory {
         nsad.setQualiConversionDelta(getQualiConversionDelta(meetingEntityReference));
         nsad.setPreviousQualiPos(getPreviousQualiPerformance(meetingEntityReference, 1));
         nsad.setAvg4d1QualiPos(getPreviousQualiPerformance(meetingEntityReference, 4));
+        nsad.setCircuitId(meetingService.getCircuitId(meetingEntityReference.getMeetingId()));
         return nsad;
     }
 

@@ -40,7 +40,7 @@ public class MeetingRepository {
         meetingRecord.setId(meeting.id());
         meetingRecord.setName(meeting.name());
         meetingRecord.setLocation(meeting.location());
-        meetingRecord.setCircuitId(meeting.circuit().id());
+        meetingRecord.setCircuitId(meeting.circuit().getId());
         meetingRecord.setCountryId(meeting.country().id());
         meetingRecord.setDateStart(meeting.startDate());
         meetingRecord.setYear(meeting.year());
