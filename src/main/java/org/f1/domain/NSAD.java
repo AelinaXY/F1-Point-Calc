@@ -37,7 +37,6 @@ public class NSAD {
     private Double qualiConversionDelta;
     private Double previousQualiPos;
     private Double avg4d1QualiPos;
-    private Integer circuitId;
 
     public Row toRegressionRow() {
         return RowFactory.create(actualPoints.doubleValue(), toFeaturesVector());
@@ -57,8 +56,7 @@ public class NSAD {
                 fp3Pos,
                 qualiConversionDelta,
                 previousQualiPos,
-                avg4d1QualiPos,
-                circuitId
+                avg4d1QualiPos
         );
     }
 
@@ -81,7 +79,6 @@ public class NSAD {
                 NumericAttribute.defaultAttr().withName("Quali Conversion Delta"),
                 NumericAttribute.defaultAttr().withName("Previous Quali Position"),
                 NumericAttribute.defaultAttr().withName("4-Race Average Quali Position"),
-                NominalAttribute.defaultAttr().withName("Circuit ID").withNumValues(25),
         };
 
         StructField featuresField = new AttributeGroup("features", attributes).toStructField();

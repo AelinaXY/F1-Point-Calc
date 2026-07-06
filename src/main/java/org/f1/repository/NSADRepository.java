@@ -63,7 +63,6 @@ public class NSADRepository {
         record.setQualiConversionDelta(nsadRecord.getQualiConversionDelta());
         record.setPreviousQualiPos(nsadRecord.getPreviousQualiPos());
         record.setAvg_4d1PrevQuali(nsadRecord.getAvg4d1QualiPos());
-        record.setCircuitId(nsadRecord.getCircuitId());
         return record;
     }
 
@@ -85,7 +84,6 @@ public class NSADRepository {
         result.setQualiConversionDelta(record.getQualiConversionDelta());
         result.setPreviousQualiPos(record.getPreviousQualiPos());
         result.setAvg4d1QualiPos(record.getAvg_4d1PrevQuali());
-        result.setCircuitId(record.getCircuitId());
         return result;
     }
 }

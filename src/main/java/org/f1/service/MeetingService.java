@@ -54,7 +54,4 @@ public class MeetingService {
         return meetingRepository.getDaysSinceFirstRace(year, fullNames);
     }
 
-    public Integer getCircuitId(Integer meetingId) {
-        return circuitRepository.getId(meetingId);
-    }
 }
