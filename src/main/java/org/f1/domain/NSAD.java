@@ -26,17 +26,12 @@ public class NSAD {
     //Regression features
     private Double avgPoints;
     private Double avg4d1Points;
-    private Double stdev;
     private Double isTeam;
     private Double teamId;
-    private Integer daysSinceFirstRace;
     private Integer fp1Pos;
     private Integer fp2Pos;
     private Integer sqPos;
     private Integer fp3Pos;
-    private Double qualiConversionDelta;
-    private Double previousQualiPos;
-    private Double avg4d1QualiPos;
 
     public Row toRegressionRow() {
         return RowFactory.create(actualPoints.doubleValue(), toFeaturesVector());
@@ -46,17 +41,12 @@ public class NSAD {
         return Vectors.dense(
                 avgPoints,
                 avg4d1Points,
-                stdev,
                 isTeam,
                 teamId,
-                daysSinceFirstRace,
                 fp1Pos,
                 fp2Pos,
                 sqPos,
-                fp3Pos,
-                qualiConversionDelta,
-                previousQualiPos,
-                avg4d1QualiPos
+                fp3Pos
         );
     }
 
@@ -68,17 +58,12 @@ public class NSAD {
         Attribute[] attributes = new Attribute[]{
                 NumericAttribute.defaultAttr().withName("Average Points"),
                 NumericAttribute.defaultAttr().withName("4-Race Average"),
-                NumericAttribute.defaultAttr().withName("Standard Deviation"),
                 BinaryAttribute.defaultAttr().withName("Is Team"),
                 NominalAttribute.defaultAttr().withName("Team ID").withNumValues(11),
-                NumericAttribute.defaultAttr().withName("Days Since First Race"),
-                NominalAttribute.defaultAttr().withName("FP1 Position").withNumValues(24),
-                NominalAttribute.defaultAttr().withName("FP2 Position").withNumValues(24),
-                NominalAttribute.defaultAttr().withName("SQ Position").withNumValues(24),
-                NominalAttribute.defaultAttr().withName("FP3 Position").withNumValues(24),
-                NumericAttribute.defaultAttr().withName("Quali Conversion Delta"),
-                NumericAttribute.defaultAttr().withName("Previous Quali Position"),
-                NumericAttribute.defaultAttr().withName("4-Race Average Quali Position"),
+                NumericAttribute.defaultAttr().withName("FP1 Position"),
+                NumericAttribute.defaultAttr().withName("FP2 Position"),
+                NumericAttribute.defaultAttr().withName("SQ Position"),
+                NumericAttribute.defaultAttr().withName("FP3 Position"),
         };
 
         StructField featuresField = new AttributeGroup("features", attributes).toStructField();

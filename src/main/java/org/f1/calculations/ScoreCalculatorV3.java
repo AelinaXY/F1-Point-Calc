@@ -40,12 +40,12 @@ public class ScoreCalculatorV3 implements ScoreCalculatorInterface {
     @Override
     @Cacheable("scoreV3")
     public Double calculateScore(FullPointEntity fullPointEntity, String raceName, boolean isSprint) {
-        NSAD nsad = nsadFactory.createUnlabelled(fullPointEntity, Meeting.getMeeting(raceName), isSprint);
+        NSAD nsad = nsadFactory.createUnlabelled(fullPointEntity, Meeting.getMeeting(raceName));
         return gradientBoostedTreesModel.predict(nsad.toFeaturesVector());
     }
 
     public PredictionTrace calculateScoreWithTrace(FullPointEntity fullPointEntity, String raceName, boolean isSprint) {
-        NSAD nsad = nsadFactory.createUnlabelled(fullPointEntity, Meeting.getMeeting(raceName), isSprint);
+        NSAD nsad = nsadFactory.createUnlabelled(fullPointEntity, Meeting.getMeeting(raceName));
         Vector features = nsad.toFeaturesVector();
         String[] featureNames = resolveFeatureNames(features.size());
 

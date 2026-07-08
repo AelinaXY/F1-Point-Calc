@@ -116,11 +116,10 @@ public class RegressionService {
 
         for (Meeting meeting : Meeting.getMeetings(year)) {
             String shortName = meeting.getShortName();
-            boolean isSprint = meeting.getSprintYears().contains(year);
 
             for (FullPointEntity entity : fullPointEntities) {
                 if (entity.getRaceNameList().contains(shortName)) {
-                    nsadFactory.createLabelled(entity, meeting, isSprint)
+                    nsadFactory.createLabelled(entity, meeting)
                             .ifPresentOrElse(
                                     returnSet::add,
                                     () -> System.out.println("Skipping NSAD entry for entity " + entity.getName() + " with year " + year + " with circuit " + shortName)
