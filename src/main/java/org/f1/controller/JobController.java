@@ -4,10 +4,11 @@ import org.f1.calculations.*;
 import org.f1.controller.model.request.OptimalTeamRequest;
 import org.f1.controller.model.response.OptimalTeamResponse;
 import org.f1.controller.model.response.PredictResponse;
+import org.f1.controller.model.response.PredictionTraceSummaryMapper;
 import org.f1.domain.DifferenceEntity;
 import org.f1.domain.FullPointEntity;
-import org.f1.domain.Race;
 import org.f1.domain.ScoreCard;
+import org.f1.model.prediction.PredictionTrace;
 import org.f1.parsing.CSVParsing;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,9 +35,11 @@ public class JobController {
     private final RegressionDataCalculation regressionData;
 
     private final ScoreCalculatorV3 scoreCalculator;
+    private final PredictionTraceSummaryMapper predictionTraceSummaryMapper;
 
-    public JobController(ScoreCalculatorV3 scoreCalculatorV3) {
+    public JobController(ScoreCalculatorV3 scoreCalculatorV3, PredictionTraceSummaryMapper predictionTraceSummaryMapper) {
         this.scoreCalculator = scoreCalculatorV3;
+        this.predictionTraceSummaryMapper = predictionTraceSummaryMapper;
 
         calculation = new RawDataCalculationV2(DRIVER_SET, TEAM_SET, 0, 0, DEFAULT_RACE_NAME, DEFAULT_IS_SPRINT, scoreCalculatorV3, DEFAULT_RACES_LEFT, DEFAULT_COST_CAP_MULT);
         regressionData = new RegressionDataCalculation(DRIVER_SET, TEAM_SET, scoreCalculatorV3);
@@ -76,18 +79,13 @@ public class JobController {
     @GetMapping("/predict")
     public ResponseEntity<?> predictedCostChange(@RequestParam String raceName,
                                                  @RequestParam boolean isSprint) {
-        Set<FullPointEntity> workingSet = new HashSet<>();
-        workingSet.addAll(DRIVER_SET);
+        Set<FullPointEntity> workingSet = new HashSet<>(DRIVER_SET);
         workingSet.addAll(TEAM_SET);
 
         Map<String, PredictResponse> returnMap = workingSet.stream()
                 .map(entity -> new AbstractMap.SimpleEntry<>(
                         entity.getName(),
-                        new PredictResponse(Math.round(scoreCalculator.calculateScore(entity, raceName, isSprint) * 100.0) / 100.0,
-                                Math.round(CostCalculator.calculateCostChange(entity,
-                                        raceName,
-                                        scoreCalculator.calculateScore(entity, raceName, isSprint)) * 100.0) / 100.0,
-                                TEAM_SET.contains(entity))))
+                        createPredictResponse(entity, raceName, isSprint)))
                 .sorted((v1, v2) ->
                         Double.compare(v2.getValue().predictedPoints(), v1.getValue().predictedPoints()))
                 .collect(Collectors.toMap(
@@ -99,6 +97,21 @@ public class JobController {
                         LinkedHashMap::new));
 
         return new ResponseEntity<>(returnMap, HttpStatus.OK);
+    }
+
+    private PredictResponse createPredictResponse(FullPointEntity entity, String raceName, boolean isSprint) {
+        PredictionTrace trace = scoreCalculator.calculateScoreWithTrace(entity, raceName, isSprint);
+        double roundedPrediction = PredictionTraceSummaryMapper.roundTo2dp(trace.rawPrediction());
+        double roundedCostChange = PredictionTraceSummaryMapper.roundTo2dp(
+                CostCalculator.calculateCostChange(entity, raceName, trace.rawPrediction())
+        );
+
+        return new PredictResponse(
+                roundedPrediction,
+                roundedCostChange,
+                TEAM_SET.contains(entity),
+                predictionTraceSummaryMapper.summarize(trace)
+        );
     }
 
     private boolean validDriverList(List<String> driverList) {
