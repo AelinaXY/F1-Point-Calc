@@ -5,6 +5,7 @@ public record PredictionFeatureInfluenceResponse(
         Double netImpact,
         String movement,
         Integer decisionCount,
+        Double strongestImpact,
         String reason
 ) {
 }

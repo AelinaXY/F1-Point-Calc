@@ -7,6 +7,7 @@ import org.apache.spark.ml.regression.GBTRegressor;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
+import org.apache.spark.sql.functions;
 import org.f1.domain.NSAD;
 import org.f1.service.RegressionService;
 
@@ -140,7 +141,22 @@ public class EvaluationResult {
                 Dataset<Row> testing = fold.get(1);
 
                 GBTRegressionModel model = buildRegressor(params).fit(training);
-                Dataset<Row> predictions = model.transform(testing).cache();
+                Dataset<Row> trainingPrediction = model.transform(training).select("label", "prediction");
+
+                Row s = trainingPrediction.agg(
+                        functions.avg("label").alias("averageLabel"),
+                        functions.avg("prediction").alias("averagePrediction"),
+                        functions.covar_samp("prediction", "label").alias("covariance"),
+                        functions.var_samp("prediction").alias("variance")
+                ).first();
+
+                double slope = s.getDouble(3) == 0.0 ? 1.0 : s.getDouble(2) / s.getDouble(3);
+                double intercept = s.getDouble(1) - slope * s.getDouble(0);
+
+                Dataset<Row> predictions = model.transform(testing)
+                        .withColumn("prediction_calibrated",
+                                functions.lit(intercept).plus(functions.col("prediction").multiply(slope)))
+                        .cache();
 
                 mse += mseEvaluator.evaluate(predictions);
                 predictions.unpersist();
@@ -164,6 +180,7 @@ public class EvaluationResult {
                 .setLabelCol("label")
                 .setFeaturesCol("features")
                 .setPredictionCol("prediction")
+                .setWeightCol("weight")
                 .setMaxIter(params.getNumIterations())
                 .setStepSize(params.getLearningRate())
                 .setMaxDepth(params.getMaxDepth())
@@ -176,20 +193,20 @@ public class EvaluationResult {
     private static RegressionEvaluator getEvaluator(String metricName) {
         return new RegressionEvaluator()
                 .setLabelCol("label")
-                .setPredictionCol("prediction")
+                .setPredictionCol("prediction_calibrated")
                 .setMetricName(metricName);
     }
 
     private static List<HyperParameters> generateParameterGrid() {
         List<HyperParameters> paramGrid = new ArrayList<>();
 
-        int[] numIterations = {210, 225, 240};
-        int[] maxDepths = {2, 3};
+        int[] numIterations = {225, 240};
+        int[] maxDepths = {2, 4, 8};
         double[] learningRates = {0.055, 0.06, 0.065};
-        int[] minInstancesPerNode = {2, 4, 8};
-        double[] subsamplingRates = {0.82, 0.87, 0.92};
+        int[] minInstancesPerNode = {1, 2, 4};
+        double[] subsamplingRates = {0.82, 0.87};
         int[] maxBins = {24, 32};
-        double[] minInfoGains = {0.005, 0.01};
+        double[] minInfoGains = {0, 0.01};
 
         for (int numIterationsValue : numIterations) {
             for (int maxDepthValue : maxDepths) {

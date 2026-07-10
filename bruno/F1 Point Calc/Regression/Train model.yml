@@ -292,3 +292,51 @@ examples:
               "Days Since First Race": 5.971705643773901E-4
             }
           }
+  - name: Post prune 3
+    request:
+      url: http://localhost:8080/api/regression/trainNSAD
+      method: GET
+      params:
+        - name: controlOnly
+          value: "True"
+          type: query
+          disabled: true
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: content-type
+          value: application/json
+        - name: transfer-encoding
+          value: chunked
+        - name: date
+          value: Thu, 09 Jul 2026 15:03:58 GMT
+        - name: keep-alive
+          value: timeout=60
+        - name: connection
+          value: keep-alive
+      body:
+        type: json
+        data: |-
+          {
+            "hyperParameters": {
+              "numIterations": 240,
+              "learningRate": 0.055,
+              "maxDepth": 2,
+              "minInstancesPerNode": 4,
+              "subSamplingRate": 0.87,
+              "maxBins": 24,
+              "minInfoGain": 0.005
+            },
+            "meanSquaredError": 295.4138053205846,
+            "featureImportance": {
+              "4-Race Average": 0.21380073020194712,
+              "Team ID": 0.19358682220271767,
+              "Average Points": 0.17210280081831542,
+              "SQ Position": 0.11722568917734795,
+              "Is Team": 0.08364749725542349,
+              "FP3 Position": 0.07844815030693834,
+              "FP1 Position": 0.07538884192595294,
+              "FP2 Position": 0.06579946811135715
+            }
+          }

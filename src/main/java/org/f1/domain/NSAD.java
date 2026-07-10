@@ -8,11 +8,14 @@ import org.apache.spark.ml.attribute.NominalAttribute;
 import org.apache.spark.ml.attribute.NumericAttribute;
 import org.apache.spark.ml.linalg.Vector;
 import org.apache.spark.ml.linalg.Vectors;
+import org.apache.spark.sql.Column;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.RowFactory;
+import org.apache.spark.sql.functions;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
+
 
 @Data
 public class NSAD {
@@ -21,8 +24,11 @@ public class NSAD {
     //Non-regression information fields
     private Integer id;
     private MeetingEntityReference meetingEntityReference;
+    private Double baseline;
     //Regression label
     private Integer actualPoints;
+    //Alt Regression label
+    private Double residual;
     //Regression features
     private Double avgPoints;
     private Double avg4d1Points;
@@ -33,8 +39,16 @@ public class NSAD {
     private Integer sqPos;
     private Integer fp3Pos;
 
+    private static final double WEIGHT_FACTOR = 0.08;
+    private static final double MAX_WEIGHT = 4.0;
+
     public Row toRegressionRow() {
-        return RowFactory.create(actualPoints.doubleValue(), toFeaturesVector());
+        return RowFactory.create(residual, toFeaturesVector(), getWeight());
+    }
+
+    private double getWeight() {
+        double weightValue = 1.0 + (Math.abs(residual) * WEIGHT_FACTOR);
+        return Math.min(weightValue, MAX_WEIGHT);
     }
 
     public Vector toFeaturesVector() {
@@ -69,7 +83,8 @@ public class NSAD {
         StructField featuresField = new AttributeGroup("features", attributes).toStructField();
         return new StructType(new StructField[]{
                 DataTypes.createStructField("label", DataTypes.DoubleType, false),
-                featuresField
+                featuresField,
+                DataTypes.createStructField("weight", DataTypes.DoubleType, false),
         });
     }
 }

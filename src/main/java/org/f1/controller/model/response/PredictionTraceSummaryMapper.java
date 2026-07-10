@@ -55,6 +55,7 @@ public class PredictionTraceSummaryMapper {
                 roundTo2dp(accumulator.netImpact),
                 accumulator.netImpact >= 0 ? "up" : "down",
                 accumulator.decisionCount,
+                accumulator.strongestStepImpact,
                 accumulator.strongestReason
         );
     }

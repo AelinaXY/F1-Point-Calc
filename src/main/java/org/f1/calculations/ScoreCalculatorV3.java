@@ -41,7 +41,7 @@ public class ScoreCalculatorV3 implements ScoreCalculatorInterface {
     @Cacheable("scoreV3")
     public Double calculateScore(FullPointEntity fullPointEntity, String raceName, boolean isSprint) {
         NSAD nsad = nsadFactory.createUnlabelled(fullPointEntity, Meeting.getMeeting(raceName));
-        return gradientBoostedTreesModel.predict(nsad.toFeaturesVector());
+        return gradientBoostedTreesModel.predict(nsad.toFeaturesVector()) + nsad.getBaseline();
     }
 
     public PredictionTrace calculateScoreWithTrace(FullPointEntity fullPointEntity, String raceName, boolean isSprint) {
@@ -78,6 +78,7 @@ public class ScoreCalculatorV3 implements ScoreCalculatorInterface {
 
         return new PredictionTrace(
                 prediction,
+                nsad.getBaseline(),
                 mapFeatureValues(features, featureNames),
                 treeContributions,
                 runningTotals,
@@ -130,7 +131,7 @@ public class ScoreCalculatorV3 implements ScoreCalculatorInterface {
 
         AttributeGroup attributeGroup = AttributeGroup.fromStructField(NSAD.regressionSchema().fields()[1]);
         if (attributeGroup.attributes().isDefined()) {
-            Attribute[] attributes = (Attribute[]) attributeGroup.attributes().get();
+            Attribute[] attributes = attributeGroup.attributes().get();
             for (int i = 0; i < Math.min(size, attributes.length); i++) {
                 if (attributes[i] != null && attributes[i].name().isDefined()) {
                     featureNames[i] = attributes[i].name().get();

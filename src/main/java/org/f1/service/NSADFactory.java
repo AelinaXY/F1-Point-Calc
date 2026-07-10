@@ -37,6 +37,7 @@ public class NSADFactory {
 
         NSAD nsad = buildBaseNsad(fullPointEntity, meetingEntityReference, pointHistory);
         nsad.setActualPoints(getActualPoints(fullPointEntity, raceName));
+        nsad.setResidual(nsad.getActualPoints() - nsad.getBaseline());
         return Optional.of(nsad);
     }
 
@@ -59,8 +60,11 @@ public class NSADFactory {
 
         NSAD nsad = new NSAD();
         nsad.setMeetingEntityReference(meetingEntityReference);
+
         nsad.setAvgPoints(ScoreCalculator.calcAveragePoints(pointHistory));
         nsad.setAvg4d1Points(ScoreCalculator.calcThreeRaceAverage(new ArrayList<>(pointHistory)));
+        nsad.setBaseline(getBaseline(nsad));
+
         nsad.setIsTeam(booleanToDouble(fullPointEntity.isTeam()));
         nsad.setTeamId((double) meetingEntityReference.getTeamId());
         nsad.setFp1Pos(fp1Summary.getPosition());
@@ -122,6 +126,10 @@ public class NSADFactory {
                 .takeWhile(race -> !race.name().equals(raceName))
                 .map(Race::totalPoints)
                 .toList();
+    }
+
+    private double getBaseline(NSAD nsad) {
+        return nsad.getAvg4d1Points() * 0.7 + nsad.getAvgPoints() * 0.3;
     }
 
     private double booleanToDouble(boolean value) {

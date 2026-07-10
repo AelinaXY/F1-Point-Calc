@@ -5,7 +5,7 @@ info:
 
 http:
   method: POST
-  url: http://localhost:8080/api/job/optimalTeam?driverList=Kimi Antonelli,Arvid Lindblad,Gabriel Bortoleto,Liam Lawson,Nico Hulkenberg&teamList=Mercedes,Ferrari&changeLimit=2
+  url: http://localhost:8080/api/job/optimalTeam?driverList=Kimi Antonelli,Arvid Lindblad,Gabriel Bortoleto,Liam Lawson,Nico Hulkenberg&teamList=Mercedes,Ferrari&changeLimit=3
   params:
     - name: driverList
       value: Kimi Antonelli,Arvid Lindblad,Gabriel Bortoleto,Liam Lawson,Nico Hulkenberg
@@ -14,7 +14,7 @@ http:
       value: Mercedes,Ferrari
       type: query
     - name: changeLimit
-      value: "2"
+      value: "3"
       type: query
   body:
     type: json

@@ -101,7 +101,7 @@ public class JobController {
 
     private PredictResponse createPredictResponse(FullPointEntity entity, String raceName, boolean isSprint) {
         PredictionTrace trace = scoreCalculator.calculateScoreWithTrace(entity, raceName, isSprint);
-        double roundedPrediction = PredictionTraceSummaryMapper.roundTo2dp(trace.rawPrediction());
+        double roundedPrediction = PredictionTraceSummaryMapper.roundTo2dp(trace.rawPrediction() + trace.baseline());
         double roundedCostChange = PredictionTraceSummaryMapper.roundTo2dp(
                 CostCalculator.calculateCostChange(entity, raceName, trace.rawPrediction())
         );

@@ -50,6 +50,8 @@ public class NSADRepository {
         NonSprintAggregateDataRecord record = new NonSprintAggregateDataRecord();
         record.setMeetingEntityReference(Objects.requireNonNull(nsadRecord.getMeetingEntityReference()).getId());
         record.setActualPoints(nsadRecord.getActualPoints());
+        record.setResidual(nsadRecord.getResidual());
+        record.setBaseline(nsadRecord.getBaseline());
         record.setAvgPoints(nsadRecord.getAvgPoints());
         record.setAvg_4d1Points(nsadRecord.getAvg4d1Points());
         record.setIsTeam(nsadRecord.getIsTeam());
@@ -66,6 +68,8 @@ public class NSADRepository {
         result.setId(record.getId());
         result.setMeetingEntityReference(meetingEntityReference);
         result.setActualPoints(record.getActualPoints());
+        result.setResidual(record.getResidual());
+        result.setBaseline(record.getBaseline());
         result.setAvgPoints(record.getAvgPoints());
         result.setAvg4d1Points(record.getAvg_4d1Points());
         result.setIsTeam(record.getIsTeam());

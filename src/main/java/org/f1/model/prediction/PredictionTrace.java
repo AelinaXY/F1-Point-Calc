@@ -5,6 +5,7 @@ import java.util.Map;
 
 public record PredictionTrace(
         Double rawPrediction,
+        Double baseline,
         Map<String, Double> featureValues,
         List<Double> treeContributions,
         List<Double> runningTotals,
