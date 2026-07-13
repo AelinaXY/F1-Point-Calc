@@ -201,12 +201,12 @@ public class EvaluationResult {
         List<HyperParameters> paramGrid = new ArrayList<>();
 
         int[] numIterations = {225, 240};
-        int[] maxDepths = {2, 4, 8};
+        int[] maxDepths = {2, 4};
         double[] learningRates = {0.055, 0.06, 0.065};
-        int[] minInstancesPerNode = {1, 2, 4};
+        int[] minInstancesPerNode = {1, 2, 4, 8};
         double[] subsamplingRates = {0.82, 0.87};
         int[] maxBins = {24, 32};
-        double[] minInfoGains = {0, 0.01};
+        double[] minInfoGains = {0.01};
 
         for (int numIterationsValue : numIterations) {
             for (int maxDepthValue : maxDepths) {
