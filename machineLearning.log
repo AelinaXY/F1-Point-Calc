@@ -1,2 +1,2 @@
 Control-only mode enabled. Evaluating CONTROL_HYPERPARAMETERS only.
-Pass: 001/001 | Time: 0:02:25 | Avg MSE: 328.212066 | Params: iter=240, depth=2, lr=0.055000, min=4, sub=0.870000, maxBin=24, minInfoGain=0.010000
+Pass: 001/001 | Time: 0:02:25 | Avg MSE: 325.638684 | Params: iter=240, depth=2, lr=0.055000, min=4, sub=0.870000, maxBin=24, minInfoGain=0.010000
