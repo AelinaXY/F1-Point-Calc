@@ -39,8 +39,8 @@ public class NSAD {
     private Integer sqPos;
     private Integer fp3Pos;
 
-    private static final double WEIGHT_FACTOR = 0.08;
-    private static final double MAX_WEIGHT = 4.0;
+    private static final double WEIGHT_FACTOR = 0.038;
+    private static final double MAX_WEIGHT = 3.0;
 
     public Row toRegressionRow() {
         return RowFactory.create(residual, toFeaturesVector(), getWeight());
