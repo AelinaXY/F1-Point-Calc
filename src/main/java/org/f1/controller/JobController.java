@@ -79,8 +79,8 @@ public class JobController {
     @GetMapping("/predict")
     public ResponseEntity<?> predictedCostChange(@RequestParam String raceName,
                                                  @RequestParam boolean isSprint) {
-        Set<FullPointEntity> workingSet = new HashSet<>(DRIVER_SET);
-        workingSet.addAll(TEAM_SET);
+        Set<FullPointEntity> workingSet = new HashSet<>(TEAM_SET);
+        workingSet.addAll(DRIVER_SET);
 
         Map<String, PredictResponse> returnMap = workingSet.stream()
                 .map(entity -> new AbstractMap.SimpleEntry<>(

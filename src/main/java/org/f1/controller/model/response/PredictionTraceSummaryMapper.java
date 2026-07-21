@@ -11,10 +11,12 @@ import java.util.*;
 @Component
 public class PredictionTraceSummaryMapper {
     private static final int TOP_FEATURE_LIMIT = 5;
+    private static final int TOP_TRACE_LIMIT = 10;
+
 
     public PredictionTraceSummaryResponse summarize(PredictionTrace trace) {
         Map<String, FeatureInfluenceAccumulator> influenceMap = new HashMap<>();
-        List<PathValueHolder> pathValueHolders = new ArrayList<>();
+        List<PathTrace> pathTraces = new ArrayList<>();
 
         for (PredictionTreeTrace treeTrace : trace.treeTraces()) {
             List<PredictionStepTrace> path = treeTrace.path();
@@ -23,10 +25,10 @@ public class PredictionTraceSummaryMapper {
             }
             double stepImpact = treeTrace.weightedContribution() / path.size();
 
-            PathValueHolder pathValueHolder = new PathValueHolder();
-            pathValueHolder.value = treeTrace.weightedContribution();
+            PathTrace pathTrace = new PathTrace();
+            pathTrace.value = treeTrace.weightedContribution();
             StringBuilder pathString = new StringBuilder();
-            pathValueHolders.add(pathValueHolder);
+            pathTraces.add(pathTrace);
 
             for (PredictionStepTrace step : path) {
                 FeatureInfluenceAccumulator accumulator = influenceMap.computeIfAbsent(
@@ -42,7 +44,7 @@ public class PredictionTraceSummaryMapper {
                 pathString.append(step.featureName()).append(": ").append(buildReason(step)).append(" -> ");
             }
             pathString.append("END");
-            pathValueHolder.path = pathString.toString();
+            pathTrace.path = pathString.toString();
         }
 
         List<PredictionFeatureInfluenceResponse> topInfluences = influenceMap.entrySet().stream()
@@ -51,10 +53,10 @@ public class PredictionTraceSummaryMapper {
                 .limit(TOP_FEATURE_LIMIT)
                 .toList();
 
-        List<PathValueHolderResponse> topPaths = pathValueHolders
+        List<PathTraceResponse> topPaths = pathTraces
                 .stream()
                 .sorted((a, b) -> Double.compare(b.value, a.value))
-                .limit(TOP_FEATURE_LIMIT)
+                .limit(TOP_TRACE_LIMIT)
                 .map(pv -> toPathValueResponse(pv.value, pv.path))
                 .toList();
 
@@ -78,9 +80,8 @@ public class PredictionTraceSummaryMapper {
         );
     }
 
-    private PathValueHolderResponse toPathValueResponse(Double value,
-                                                        String path) {
-        return new PathValueHolderResponse(
+    private PathTraceResponse toPathValueResponse(Double value, String path) {
+        return new PathTraceResponse(
                 value,
                 path
         );
@@ -114,7 +115,7 @@ public class PredictionTraceSummaryMapper {
         return Math.round(value * 100.0) / 100.0;
     }
 
-    private static class PathValueHolder {
+    private static class PathTrace {
         private double value;
         private String path;
     }
