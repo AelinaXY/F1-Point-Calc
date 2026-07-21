@@ -5,10 +5,10 @@ info:
 
 http:
   method: POST
-  url: http://localhost:8080/api/job/optimalTeam?driverList=Kimi Antonelli,Arvid Lindblad,Gabriel Bortoleto,Liam Lawson,Nico Hulkenberg&teamList=Mercedes,Ferrari&changeLimit=3
+  url: http://localhost:8080/api/job/optimalTeam?driverList=Kimi Antonelli,Arvid Lindblad,Isack Hadjar,Fernando Alonso,Nico Hulkenberg&teamList=Mercedes,Ferrari&changeLimit=3
   params:
     - name: driverList
-      value: Kimi Antonelli,Arvid Lindblad,Gabriel Bortoleto,Liam Lawson,Nico Hulkenberg
+      value: Kimi Antonelli,Arvid Lindblad,Isack Hadjar,Fernando Alonso,Nico Hulkenberg
       type: query
     - name: teamList
       value: Mercedes,Ferrari
@@ -20,10 +20,10 @@ http:
     type: json
     data: |-
       {
-        "costCap": 110.1,
-        "raceName": "Britain",
-        "isSprint": true,
-        "racesLeft": 14,
+        "costCap": 115.1,
+        "raceName": "Hungary",
+        "isSprint": false,
+        "racesLeft": 12,
         "costCapMult": 1.2
       }
   auth: inherit

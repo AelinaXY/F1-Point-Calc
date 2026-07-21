@@ -47,3 +47,4 @@ build/
 
 machineLearning.log
 /.github/copilot-instructions.md
+src/main/resources/application-default.properties

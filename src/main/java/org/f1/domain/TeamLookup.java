@@ -52,4 +52,13 @@ public enum TeamLookup {
         }
         return null;
     }
+
+    public static String idToPreferred(int id) {
+        for (TeamLookup teamLookup : TeamLookup.values()) {
+            if (teamLookup.id == id) {
+                return teamLookup.lineageName;
+            }
+        }
+        return null;
+    }
 }
